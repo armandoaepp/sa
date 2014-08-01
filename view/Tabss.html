@@ -1,0 +1,106 @@
+<style>
+
+
+/* PARA EL TABs
+ es el rectángulo contenedor */
+.tabs {
+  margin: 0 auto;
+  min-height: 205px;
+  position: relative;
+  width: 100%;
+}
+/* cada una de las pestañas */
+.tab {
+  float: left;
+}
+/* la parte superior con el título de la pestaña */
+.tab .tab-label {
+  background-color: #DCDEE0;
+  border-radius: 5px 5px 0 0;
+  box-shadow: -3px 3px 2px #B4B7BB inset;
+  color: #797676;
+  cursor: pointer;
+  left: 0;
+  margin-right: 1px;
+  padding: 5px 15px;
+  /*position: relative;*/
+  /*text-shadow: 1px 1px #000*/
+}
+/* el control input sólo lo necesitamos para que las pestañas permanezcan abiertas así que lo ocultamos */
+.tab .tab-radio { display: none; }
+
+/* el contenido de las pestañas */
+.content {
+  background-color: #E6E6E6;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  padding: 20px;
+  position: absolute;
+  right: 0;
+  top: 23px;
+  overflow: auto;
+}
+/* y un poco de animación */
+.content > * {
+  opacity: 0;
+  -moz-transform: translateX(-100%);
+  -webkit-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+
+  -moz-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+}
+
+/* controlamos la pestaña activa */
+[type="radio"]:checked ~ .tab-label {
+    background-color: #E6E6E6;
+    box-shadow: 0 3px 2px #D6D9DB  inset;
+    color: #000;
+    /*z-index: 1;*/
+}
+[type=radio]:checked ~ .tab-label ~ .content { z-index: 1; }
+[type=radio]:checked ~ .tab-label ~ .content > * {
+  opacity: 1;
+  -moz-transform: translateX(0);
+  -webkit-transform: translateX(0);
+  -o-transform: translateX(0);
+  -ms-transform: translateX(0);
+}
+
+
+
+</style>
+
+
+<div class="tabs"  >
+	<div class="tab">
+		<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio">
+		<label for="tab-1" class="tab-label" >tab 1  </label>
+		<div class="content " >
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore, atque, pariatur, quod odio repellendus neque tenetur vel deserunt impedit suscipit maiores quam nulla. Veritatis, corporis rem ea dicta sint hic.
+			</div>
+		</div>
+	</div>
+	<div class="tab">
+		<input type="radio" id="tab-2" name="tab-group-1"  checked class="tab-radio">
+		<label for="tab-2" class="tab-label" >tab 2  </label>
+		<div class="content " >
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore, atque, pariatur, quod odio repellendus neque tenetur vel deserunt impedit suscipit maiores quam nulla. Veritatis, corporis rem ea dicta sint hic.
+			</div>
+		</div>
+	</div>
+	<div class="tab">
+		<input type="radio" id="tab-3" name="tab-group-1"  checked class="tab-radio">
+		<label for="tab-3" class="tab-label" >tab 3  </label>
+		<div class="content " >
+			<div>
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempore, atque, pariatur, quod odio repellendus neque tenetur vel deserunt impedit suscipit maiores quam nulla. Veritatis, corporis rem ea dicta sint hic.
+			</div>
+		</div>
+	</div>
+</div>
+
