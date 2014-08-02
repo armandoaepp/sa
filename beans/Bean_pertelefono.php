@@ -9,6 +9,8 @@ class Bean_pertelefono{
 	private $nPerTelItem;
 	private $cPerTelNumero;
 	private $nPerTelEstado;
+	private $nPerTelTipNew;
+
 //Propiedades
 	public function setcPerCodigo($cPerCodigo_){ $this->cPerCodigo=$cPerCodigo_;}
 	public function getcPerCodigo(){ return $this->cPerCodigo;}
@@ -20,4 +22,8 @@ class Bean_pertelefono{
 	public function getcPerTelNumero(){ return $this->cPerTelNumero;}
 	public function setnPerTelEstado($nPerTelEstado_){ $this->nPerTelEstado=$nPerTelEstado_;}
 	public function getnPerTelEstado(){ return $this->nPerTelEstado;}
+
+	# PAR EL NUEVO TIPO DE TELEFONO EN CASO QUE SE SELECCIONE
+	public function setnPerTelTipNew($nPerTelTipNew_ = 1 ){ $this->nPerTelTipNew=$nPerTelTipNew_;}
+	public function getnPerTelTipNew(){ return $this->nPerTelTipNew;}
 }

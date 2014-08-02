@@ -1,6 +1,6 @@
 <?php
 /* Clase Bean Generada  - Creado por @armandoaepp */
-class Bean_persona{
+class Bean_persona extends Bean_general{
 //Constructor
 	public function Bean_persona(){}
 //Atributos

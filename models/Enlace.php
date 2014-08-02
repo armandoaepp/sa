@@ -46,6 +46,11 @@ require_once "ClsPerRelacion.php";
 require_once "ClsPerParametro.php";
 require_once "ClsPerUbigeo.php";
 
+require_once "ClsProductor.php";
+require_once "ClsUbigeo.php";
+
+
+
 # =====================	Funciones Php
 require_once "../controllers/Funciones_Ajax/Fnc_Comun.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Transaccion.php";

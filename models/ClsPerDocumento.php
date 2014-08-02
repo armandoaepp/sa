@@ -27,6 +27,33 @@ class ClsPerDocumento extends ClsConexion
 			$data = $this->rows ;
 			return $data;
 		}
+
+		# VALIDAR DOCUMENTO DE PERSONA
+		function Upd_PerDocumento_by_cPerCodigo($bean_perdocumento )
+		{
+			$cPerCodigo    = $bean_perdocumento->getcPerCodigo() ;
+			$nPerDocTipo   = $bean_perdocumento->getnPerDocTipo() ;
+			$cPerDocNumero = $bean_perdocumento->getcPerDocNumero() ;
+			$this->query = "CALL usp_Upd_PerDocumento_by_cPerCodigo('$cPerCodigo' ,  $nPerDocTipo , '$cPerDocNumero')  ; ";
+			$this->execute_query();
+			$data = $this->rows ;
+			return $data;
+		}
+
+		# VALIDAR DOCUMENTO QUE NO EXITA PARA OTRA PERSONA
+		function Validar_PerDocumento_Upd($bean_perdocumento )
+		{
+			$cPerCodigo    = $bean_perdocumento->getcPerCodigo() ;
+			$cPerDocNumero = $bean_perdocumento->getcPerDocNumero() ;
+			$this->query = "CALL usp_Validar_PerDocumento_Upd('$cPerCodigo' , '$cPerDocNumero')  ; ";
+			$this->execute_query();
+			$data = $this->rows ;
+			return $data;
+		}
+
+
+
+
 }
 
 ?>

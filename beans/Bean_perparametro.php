@@ -10,6 +10,7 @@ class Bean_perparametro{
 	private $cPerParValor;
 	private $cPerParGlosa;
 	private $nPerParEstado;
+	private $nParCodigoNew;
 //Propiedades
 	public function setcPerCodigo($cPerCodigo_){ $this->cPerCodigo=$cPerCodigo_;}
 	public function getcPerCodigo(){ return $this->cPerCodigo;}
@@ -23,4 +24,7 @@ class Bean_perparametro{
 	public function getcPerParGlosa(){ return $this->cPerParGlosa;}
 	public function setnPerParEstado($nPerParEstado_){ $this->nPerParEstado=$nPerParEstado_;}
 	public function getnPerParEstado(){ return $this->nPerParEstado;}
+	# cuando vamos a actualizar el parametro de una clase
+	public function setnParCodigoNew($nParCodigoNew_){ $this->nParCodigoNew=$nParCodigoNew_;}
+	public function getnParCodigoNew(){ return $this->nParCodigoNew;}
 }

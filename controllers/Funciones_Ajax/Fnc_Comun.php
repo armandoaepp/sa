@@ -154,7 +154,7 @@
                                         </div>
 
                                         <div class="c3 text-right" style="width:25%;">
-                                            <a href="#" onclick="xajax_'.trim($funcion).'('.$ncodgio.');" > <i class="boton-eliminar"></i>
+                                            <a href="#" onclick="xajax_'.trim($funcion).'(\''.$ncodgio.'\');" > <i class="boton-eliminar"></i>
                                             </a>
                                         </div> ' ;
                             $formulario .="</div>";
