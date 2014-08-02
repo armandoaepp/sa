@@ -9,7 +9,7 @@
 	$xajax->registerFunction("Actualizar_Productor");
 	$xajax->registerFunction("Eliminar_Productor");
 	$xajax->registerFunction("ConfEliminar_Productor");
-	$xajax->registerFunction("Reporte_Productor");
+	$xajax->registerFunction("Rpt_Productor_Pdf");
 
 	# MOSTRAR TABS
 		function Listar_Tabs_Productor()
@@ -996,5 +996,133 @@
 			$formulario .=botonRegistrar($funcion) ;
 			$formulario .='	</div>';
 				return $formulario;
+		}
+
+	# REPORTE EN PDF
+		function Rpt_Productor_Pdf($frm="")
+		{
+			$objResponse       = new xajaxResponse();
+			$bean_persona      = new Bean_persona();
+			$bean_perdocumento = new Bean_perdocumento();
+			$bean_perdocumento = new Bean_perdocumento();
+			$bean_parametro    = new Bean_parametro();
+
+
+			$objProductor      =  new ClsProductor() ;
+			# validaciones
+				if(empty($frm["s_cPerDocumento_"]))
+				{
+					$cPerDocumento = "-";
+				}else{
+					$cPerDocumento = $frm["s_cPerDocumento_"];
+				}
+				if(empty($frm["s_cPerApellidos_"]))
+				{
+					$cPerApellidos = "-";
+				}else{
+					$cPerApellidos = $frm["s_cPerApellidos_"];
+				}
+				if(empty($frm["s_cPerNombre_"]))
+				{
+					$cPerNombre = "-";
+				}else{
+					$cPerNombre = $frm["s_cPerNombre"];
+				}
+				if(empty($frm["s_nParStatus_"]))
+				{
+					$nParStatus = 0;
+				}else{
+					$nParStatus = $frm["s_nParStatus_"];
+				}
+				if(empty($frm["s_cParSector_"]))
+				{
+					$cParSector = "-";
+				}else{
+					$cParSector = $frm["s_cParSector_"];
+				}
+
+
+
+
+			$bean_persona->setnOriRegistros(0) ;
+			$bean_persona->setnNumRegMostrar(0) ;
+			$bean_persona->setnPagRegistro(0) ; # que no pagine
+			$bean_persona->setcPerNombre($cPerNombre) ;
+			$bean_persona->setcPerApellidos($cPerApellidos) ;
+			$bean_perdocumento->setcPerDocNumero($cPerDocumento) ;
+
+			$bean_parametro->setnParCodigo($nParStatus) ; # codigo de status
+			$bean_parametro->setcParDescripcion($cParSector) ; # descripcion del sector
+
+		    $data = $objProductor->Get_Productores($bean_persona , $bean_perdocumento, $bean_parametro);
+
+
+			$formulario= "";
+
+			if (count($data["cuerpo"]) > 0)
+			{
+
+				$formulario .= "<table class='table'>" ;
+				$formulario .='
+						<tr class="border-bottom">
+							<th class="" style="width:5%;"> Num </th>
+							<th style="width:8%;">&nbsp; DNI</th>
+							<th style="width:17%;">&nbsp; Apellidos</th>
+							<th style="width:18%;">&nbsp; Nombres</th>
+							<th style="width:8%;">&nbsp; Fecha Nac </th>
+							<th style="width:13%;">&nbsp; E-Mail</th>
+							<th style="width:8%;">&nbsp; Teléfono </th>
+							<th style="width:10%;">&nbsp; Status </th>
+							<th style="width:12%;">&nbsp; Sector  </th>
+						</tr>
+					' ;
+
+				$formulario .= "<tbody>" ;
+
+				for ($i = 0; $i < count($data["cuerpo"]); $i++)
+            	{
+						$formulario.="<tr>";
+	                    $formulario.= 	"<td>";
+	                    $formulario.=         $i + 1 ;
+	                    $formulario.=   "</td>";
+					    $formulario.= 	"<td>". $data["cuerpo"][$i]["cPerDocNumero"] ."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cPerApellidos"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cPerNombre"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["dPerNacimiento"]."</td>";
+					   	$formulario.= 	"<td class='text-transform-none'>".$data["cuerpo"][$i]["cPerMail"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cPerTelNumero"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParStatus"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParSector"]."</td>";
+					   	$formulario.="</tr>";
+				}
+				$formulario .= "</tbody>" ;
+				$formulario .= "<tfoot>" ;
+				$formulario .= " 	<tr>" ;
+				$formulario .= " 	<td  colspan='5' class='border-top'>   </td>" ;
+				$formulario .= " 	</tr>" ;
+
+				$formulario .= "</tfoot>" ;
+
+				$formulario .= "</table>" ;
+			}
+
+			$HTML ="<html>
+						<body>
+						<br/>
+							<h3 class='rounded text-center mayusc title'> Lista de Sectores </h3>
+							<br/>
+						<div>
+							".$formulario."
+						</div>
+						</body>
+						</html>";
+
+					$mpdf = Rpt_Generar_Pdf("A4-L") ;
+					$fichero = '../documents/pdf.pdf';
+					$mpdf->WriteHTML($HTML);
+					$mpdf->Output(  $fichero);
+					$objResponse->script('window.open("'.$fichero.'", "_blank");');
+
+		    return $objResponse;
 		}
 
