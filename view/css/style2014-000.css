@@ -1,9 +1,9 @@
 /* ---- HTML RESET ---- */
+body { font-size:16px; line-height: 1; }
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
 	margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; font: inherit; vertical-align: baseline;
 }
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, label, legend { display: block; }
-body { font-size:100%; line-height: 1; }
 blockquote, q { quotes: none; }
 blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
 table { border-spacing: 0; }
@@ -52,6 +52,7 @@ table { border-spacing: 0; }
 .text-right {text-align: right;}
 .text-center {text-align: center;}
 .text-justify {text-align: justify;}
+.text-transform-none{	text-transform: none; }
 
 .left {float: left;}
 .right {float: right;}
@@ -181,11 +182,10 @@ table { border-spacing: 0; }
 	background-color: #f2f2f2;
 	border: 1px solid #cccccc;
 	color: #222222;
-	font-size: 13px;
-	line-height: 18px;
-	height: 30px;
+	font-size: 16px;
+	height: 25px;
 	position: relative;
-	padding: 5px 10px;
+	padding: 3px;
 }
 .vform span.pre, .hform span.pre{margin-right: -1px; float: left;	}
 .vform span.post, .hform span.post{margin-left: -1px; float: left;}
@@ -199,7 +199,7 @@ table { border-spacing: 0; }
 	   -moz-border-radius: 0 4px 4px 0;
 	-webkit-border-radius: 0 4px 4px 0;
 }
-.vform input.pre, .vform input.post{width:75%; float:left; height: 30px;}
+.vform input.pre, .vform input.post{width:90%; float:left; height: 30px;}
 .hform input.pre, .hform input.post{width:45%; float:left; height: 30px;}
 .vform input.pre-post{width: 70%; float: left; height: 30px; border-radius: 0;}
 .hform input.pre-post{width: 40%; float: left; height: 30px; border-radius: 0;}
@@ -217,10 +217,9 @@ table { border-spacing: 0; }
 	background:-webkit-gradient(linear, left top, left bottom, from(#eee), to(#f8f8f8));
 	background:-moz-linear-gradient(top, #eee, #f8f8f8);
 }
- .vform .c12 fieldset .post{
- 	padding-left: 5px ;
- }
 
+.vform span.pre, .hform span.pre{width: 10%; max-width: 25px;	}
+.vform input.post, .hform input.post{padding-left: 5px!important 	}
 
 input[disabled],
 select[disabled],
@@ -272,17 +271,19 @@ select:focus:invalid:focus {
 	font-family:tahoma;
 	margin: 0;
 	text-transform: uppercase;
+	font-weight: bold;
 }
 
 .vform .c12 fieldset  input[type="text"],
 .vform .c12 fieldset  input[type="number"],
 .vform .c12 fieldset  input[type="time"],
+.vform .c12 fieldset  input[type="email"],
 .vform .c12 fieldset  select
 {
 	font-size: 11px;
 	height: 25px;
 	margin-bottom: 1px;
-	width: 100%;
+	/*width: 100%;*/
 }
 
 .vform .c12 fieldset  input[type="text"],
@@ -290,6 +291,19 @@ select:focus:invalid:focus {
 {
 	padding-left: 20px;
 }
+/*elementos adyacentes*/
+.vform .c12 fieldset .pre +  input[type="text"],
+.vform .c12 fieldset  .pre +  input[type="number"]
+{
+	padding-left: 5px;
+}
+
+.vform .c12 fieldset .pre +  input.c12,
+.vform .c12 fieldset  .pre +  input.c12
+{
+	width: 93%;
+}
+
 .c12 .margin-areatext
 {
 	margin: 0 5px;
@@ -948,112 +962,12 @@ fieldset[disabled] .checkbox-inline {
   cursor: not-allowed;
 }
 
-
-/* SPRITE PARA BOTONES*/
-[class^="boton-"],
-[class*=" boton-"] {
-  display: inline-block;
-  width: 103px;
-  height: 32px;
-  margin-top: 1px;
-  *margin-right: .3em;
-  line-height: 32px;
-  vertical-align: text-top;
-  background-image: url("../img/botones/btns.png");
-  background-repeat: no-repeat;
-  margin-top: 5px;
-}
-
-.boton-buscar { background-position: -0px -0px; width: 103px; height: 33px; }
-.boton-cancelar { background-position: -103px -0px; width: 103px; height: 33px; }
-.boton-contacto { background-position: -206px -0px; width: 103px; height: 33px; }
-.boton-editar { background-position: -0px -33px; width: 103px; height: 33px; }
-.boton-eliminar { background-position: -103px -33px; width: 103px; height: 33px; }
-.boton-guardar { background-position: -206px -33px; width: 103px; height: 33px; }
-.boton-listar { background-position: -0px -66px; width: 103px; height: 33px; }
-.boton-login { background-position: -103px -66px; width: 103px; height: 33px; }
-.boton-nuevo { background-position: -206px -66px; width: 103px; height: 33px; }
-.boton-registrar { background-position: -0px -99px; width: 103px; height: 33px; }
-.boton-regresar { background-position: -103px -99px; width: 103px; height: 33px; }
-.boton-reporte { background-position: -206px -99px; width: 103px; height: 33px; }
-
-[class^="boton-"]:hover,
-[class*=" boton-"]:hover {
-	opacity: .55;
-	cursor: pointer;
-	color: #fff;
-}
-
-
- /*iconos */
-[class^="icon-"],
-[class*=" icon-"] {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-top: 1px;
-  *margin-right: .3em;
-  line-height: 16px;
-  vertical-align: text-top;
-  background-image: url("../icons/icons.png");
-  background-position: 16px 16px;
-  background-repeat: no-repeat;
-}
-.icon-activar { background-position: -4px -0px; }
-.icon-new { background-position: -24px -0px; }
-.icon-map { background-position: -44px -0px; }
-.icon-camera { background-position: -64px -0px; }
-.icon-user-add { background-position: -84px -0px; }
-.icon-phone-movil { background-position: -104px -0px; }
-.icon-reloj { background-position: -4px -20px; }
-.icon-home { background-position: -24px -20px; }
-.icon-dolar { background-position: -44px -20px; }
-.icon-delete { background-position: -64px -20px; }
-.icon-search { background-position: -84px -20px; }
-.icon-delete-01 { background-position: -104px -20px; }
-.icon-printer { background-position: -4px -40px; }
-.icon-cancel { background-position: -24px -40px; }
-.icon-email { background-position: -44px -40px; }
-.icon-delete-02 { background-position: -64px -40px; }
-.icon-excel { background-position: -84px -40px; }
-.icon-edit { background-position: -104px -40px; }
-.icon-menos { background-position: -4px -60px; }
-.icon-report { background-position: -24px -60px; }
-.icon-print { background-position: -44px -60px; }
-.icon-close { background-position: -64px -60px; }
-.icon-add { background-position: -84px -60px; }
-.icon-search-left { background-position: -104px -60px; }
-.icon-user-error { background-position: -4px -80px; }
-.icon-edit-03 { background-position: -24px -80px; }
-.icon-list { background-position: -44px -80px; }
-.icon-plus { background-position: -64px -80px; }
-.icon-remove { background-position: -84px -80px; }
-.icon-edit-02 { background-position: -104px -80px; }
-.icon-phone { background-position: -4px -100px; }
-.icon-data { background-position: -24px -100px; }
-.icon-calendar { background-position: -44px -100px; }
-.icon-bloquear { background-position: -64px -100px; }
-.icon-soles { background-position: -84px -100px; }
-.icon-user-ok { background-position: -104px -100px; }
-.icon-phone02 { background-position: -4px -120px; }
-.icon-email-01 { background-position: -24px -120px; }
-.icon-edit-01 { background-position: -44px -120px; }
-.icon-save { background-position: -64px -120px; }
-.icon-text { background-position: -84px -120px; }
-.icon-arroba { background-position: -104px -120px; }
-.icon-user { background-position: -4px -140px; }
-.icon-pdf { background-position: -24px -140px; }
-.icon-key {   background-image: url("../icons/icon-key.png");
-  background-position: 0px 0px;
-
-}
-
 .ContenedorTable{
 	text-transform: uppercase;
 }
 .title-table{
-	font-size: 14px;
-	font-family: "myriadpro" ;
+	font-family: "open_sans_regular" ;
+	font-size: 0.75em ;
 }
 /* ESTILOS APP*/
 .vform td input,
@@ -1081,9 +995,219 @@ fieldset[disabled] .checkbox-inline {
 #labelMsj{
 		width: 75%;
 }
+.labelMsj{
+	color:#FF0000;
+	font-size: 10px;
+	 font-weight: bold;
+}
 #botonGuardar{
 		width: 25%;
 }
+
+
+
+/* SPRITE PARA BOTONES*/
+[class^="boton-"],
+[class*=" boton-"] {
+  display: inline-block;
+  width: 103px;
+  height: 33px;
+  margin-top: 1px;
+  *margin-right: .3em;
+  line-height: 32px;
+  vertical-align: text-top;
+  background-image: url("../img/botones/btns.png");
+  background-repeat: no-repeat;
+  margin-top: 5px;
+}
+
+.boton-buscar { background-position: -0px -0px; }
+.boton-cancelar { background-position: -103px -0px; }
+.boton-contacto { background-position: -206px -0px; }
+.boton-editar { background-position: -0px -33px; }
+.boton-eliminar { background-position: -103px -33px; }
+.boton-guardar { background-position: -206px -33px; }
+.boton-listar { background-position: -0px -66px; }
+.boton-login { background-position: -103px -66px; }
+.boton-nuevo { background-position: -206px -66px; }
+.boton-registrar { background-position: -0px -99px; }
+.boton-regresar { background-position: -103px -99px; }
+.boton-reporte { background-position: -206px -99px; }
+.boton-no {
+  *margin-right: .3em;
+  background-image: url("../img/botones/btn-no.png");
+  background-repeat: no-repeat;
+  height: 33px;
+  line-height: 32px;
+  width: 85px;
+ }
+ .boton-yes {
+  *margin-right: .3em;
+  background-image: url("../img/botones/btn-yes.png");
+  background-repeat: no-repeat;
+  height: 33px;
+  line-height: 32px;
+  width: 85px;
+ }
+
+
+
+[class^="boton-"]:hover,
+[class*=" boton-"]:hover {
+	opacity: .55;
+	cursor: pointer;
+	color: #fff;
+}
+
+@font-face {
+	font-family: 'icomoon';
+	src:url('../fonts/icons/icomoon.eot?46hupa');
+	src:url('../fonts/icons/icomoon.eot?#iefix46hupa') format('embedded-opentype'),
+		url('../fonts/icons/icomoon.woff?46hupa') format('woff'),
+		url('../fonts/icons/icomoon.ttf?46hupa') format('truetype'),
+		url('../fonts/icons/icomoon.svg?46hupa#icomoon') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+[class^="icon-"],
+[class*=" icon-"] {
+	font-family: 'icomoon';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	color:  #161111 ;
+
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.icon-check:before {
+	content: "\e60f";
+}
+.icon-save:before {
+	content: "\e618";
+}
+.icon-mail:before {
+	content: "\e621";
+}
+.icon-menu9:before {
+	content: "\e622";
+}
+.icon-new:before {
+	content: "\e623";
+}
+.icon-edit:before {
+	content: "\e624";
+}
+.icon-pencil1:before {
+	content: "\e625";
+}
+.icon-printer:before {
+	content: "\e626";
+}
+.icon-list:before {
+	content: "\e600";
+}
+.icon-home:before {
+	content: "\e601";
+}
+.icon-pencil:before {
+	content: "\e602";
+}
+.icon-camera:before {
+	content: "\e603";
+}
+.icon-file:before {
+	content: "\e604";
+}
+.icon-new1:before {
+	content: "\e605";
+}
+.icon-location:before {
+	content: "\e606";
+}
+.icon-clock:before {
+	content: "\e607";
+}
+.icon-calendar:before {
+	content: "\e608";
+}
+.icon-user:before {
+	content: "\e60b";
+}
+.icon-spinner:before {
+	content: "\e60c";
+}
+.icon-lock:before {
+	content: "\e60d";
+}
+.icon-unlocked:before {
+	content: "\e60e";
+}
+.icon-bars:before {
+	content: "\e612";
+}
+.icon-bars2:before {
+	content: "\e610";
+}
+.icon-fire:before {
+	content: "\e609";
+}
+.icon-remove:before {
+	content: "\e611";
+}
+.icon-menu:before {
+	content: "\e613";
+}
+.icon-exit:before {
+	content: "\e614";
+}
+.icon-pdf:before {
+	content: "\e615";
+}
+.icon-word:before {
+	content: "\e616";
+}
+.icon-excel:before {
+	content: "\e617";
+}
+.icon-calendar2:before {
+	content: "\e61a";
+}
+.icon-mobile:before {
+	content: "\e61c";
+}
+.icon-minus:before {
+	content: "\e61e";
+}
+.icon-plus:before {
+	content: "\e61f";
+}
+.icon-cross:before {
+	content: "\e620";
+}
+
+
+.table tr td a{
+	text-decoration: none;
+}
+.table tr td [class^="icon-"],
+.table tr td [class*=" icon-"] {
+	font-size: 16px;
+	color:  #161111 ;
+}
+.table tr td [class^="icon-"]:hover,
+.table tr td [class*=" icon-"]:hover{
+	font-size: 17px;
+	color:  #3C3737 ;
+}
+
 
 /* Media query for 960 Screens - sets nested grids to 100% */
 @media only screen and (max-width:960px){
@@ -1128,6 +1252,7 @@ fieldset[disabled] .checkbox-inline {
       -moz-border-radius: 20px 20px 20px 20px;
            border-radius: 20px 20px 20px 20px;
     }
+    .vform input.pre, .vform input.post{width:93%;}
 
 }
 

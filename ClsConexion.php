@@ -8,17 +8,19 @@
 */
  Class ClsConexion
 {
-   /* private static $db_host = 'www.planeatec.com';
+
+     private static $db_host = 'www.planeatec.com';
     private static $db_user = 'planeate_user';
     private static $db_pass = '+-*planeatec+-*';
-    protected $db_name      = 'planeate_sa';
-*/
+    protected $db_driver    = 'mysql';
+    protected $db_name      = 'planeate_demo';
+
+    /*
     private static $db_host = '127.0.0.1';
     private static $db_user = 'root';
     private static $db_pass = '';
-    protected $db_name      = 'planeatec_sa';
-
     protected $db_driver    = 'mysql';
+    protected $db_name      = 'planeatec_sa';*/
     protected $query;
     protected $rows         = array();
     private $conn;

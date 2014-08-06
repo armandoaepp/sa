@@ -47,7 +47,14 @@
 								<label for="tab-2" class="tab-label" >Parcela  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
+									# contenedor de productor
+							$formulario .='	<div id="Tab_Parcela" >
+											</div>' ;
 
+
+						# paginado paginado productor
+						$formulario .='<div id="Cont_Num_Parcela_" class="c1" ></div>	<div id="tab_pag_productor"  class="c11"  style="position: relative; top: 5px; padding:0 ;">
+										</div> ';
 					$formulario .='	</div> ';
 					# End content
 				$formulario .='</div> ' ;
@@ -169,9 +176,8 @@
 			$bean_perdocumento = new Bean_perdocumento();
 			$bean_perdocumento = new Bean_perdocumento();
 			$bean_parametro    = new Bean_parametro();
-
-
 			$objProductor      =  new ClsProductor() ;
+
 			# validaciones
 				if(empty($frm["s_cPerDocumento_"]))
 				{
@@ -203,9 +209,6 @@
 				}else{
 					$cParSector = $frm["s_cParSector_"];
 				}
-
-
-
 
 			$bean_persona->setnOriRegistros($nOriRegistros) ;
 			$bean_persona->setnNumRegMostrar($nNumRegMostrar) ;

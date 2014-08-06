@@ -13,7 +13,6 @@
     private static $db_host = 'www.planeatec.com';
     private static $db_user = 'planeate_user';
     private static $db_pass = '+-*planeatec+-*';
-    protected $db_driver    = 'mysql';
     protected $db_name      = 'planeate_demo';
 
     /*
@@ -24,6 +23,7 @@
         protected $db_name      = 'planeatec_sa';
     */
 
+    protected $db_driver    = 'mysql';
     protected $query;
     protected $rows         = array();
     private $conn;

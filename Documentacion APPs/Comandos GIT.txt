@@ -1,0 +1,12 @@
+https://www.youtube.com/watch?v=YPrdZq4YTn4
+
+https://www.youtube.com/watch?v=Zj9fl4kWwCg
+
+# estado de repositorio / archivos
+git status
+
+#ver todos commit
+git log --oneline
+
+# volver a una version anterior
+git reset --hard (codigo del commit)

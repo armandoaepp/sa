@@ -154,9 +154,15 @@
                                         </div>
 
                                         <div class="c3 text-right" style="width:25%;">
-                                            <a href="#" onclick="xajax_'.trim($funcion).'(\''.$ncodgio.'\');" > <i class="boton-eliminar"></i>
+                                            <a href="#" onclick="xajax_'.trim($funcion).'(\''.$ncodgio.'\');"  class="boton">
+                                                <span class="nav-btn-nombre"> Eliminar </span>
+                                                <span class=" post icon-remove " ></span>
                                             </a>
                                         </div> ' ;
+                                        /*<div class="c3 text-right" style="width:25%;">
+                                            <a href="#" onclick="xajax_'.trim($funcion).'(\''.$ncodgio.'\');" > <i class="boton-eliminar"></i>
+                                            </a>
+                                        </div> ' ;*/
                             $formulario .="</div>";
                             $formulario = utf8_encode($formulario);
                         }
@@ -255,19 +261,21 @@
         function BotonRegistrar($funcion)
         {
             $formulario ="";
-              $formulario .=' <div class="clear"></div>
+                $formulario .=' <div class="clear"></div>
 
                                 <div id="labelMsj"  class="c12 MsjAlert "  ></div>
                                 <div id="botonCancelar" class="c2 text-right hide" >
-                                    <a   href="#" onclick="ocultar_emergente();" >
+                                    <a   href="#" onclick="ocultar_emergente();">
+                                        <span class="boton-cancelar">Cancelar</span>
                                         <span class="boton-cancelar"></span>
                                     </a>
-                                </div>
+                                </div> ';
 
 
-                            <div id="botonGuardar" class="c3 text-right" >
-                                <a href="#" onclick="xajax_'.trim($funcion).'(xajax.getFormValues(frmEmergente));" >
-                                    <span class="boton-guardar"></span>
+                $formulario .='<div id="botonGuardar" class="c3 text-right" >
+                                <a href="#" onclick="xajax_'.trim($funcion).'(xajax.getFormValues(frmEmergente));" class="boton" >
+                                    <span class="nav-btn-nombre"> Guardar </span>
+                                    <span class=" post icon-save " ></span>
                                 </a>
                             </div>
                             ';

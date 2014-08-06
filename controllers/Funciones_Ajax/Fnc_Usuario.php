@@ -124,12 +124,15 @@ $xajax->registerFunction("Menus_Botonera");
 
 		if (count($data["cuerpo"]) > 0)
 		{
-			$botonera .='<ul class="botonera"> ' ;
+			$botonera .='<ul class="nav-btn"> ' ;
 			for ($i = 0; $i < count($data["cuerpo"]); $i++)
 			{
-				$botonera .= '<li>
-				<a href="#" id="'.$data["cuerpo"][$i][8].'" onclick="'.$data["cuerpo"][$i][10].'"  title="'.$data["cuerpo"][$i][8].'" ><i class="'.$data["cuerpo"][$i][7].'"> </i></a>
-			</li> ' ;
+				$botonera .= '<li>';
+				$botonera .= '	<a href="#" id="'.$data["cuerpo"][$i][8].'" onclick="'.$data["cuerpo"][$i][10].'"  title="'.$data["cuerpo"][$i][8].'" >' ;
+				$botonera .= '		<span class="nav-btn-nombre"> '.$data["cuerpo"][$i][8].' </span> ' ;
+				$botonera .= '		<span class="post '.$data["cuerpo"][$i][7].'"> </span> ' ;
+				$botonera .= '	</a> ' ;
+				$botonera .= '</li> ' ;
 			}
 
 			$botonera .= '</ul>' ;
