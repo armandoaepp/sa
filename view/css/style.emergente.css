@@ -55,6 +55,7 @@ span.title-emergente
     margin-bottom:5px;
     text-align:center;
     font-weight: bold;
+    text-transform: uppercase;
 }
 #emergente a[href="#close"]:after{
     background: #000;

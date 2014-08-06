@@ -258,7 +258,7 @@
      * [BotonRegistrar crear un boton para registrar los datos(envia datos del fomulario ) ademas crear el contenedor del mensaje de alerta]
      * @param  [type] $funcion [funciona a la cual permite enviar los datos ]
      */
-        function BotonRegistrar($funcion)
+        function botonRegistrar($funcion)
         {
             $formulario ="";
                 $formulario .=' <div class="clear"></div>

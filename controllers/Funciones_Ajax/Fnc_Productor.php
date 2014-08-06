@@ -22,7 +22,7 @@
 
 				# Start Tab1
 				$formulario .='<div class="tab">
-								<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio">
+								<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio" onclick="xajax_Menus_Botonera(\'100201\');">
 								<label for="tab-1" class="tab-label" >Productor  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
@@ -43,7 +43,7 @@
 
 				# Start Tab2
 				$formulario .='<div class="tab">
-								<input type="radio" id="tab-2" name="tab-group-1"  class="tab-radio">
+								<input type="radio" id="tab-2" name="tab-group-1"  class="tab-radio" onclick="xajax_Listar_Parcelas( xajax.getFormValues(FrmPrincipal) ) ;">
 								<label for="tab-2" class="tab-label" >Parcela  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
