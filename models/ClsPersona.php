@@ -31,6 +31,17 @@ class ClsPersona extends ClsConexion
 			$data = $this->rows ;
 			return $data;
 		}
+	# Buscar Persona cPerCodigo
+		function Buscar_Persona_By_cPerCodigo($bean_persona )
+		{
+			$cPerCodigo     = $bean_persona->getcPerCodigo() ;
+
+			$this->query = "CALL usp_Buscar_Persona_By_cPerCodigo( '$cPerCodigo' )  ; ";
+			$this->execute_query();
+			$data = $this->rows ;
+			return $data;
+		}
+
 
 
 

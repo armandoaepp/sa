@@ -7,9 +7,16 @@ function js_seleccionar_fila(numFila)
 	// Hacemos Visible el Hermono Oculta
 	jq('#tbodyData>tr').removeClass("add-background-tr") ;
 	jq('#tr'+numFila).addClass("add-background-tr") ;
-	jq('#tr'+numFila).addClass("add-background-tr") ;
 	jq('#rdCodigo'+numFila).prop("checked", true) ;
 	// console.log(numFila) ;
+}
+function js_selected_rd_tr(numFila,id_tbody , id_rdbutton)
+{
+	// Hacemos Visible el Hermono Oculta
+	jq('#'+id_tbody+'>tr').removeClass("add-background-tr") ;
+	jq('#'+id_tbody+' #tr'+numFila).addClass("add-background-tr") ;
+	jq('#'+id_rdbutton+numFila).prop("checked", true) ;
+	// console.log('#'+id_tbody+ ' #tr'+numFila) ;
 }
 
 function Calendar_Load(id){
@@ -104,9 +111,6 @@ function Hora_CLass(ClassCSS)
 }
 
 
-function js_checked(id , estado) {
-	jq("#"+id).attr('checked', estado);
-}
 
 
 // VALIDAR UN CAMPO TYPE: NUMERO
@@ -128,7 +132,7 @@ function Validar_Text_Number(obj)
 	jq(obj).validCampoAPP('abcdefghijklmnñopqrstuvwxyzáéíóú0123456789 ');
 }
 // VALIDAR UN CAMPO TYPE: NUMERO DECIMAL
-function Validar_Decimal(id){
+function Validar_Decimal(obj){
 	 jq(obj).validCampoAPP('0123456789.');
 }
 
@@ -151,3 +155,13 @@ function Validar_Decimal_Class(ClassCSS){
 }
 
 
+function js_checked(id , estado) {
+	jq("#"+id).attr('checked', estado);
+}
+
+function js_disabled_rd_tab_productor(estado)
+{
+	jQuery('#tab-2').prop("disabled", estado);
+	jQuery('#tab-3').prop("disabled", estado);
+
+}

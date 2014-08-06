@@ -276,7 +276,8 @@
 
 			$formulario = "";
 			$nPrdTipo = "";
-					if (!empty($frm["rdCodigo"])) {
+					if (!empty($frm["rdCodigo"]))
+					{
 						$arr = explode('-', $frm["rdCodigo"]);
 						$nParCodigo = $arr[0];
 						$nCasCodigo = $arr[1];
@@ -308,7 +309,8 @@
 						$objResponse->script("xajax_Combo_Distrito(".$nProCodigo." ,".$nDisCodigo.", '".$selectDependiente."');");
 						$objResponse->script("xajax_Combo_Caserio(".$nDisCodigo." ,".$nCasCodigo.", '".$selectDependiente."');");
 					}
-					else{
+					else
+					{
 						$formulario .="<div class='divContenedor'>";
 		    			$formulario .=	"<div class='divFila' style='text-align:center; margin-top:10px;'>";
 					    $formulario .= 		"<label style='color:#000000; font-family:Arial; font-size:12px; font-weight:bold;'>¡SELECCIONE UN REGISTRO DE LA LISTA!</label>";
@@ -602,7 +604,7 @@
 	                    $formulario.=         $i + 1 ;
 	                    $formulario.=   "</td>";
 					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParNombre"]."</td>";
-					   	$formulario.= 	"<td> $i: ".$data["cuerpo"][$i]["cParDescripcion"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParDescripcion"]."</td>";
 					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cCasDescripcion"]."</td>";
 					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cDisDescripcion"]."</td>";
 					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cProDescripcion"]."</td>";

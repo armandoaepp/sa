@@ -48,6 +48,7 @@ require_once "ClsPerUbigeo.php";
 
 require_once "ClsProductor.php";
 require_once "ClsUbigeo.php";
+require_once "ClsParcela.php";
 
 
 

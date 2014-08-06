@@ -22,7 +22,7 @@
 
 				# Start Tab1
 				$formulario .='<div class="tab">
-								<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio" onclick="xajax_Menus_Botonera(\'100201\');">
+								<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio" onclick="xajax_Menus_Botonera(\'100201\')">
 								<label for="tab-1" class="tab-label" >Productor  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
@@ -43,7 +43,7 @@
 
 				# Start Tab2
 				$formulario .='<div class="tab">
-								<input type="radio" id="tab-2" name="tab-group-1"  class="tab-radio" onclick="xajax_Listar_Parcelas( xajax.getFormValues(FrmPrincipal) ) ;">
+								<input type="radio" id="tab-2" name="tab-group-1"  class="tab-radio" onclick="xajax_Listar_Parcelas( 0,15,1,1 ) ;" disabled>
 								<label for="tab-2" class="tab-label" >Parcela  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
@@ -52,8 +52,8 @@
 											</div>' ;
 
 
-						# paginado paginado productor
-						$formulario .='<div id="Cont_Num_Parcela_" class="c1" ></div>	<div id="tab_pag_productor"  class="c11"  style="position: relative; top: 5px; padding:0 ;">
+						# paginado paginado parcela
+						$formulario .='<div id="Cont_Pag_Parcela_" class="c1" ></div>	<div id="tab_pag_productor"  class="c11"  style="position: relative; top: 5px; padding:0 ;">
 										</div> ';
 					$formulario .='	</div> ';
 					# End content
@@ -128,7 +128,7 @@
 
 												</td>
 												<td>
-									    		    <input type="search" name="s_cPerNombre_" id="s_cPerNombre_" placeholder="Buscar DNI"
+									    		    <input type="search" name="s_cPerNombre_" id="s_cPerNombre_" placeholder="Buscar Por Nombres"
 									    		    onkeyup="'.$FuncionEnter.'"
 								    				onsearch="'.$FuncionSearch.'" />
 												</td>
@@ -163,6 +163,7 @@
 
 			$formulario="<center>".$formulario."</center>";
 		    $objResponse->assign("Tab_Productor","innerHTML",$formulario);
+		    $objResponse->script("js_disabled_rd_tab_productor(true);");
 		    $objResponse->script("xajax_Filtrar_Productor('".$nOriRegistros."', '".$nNumRegMostrar."', '".$nPagRegistro."', '".$nPagAct."',  xajax.getFormValues(FrmPrincipal) );");
 
 			return $objResponse;
@@ -195,7 +196,7 @@
 				{
 					$cPerNombre = "-";
 				}else{
-					$cPerNombre = $frm["s_cPerNombre"];
+					$cPerNombre = $frm["s_cPerNombre_"];
 				}
 				if(empty($frm["s_nParStatus_"]))
 				{
@@ -240,7 +241,7 @@
 				for ($i = 0; $i < count($data["cuerpo"]); $i++)
 	            {
 
-						$formulario.="<tr id='tr".$i."' onclick=\"js_seleccionar_fila(".$i.");\">";
+						$formulario.="<tr id='tr".$i."' onclick=\"js_seleccionar_fila(".$i.");js_disabled_rd_tab_productor(false);\">";
 	                    $formulario.= 	"<td>";
 	                    $formulario.=      "  <input class='inputRadio' type='radio'
 	                    					value='".$data["cuerpo"][$i]["cPerCodigo"]. "'
@@ -764,7 +765,7 @@
 									$bean_perparametro->setcPerParGlosa("FECHA INCORPORACION") ;
 									$bean_perparametro->setnParCodigoNew(1) ;
 									# Fecha Incorporacion
-									$objPerParametro->Upd_PerParametro($bean_perparametro ) ;
+									$objPerParametro->Upd_PerParametro_nParCodigoNew($bean_perparametro ) ;
 
 									# Status
 									$bean_perparametro->setnParClase(2003) ;
@@ -774,7 +775,7 @@
 									$bean_perparametro->setnParCodigoNew($Status) ;
 
 
-									$objPerParametro->Upd_PerParametro($bean_perparametro ) ;
+									$objPerParametro->Upd_PerParametro_nParCodigoNew($bean_perparametro ) ;
 
 									# ACTUALIZAR SECTOR
 									$bean_perubigeo->setcPerCodigo($cPerCodigo) ;
@@ -1029,7 +1030,7 @@
 				{
 					$cPerNombre = "-";
 				}else{
-					$cPerNombre = $frm["s_cPerNombre"];
+					$cPerNombre = $frm["s_cPerNombre_"];
 				}
 				if(empty($frm["s_nParStatus_"]))
 				{
@@ -1058,7 +1059,6 @@
 			$bean_parametro->setcParDescripcion($cParSector) ; # descripcion del sector
 
 		    $data = $objProductor->Get_Productores($bean_persona , $bean_perdocumento, $bean_parametro);
-
 
 			$formulario= "";
 
@@ -1101,7 +1101,7 @@
 				$formulario .= "</tbody>" ;
 				$formulario .= "<tfoot>" ;
 				$formulario .= " 	<tr>" ;
-				$formulario .= " 	<td  colspan='5' class='border-top'>   </td>" ;
+				$formulario .= " 	<td  colspan='9' class='border-top'>   </td>" ;
 				$formulario .= " 	</tr>" ;
 
 				$formulario .= "</tfoot>" ;

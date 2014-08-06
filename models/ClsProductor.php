@@ -15,8 +15,6 @@ Class ClsProductor extends ClsConexion
 		$nParCodStatus    = $bean_parametro->getnParCodigo() ; # codigo de status
 		$cParDescSector   = $bean_parametro->getcParDescripcion() ; # descripcion del sector
 
-
-
 		// return "Call usp_Get_Productores($nOriReg, $nCanReg, $nPagRegistro, '$cPerDocNumero' , '$cPerApellidos', '$cPerNombre')";
 		$this->query = "Call usp_Get_Productores($nOriReg, $nCanReg, $nPagRegistro, '$cPerDocNumero' , '$cPerApellidos', '$cPerNombre',$nParCodStatus ,'$cParDescSector' )";
 		$this->execute_query();
