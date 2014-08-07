@@ -76,6 +76,19 @@ Class ClsPerParametro extends ClsConexion
 		$data = $this->rows ;
 		return $data;
 	}
+	# EXTRAER PARAMETRO - PERPARAMETRO POR (cPerCodigo - nParCodigo)
+	function Get_PerParametro_by_cPer_nPar_Codigo($bean_perparametro )
+	{
+		$cPerCodigo    = $bean_perparametro->getcPerCodigo() ;
+		$nParClase     = $bean_perparametro->getnParClase() ;
+
+		$this->query = "Call usp_Get_PerParametro_by_cPer_nPar_Codigo('$cPerCodigo' , $nParClase )";
+		$this->execute_query();
+		$data = $this->rows ;
+		return $data;
+	}
+
+
 
 
 }

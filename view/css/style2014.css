@@ -48,19 +48,13 @@ table { border-spacing: 0; }
 .centered{float: none; margin: auto;}
 .left {float: left;}
 .right {float: right;}
+
 .text-left {text-align: left;}
 .text-right {text-align: right;}
 .text-center {text-align: center;}
 .text-justify {text-align: justify;}
 .text-transform-none{	text-transform: none; }
 
-.left {float: left;}
-.right {float: right;}
-
-.text-left {text-align: left;}
-.text-right {text-align: right;}
-.text-center {text-align: center;}
-.text-justify {text-align: justify;}
 
 .space-all {margin: 20px;}
 .space-top {margin-top: 20px;}
@@ -1124,6 +1118,17 @@ fieldset[disabled] .checkbox-inline {
 .boton .nav-btn-nombre ,
 .boton .post {
 	padding-top: 4px!important;
+}
+
+.botonCancelar a
+{
+	color: #2671C2 ;
+	font-size:1.1em;
+}
+
+.botonCancelar a:hover
+{
+	color: #AA0505 ;
 }
 
 

@@ -30,8 +30,8 @@
 									<th  style="width: 25%;">&nbsp; Parcela </th>
 									<th  style="width: 25%;">&nbsp; Productos </th>
 									<th  style="width: 10%;">&nbsp; Hectareas</th>
-									<th  style="width: 10%;">&nbsp; Quintales </th>
 									<th  style="width: 10%;">&nbsp; Kg </th>
+									<th  style="width: 10%;">&nbsp; Quintales </th>
 									<th  style="width: 10%;">&nbsp; % </th>
 								</tr>';
 					$formulario .='<tr class="vform">
@@ -158,12 +158,13 @@
 		}
 
 	# NUEVO
-		function Nuevo_Cosecha()
+		function Nuevo_Cosecha($frm)
 		{
 			$objResponse = new xajaxResponse();
 			#Formulario
 			$funcion = "Insertar_Cosecha";
-			$formulario = Frm_Cosecha($funcion);
+			$cPerCodigo =  $frm["rdCodigo"] ;
+			$formulario = Frm_Cosecha($funcion,$cPerCodigo);
 
 			# configurando emergente
 			$FrmRpta = FrmEmergente("NUEVO Cosecha", $formulario);
@@ -189,44 +190,49 @@
 				if(empty($frmP['rdCodigo'])){
 					$MsjAlter = "Seleccionar Productor";
 				}
-				if(empty($frmE['cParNomCodCosecha_'])){
+				if(empty($frmE['Parcela_'])){
+					$MsjAlter = "Seleccionar Parcela";
+				}
+				if(empty($frmE['Producto_'])){
+					$MsjAlter = "Seleccionar Productos";
+				}
+				if(empty($frmE['cParCodCosecha_'])){
 					$MsjAlter = "Ingrese Codigo de Cosecha.";
 				}
-				if(empty($frmE['cParNomCodCosecha_'])){
-					$MsjAlter = "Ingrese Codigo de Cosecha.";
+				if(empty($frmE['Hectareas_'])){
+					$MsjAlter = "Ingrese Hectareas de Cosecha.";
 				}
-				if(empty($frmE['cParDescCosecha_'])){
-					$MsjAlter = "Ingrese Nombre de Cosecha";
+				if(empty($frmE['Quintales_'])){
+					$MsjAlter = "Ingrese Ingrese Kg Estimados ";
 				}
-				if(empty($frmE['nAreaParecela_'])){
-					$MsjAlter = "Ingrese Área de Cosecha.";
+				if(empty($frmE['holgura_'])){
+					$MsjAlter = "Ingrese lo extra de la cosecha ";
 				}
-				if(empty($frmE['dFechaIncorCosecha_'])){
-					$MsjAlter = "Seleccione Fecha de Incorporación";
-				}
+
 
 			if($MsjAlter == "")
 			{
 				# OBJETOS
-					$bean_persona      =  new Bean_persona() ;
-					$bean_perparametro =  new Bean_perparametro() ;
-					$bean_parametro    =  new Bean_parametro() ;
+					$bean_perparparametro =  new Bean_perparparametro() ;
+					$bean_parametro       =  new Bean_parametro() ;
 
-					$objPersona      = new ClsPersona();
-					$objPerParametro = new ClsPerParametro();
-					$objParametro    = new ClsParametro();
+					$objPerParParametro = new ClsPerParParametro();
+					$objParametro       = new ClsParametro();
 
 				# DATOS FRM
-					$cPerCodigo         = $frmP['rdCodigo'] ;
-					$cParNomCodCosecha  = $frmE['cParNomCodCosecha_'] ;
-					$cParDescCosecha    = Mayusc($frmE['cParDescCosecha_']) ;
-					$nAreaParecela      = $frmE['nAreaParecela_'] ;
-					$dFechaIncorCosecha = $frmE['dFechaIncorCosecha_'] ;
-					// $objResponse->alert($cPerCodigo);
+					$cPerCodigo     = $frmP['rdCodigo'] ;
+					$Parcela        = $frmE['Parcela_'] ;
+					$Producto       = $frmE['Producto_'] ;
+					$cParCodCosecha = $frmE['cParCodCosecha_'] ;
+					$Hectareas      = $frmE['Hectareas_'] ;
+					$Quintales      = $frmE['Quintales_'] ; // save  cParDespcricion de parametro
+					$holgura        = $frmE['holgura_'] ;
+
+
 
 				// $bean_parametro->setcParJerarquia($nCaserio);
-				$bean_parametro->setnParClase( 2006 );
-				$bean_parametro->setcParNombre($cParNomCodCosecha );
+				$bean_parametro->setnParClase( 2008 );
+				$bean_parametro->setcParNombre($cParCodCosecha);
 				$bean_parametro->setcParDescripcion("-" );
 
 				# valida que el codigo sector no exista
@@ -247,9 +253,9 @@
 					        	$objPersona->beginTransaction() ;
 
 					        # REGISTRAR PARCELA COMO PARAMETRO
-								$bean_parametro->setcParNombre($cParNomCodCosecha );
-								$bean_parametro->setcParDescripcion($cParDescCosecha );
-								$bean_parametro->setnParClase( 2006 );
+								$bean_parametro->setcParNombre($cParCodCosecha);
+								$bean_parametro->setcParDescripcion($Quintales );
+								$bean_parametro->setnParClase( 2008 );
 			        			$data = $objParametro->Set_Parametro($bean_parametro);
 
 			        			$nParCodigo = $data["cuerpo"][0]["nParCodigo"] ;
@@ -260,8 +266,18 @@
 								$bean_perparametro->setnParCodigo($nParCodigo) ;
 								$bean_perparametro->setcPerParValor($nAreaParecela) ;
 								$bean_perparametro->setcPerParGlosa($dFechaIncorCosecha) ;
+
+
+
+								$bean_perparparametro->setcPerCodigo($cPerCodigo);
+								$bean_perparparametro->setnParSrcCodigo($nParCodigo);
+								$bean_perparparametro->setnParSrcClase(2008);
+								$bean_perparparametro->setnParDstCodigo();
+								$bean_perparparametro->setnParDstClase();
+								$bean_perparparametro->setcParParValor();
+								$bean_perparparametro->setcParParGlosa();
 								# Fecha Incorporacion
-								$dat1 = $objPerParametro->Set_PerParametro($bean_perparametro ) ;
+								$dat1 = $objPerParParametro->Set_PerParParametro($bean_perparparametro) ;
 
 							# INSERTAMOS LA TRANSACCION
 								Insertar_Transaccion(1,"NUEVO PARCELA nParCodigo: ".$nParCodigo.", cPerCodigo:".$cPerCodigo.", cParDescCosecha:".$cParDescCosecha ,"") ;
@@ -360,10 +376,10 @@
 				if(empty($frmE['nParCodCosecha_'])){
 					$MsjAlter = "No Existe Cosecha Seleccionada";
 				}
-				if(empty($frmE['cParNomCodCosecha_'])){
+				if(empty($frmE['cParCodCosecha_'])){
 					$MsjAlter = "Ingrese Codigo de Cosecha.";
 				}
-				if(empty($frmE['cParNomCodCosecha_'])){
+				if(empty($frmE['cParCodCosecha_'])){
 					$MsjAlter = "Ingrese Codigo de Cosecha.";
 				}
 				if(empty($frmE['cParDescCosecha_'])){
@@ -390,7 +406,7 @@
 				# DATOS FRM
 					$cPerCodigo         = $frmP['rdCodigo'] ;
 					$nParCodigo         = $frmE['nParCodCosecha_'] ;
-					$cParNomCodCosecha  = $frmE['cParNomCodCosecha_'] ;
+					$cParNomCodCosecha  = $frmE['cParCodCosecha_'] ;
 					$cParDescCosecha    = Mayusc($frmE['cParDescCosecha_']) ;
 					$nAreaParecela      = $frmE['nAreaParecela_'] ;
 					$dFechaIncorCosecha = $frmE['dFechaIncorCosecha_'] ;
@@ -545,49 +561,68 @@
 		}
 
 	# FRM PARCELA
-		function Frm_Cosecha($funcion, $nParCodCosecha = 0 , $cParNomCodCosecha = "" , $Parcela = 0 , $Producto = 0 , $Hectareas = "" , $Kg = "" )
+		function Frm_Cosecha($funcion,$cPerCodigo , $nParCodCosecha = 0 , $cParNomCodCosecha = "" , $nCodParcela = 0 , $nCodProducto = 0 , $Hectareas = "" , $Kg = "" )
 		{
+			$objPerParametro   = new ClsPerParametro() ;
+			$objParametro      = new ClsParametro() ;
+
+			$bean_perparametro = new Bean_perparametro() ;
+			$bean_parametro    = new Bean_parametro() ;
+
+			$bean_perparametro->setcPerCodigo($cPerCodigo ) ;
+			$bean_perparametro->setnParClase(2006) ;
+
+			$data_parcela = $objPerParametro->Get_PerParametro_by_cPer_nPar_Codigo($bean_perparametro ) ;
+			$option_parcela = SelectOption($data_parcela, "nParCodigo","cParDescripcion", $nCodParcela );
+
+			$bean_parametro->setnParClase(2007) ;
+
+			$data_productos = $objParametro->Get_Parametro_By_cParClase($bean_parametro ) ;
+			$option_productos = SelectOption($data_productos, "nParCodigo","cParDescripcion", $nCodProducto );
+
 
 			$formulario = '
 		    	<div class="vform vformContenedor">
 		    		<fieldset class="c12">
 		    		<input type="hidden" name="nParCodCosecha_" value="'.$nParCodCosecha.'" />' ;
 
-		    	$formulario .='<fieldset class="c6 ">
-	                                <label for="cParNomCodCosecha_">Codigo</label>
-	                                <span class="pre  icon-text"></span>
-	                                <input type="text" class="pre " name="cParNomCodCosecha_" id="cParNomCodCosecha_" value="'.$cParNomCodCosecha.'" placeholder="INGRESE Codigo Cosecha "  maxlength="8">
-	                            </fieldset>';
-
 		        $formulario .=' <fieldset class="c6">
 						    		<label for="Parcela_"> Parcela </label>
 						    		<select name="Parcela_" id="Parcela_">
+						    		'.$option_parcela.'
 						    		</select>
 						    	</fieldset> ';
 
 				$formulario .=' <fieldset class="c6">
 						    		<label for="Producto_"> Producto </label>
 						    		<select name="Producto_" id="Producto_">
+						    		'.$option_productos.'
 						    		</select>
 						    	</fieldset> ';
+
+				$formulario .='<fieldset class="c6 ">
+	                                <label for="cParCodCosecha_">Codigo</label>
+	                                <span class="pre  icon-text"></span>
+	                                <input type="text" class="pre " name="cParCodCosecha_" id="cParCodCosecha_" value="'.$cParNomCodCosecha.'" placeholder="INGRESE Codigo Cosecha "  maxlength="8">
+	                            </fieldset>';
 
 
 	            $formulario .='<fieldset class="c6 ">
 	                                <label for="Hectareas_">Hectareas </label>
 	                                <span class="pre  icon-text"></span>
-	                                <input type="text" class="pre " name="Hectareas_" id="Hectareas_" value="'.$cParDescCosecha.'" placeholder="INGRESE Hectareas para el Producto">
+	                                <input type="text" class="pre " name="Hectareas_" id="Hectareas_" value="'.$cParDescCosecha.'" placeholder="INGRESE Hectareas para el Producto" onfocus="Validar_Decimal(this) ;"  maxlength="4">
 	                            </fieldset>';
 
 	            $formulario .='<fieldset class="c6 ">
-	                                <label for="Kg_">Área </label>
+	                                <label for="Quintales_"> Quintales  </label>
 	                                <span class="pre  icon-text"></span>
-	                                <input type="text" class="pre " name="Kg_" id="Kg_" value="'.$nAreaParecela.'" placeholder="INGRESE Area Cosecha " onfocus="Validar_Decimal(this) ;" maxlength="4">
+	                                <input type="text" class="pre " name="Quintales_" id="Quintales_" value="'.$nAreaParecela.'" placeholder="INGRESE Area Cosecha " onfocus="Validar_Decimal(this) ;" maxlength="4">
 	                            </fieldset>';
 
 	            $formulario .='<fieldset class="c6 ">
-	                                <label for="holgura_"> % </label>
+	                                <label for="holgura_"> % Extra </label>
 	                                <span class="pre  icon-text"></span>
-	                                <input type="text" class="pre " name="holgura_" id="holgura_" value="" placeholder="INGRESE holgura ">
+	                                <input type="text" class="pre " name="holgura_" id="holgura_" value="" placeholder="INGRESE holgura " onfocus="Validar_Decimal(this) ;" maxlength="4">
 	                            </fieldset>';
 
 	            $formulario .=' <div id="labelMsj" class="c12 MsjAlert "></div>

@@ -8,7 +8,7 @@
 		$xajax->registerFunction("Actualizar_Parametro");
 		$xajax->registerFunction("Eliminar_Parametro");
 		$xajax->registerFunction("ConfEliminar_Parametro");
-		$xajax->registerFunction("Reportes_Parametro");
+		$xajax->registerFunction("Rpt_Parametro_Pdf");
 		$xajax->registerFunction("Configurar_Parametro");
 
 		/**
@@ -16,18 +16,18 @@
 		 * @param [type] $nParClase [CLASE DEL PARAMETRO]
 		 * @param string $funcion   [FUNCION QUE VA CARGAR ESTO SI ES QUE ACCEDO AL FORMULARIO DESDE OTRO INTERFAZ]
 		 */
-			// $objBeanParametro = new  Bean_parametro() ;
+			// $bean_parametro = new  Bean_parametro() ;
 			function Configurar_Parametro($nParClase , $funcion ="")
 			{
 				$objResponse = new xajaxResponse();
 
-				$objBeanParametro = new  Bean_parametro() ;
-				// global $objBeanParametro ;
-				$objBeanParametro->setnParClase($nParClase) ;
+				$bean_parametro = new  Bean_parametro() ;
+				// global $bean_parametro ;
+				$bean_parametro->setnParClase($nParClase) ;
 				# cargamos  el parametro padre nParCodigo: 0 y nParEstado : 0
 				$objParametro = new ClsParametro();
-				$data = $objParametro->Get_Parametro_Padre_nParClase($objBeanParametro );
-				// $objResponse->alert($objBeanParametro->getnParClase()) ;
+				$data = $objParametro->Get_Parametro_Padre_nParClase($bean_parametro );
+				// $objResponse->alert($bean_parametro->getnParClase()) ;
 
 				$cParNombre = "";
 				if(count($data["cuerpo"])>0)
@@ -51,7 +51,7 @@
 				$_SESSION["S_nParClase"]     =  $nParClase ;
 				$_SESSION["S_Fnc_ListarPar"] =  $FuncionCargar ;
 
-				// $objBeanParametro = null;
+				// $bean_parametro = null;
 				return $objResponse ;
 			}
 
@@ -60,32 +60,34 @@
 			{
 
 					$objResponse = new xajaxResponse();
-					$objParametro = new ClsParametro();
+
+
+			   		$FuncionSearch = 'xajax_Filtrar_Parametro('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );';
+					$FuncionEnter = ' if(event.keyCode == 13 ){'.$FuncionSearch.'} ; if( (jq(this).val()).length  == 0){	'.$FuncionSearch.' }';
+
 
 					$formulario ='';
 					$formulario .= ' <div class="ContenedorTable">
 							<table style="width:100%;" >
 								<tr class="title-table" >
 									<td  style="width:20%;">&nbsp; C&oacute;digo</td>
-									<td  style="width:35%;">&nbsp;abreviatura </td>
-									<td  style="width:45%;">&nbsp;'.$_SESSION["S_cParNombre"].'</td>
+									<td  style="width:30%;">&nbsp;abreviatura </td>
+									<td  style="width:50%;">&nbsp;'.$_SESSION["S_cParNombre"].'</td>
 								</tr>
 						    	<tr class="vform">
 									<td>
 									    <input  type="search" disabled="disabled" name="" placeholder="" />
 									</td>
 									<td>
-						    		    <input type="search" name="cParNombre_" id="cParNombre_" placeholder="Buscar por Codigo"
-						    		    value=""
-										onkeyup="xajax_Filtrar_Parametro('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );"
-					    		    	onsearch="xajax_Filtrar_Parametro('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );" />
+						    		    <input type="search" name="B_cParNombre_" id="B_cParNombre_" placeholder="Buscar por Codigo"
+						    		    onkeyup="'.$FuncionEnter.'"
+							    		onsearch="'.$FuncionSearch.'" />
 
 									</td>
 									<td>
-						    		    <input type="search" name="cParDescripcion_" id="cParDescripcion_" placeholder="Buscar '.$_SESSION["S_cParNombre"].'"
-						    		    value=""
-										onkeyup="xajax_Filtrar_Parametro('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );"
-					    		    	onsearch="xajax_Filtrar_Parametro('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );" />
+						    		    <input type="search" name="B_cParDescripcion_" id="B_cParDescripcion_" placeholder="Buscar '.$_SESSION["S_cParNombre"].'"
+						    		   onkeyup="'.$FuncionEnter.'"
+							    		onsearch="'.$FuncionSearch.'" />
 									</td>
 								</tr>
 								<tbody id="tbodyData" class="table table-hover table-border">
@@ -107,39 +109,39 @@
 				$objResponse = new xajaxResponse();
 				$objParametro = new ClsParametro();
 
-				if(empty($frm["cParDescripcion_"]))
+				if(empty($frm["B_cParDescripcion_"]))
 				{
 					 $cParDescripcion="-";
 				}else{
-					$cParDescripcion=$frm["cParDescripcion_"];
+					$cParDescripcion=$frm["B_cParDescripcion_"];
 				}
-				if(empty($frm["cParNombre_"]))
+				if(empty($frm["B_cParNombre_"]))
 				{
 					 $cParNombre="-";
 				}else{
-					 $cParNombre=$frm["cParNombre_"];
+					 $cParNombre=$frm["B_cParNombre_"];
 				}
 					#Se Instrancia la clase Bean_parametro en un objeto y se encapasula los con los datos
-				    $objBeanParametro = new  Bean_parametro() ;
+				    $bean_parametro = new  Bean_parametro() ;
 
-			    	$objBeanParametro->setnOriRegistros(0) ;
-					$objBeanParametro->setnNumRegMostrar(0) ;
-					$objBeanParametro->setnPagRegistro(0) ;//que no pagine
-					$objBeanParametro->setnParClase($_SESSION["S_nParClase"]) ;
-					$objBeanParametro->setcParNombre($cParNombre) ;
-					$objBeanParametro->setcParDescripcion($cParDescripcion) ;
+			    	// $bean_parametro->setnOriRegistros(0) ;
+					// $bean_parametro->setnNumRegMostrar(0) ;
+					$bean_parametro->setnOriRegistros($nOriRegistros) ;
+					$bean_parametro->setnNumRegMostrar($nNumRegMostrar) ;
+					$bean_parametro->setnPagRegistro(0) ;//que no pagine
+					$bean_parametro->setnParClase($_SESSION["S_nParClase"]) ;
+					$bean_parametro->setcParNombre($cParNombre) ;
+					$bean_parametro->setcParDescripcion($cParDescripcion) ;
 					# se llama a la funciona(sin paginado) y se le envia el objeto
-			    	$AdoRs =$objParametro->Filtrar_Parametro($objBeanParametro);
+			    	$AdoRs =$objParametro->Filtrar_Parametro($bean_parametro);
 
-			   		 #Capturar el número de registros de acuerdo al objeto que se le envia y los datos qye recibe es un array
+			   		#Capturar el número de registros de acuerdo al objeto que se le envia y los datos qye recibe es un array
 			    	$nNumRegExist = count($AdoRs["cuerpo"]);
 
 				    #Filtrar registros deacuerdo al origen de datos y y viene paginados
-				    $objBeanParametro->setnOriRegistros($nOriRegistros) ;
-					$objBeanParametro->setnNumRegMostrar($nNumRegMostrar) ;
-					$objBeanParametro->setnPagRegistro($nPagRegistro) ;
+					$bean_parametro->setnPagRegistro($nPagRegistro) ;
 
-			    	$data =$objParametro->Filtrar_Parametro($objBeanParametro);
+			    	$data =$objParametro->Filtrar_Parametro($bean_parametro);
 
 			    $formulario= "";
 				$Paginacion="&nbsp;";
@@ -196,49 +198,55 @@
 			{
 				$objResponse = new xajaxResponse();
 
-			  	$objBeanParametro = new  Bean_parametro() ;
-			  	$objBeanParametro->setnParClase($_SESSION["S_nParClase"]) ;
-				$objBeanParametro->setcParNombre(Mayusc($frm["txtcParNombre"]));
-				$objBeanParametro->setcParDescripcion(Mayusc($frm["txtcParDescripcion"])) ;
 
-				$objParametro = new ClsParametro();
 
 				$MsjAlter = "";
 				$Funcion = "#";
 
-				if(empty($frm["txtcParNombre"]))
+				if(empty($frm["cParNombre_"]))
 				{
 					$MsjAlter = "Completar abreviatura.";
 				}
-				elseif(empty($frm["txtcParDescripcion"]))
+				elseif(empty($frm["cParDescripcion_"]))
 				{
 					$MsjAlter = "Completar descripci&oacute;n.";
 				}
 
 				if($MsjAlter=="")
 				{
-			    	$dataValida = $objParametro->Validar_Parametro($objBeanParametro);
-			        #VALIDAR
-				        if(count($dataValida["cuerpo"])>0){
-	        				$MsjAlter= ".::YA EXISTE UN REGISTRO IDENTICO::.";
-				        }
-				        else{
-				        	try
-				        	{	# iniciamos la transaccion
-				        		$objParametro->beginTransaction() ;
-				        		$data = $objParametro->Set_Parametro($objBeanParametro);
-								Insertar_Transaccion(1,"NUEVO PARAMETRO: ".$_SESSION["S_cParNombre"]." - nParCodigo : ".$frm["txtnParCodigo"]."- nParClase : ".$_SESSION["S_nParClase"]." - cParDescripcion : ".Mayusc($frm["txtcParDescripcion"]),"") ;
-								# si todo a tendido exito
-				        		$objParametro->commit();
+						$bean_parametro = new  Bean_parametro() ;
+						$objParametro = new ClsParametro();
 
-								$Funcion = $_SESSION["S_Fnc_ListarPar"] ." ocultar_emergente();";
-				        	}catch(Exception $e)
-				        	{
-				        		# si ha habido algun error
-				        		$objParametro->rollback();
-				        		$MsjAlter =  "Error de registro.";
+						$nParClase       = $_SESSION["S_nParClase"] ;
+						$cParNombre      = Mayusc($frm["cParNombre_"]);
+						$cParDescripcion = Mayusc($frm["cParDescripcion_"]);
+
+					  	$bean_parametro->setnParClase($nParClase ) ;
+						$bean_parametro->setcParNombre($cParNombre );
+						$bean_parametro->setcParDescripcion($cParDescripcion) ;
+
+				    	$dataValida = $objParametro->Validar_Parametro($bean_parametro);
+				        #VALIDAR
+					        if(count($dataValida["cuerpo"])>0){
+		        				$MsjAlter= ".::YA EXISTE UN REGISTRO IDENTICO::.";
+					        }
+					        else{
+					        	try
+					        	{	# iniciamos la transaccion
+					        		$objParametro->beginTransaction() ;
+					        		$data = $objParametro->Set_Parametro($bean_parametro);
+									Insertar_Transaccion(1,"NUEVO PARAMETRO: ".$_SESSION["S_cParNombre"]." - nParCodigo : ".$data["cuerpo"][0]["nParCodigo"] ."- nParClase : ".$nParClase." - cParDescripcion : ".$cParDescripcion,"") ;
+									# si todo a tendido exito
+					        		$objParametro->commit();
+
+									$Funcion = $_SESSION["S_Fnc_ListarPar"] ." ocultar_emergente();";
+					        	}catch(Exception $e)
+					        	{
+					        		# si ha habido algun error
+					        		$objParametro->rollback();
+					        		$MsjAlter =  "Error de registro.";
+					        	}
 				        	}
-			        	}
 				}
 
 				$objResponse->assign("labelMsj","innerHTML",$MsjAlter);
@@ -254,18 +262,18 @@
 				$formulario = "";
 				if (isset($frm["rdCodigo"])) {
 
-					$objBeanParametro = new  Bean_parametro() ;
-				  	$objBeanParametro->setnParClase($_SESSION["S_nParClase"]) ;
-					$objBeanParametro->setnParCodigo($frm["rdCodigo"]);
+					$bean_parametro = new  Bean_parametro() ;
+				  	$bean_parametro->setnParClase($_SESSION["S_nParClase"]) ;
+					$bean_parametro->setnParCodigo($frm["rdCodigo"]);
 
 					$objParametro = new ClsParametro();
-					$data	= $objParametro->Buscar_Parametro($objBeanParametro);
-					$objResponse->alert($data) ;
+					$data	= $objParametro->Buscar_Parametro($bean_parametro);
+
 					if(count($data["cuerpo"])>0)
 					{
-						$nnParCodigo=$data["cuerpo"][0]["nParCodigo"];
-						$cParDescripcion=Mayusc($data["cuerpo"][0]["cParDescripcion"]);
-						$cParNombre=Mayusc($data["cuerpo"][0]["cParNombre"]);
+						$nnParCodigo     = $data["cuerpo"][0]["nParCodigo"];
+						$cParDescripcion = Mayusc($data["cuerpo"][0]["cParDescripcion"]);
+						$cParNombre      = Mayusc($data["cuerpo"][0]["cParNombre"]);
 
 						// Llamamo al la Funcion del Formulario Modal Parameto enviadoles los datos
 						$formulario .= Frm_Parametro("Actualizar_Parametro",$nnParCodigo,$cParDescripcion,$cParNombre);
@@ -274,7 +282,6 @@
 				else{
 					# muesta el mensaje de seleccionar registro
 				    $formulario = SeleccionarRegistro() ;
-				    $objResponse->alert( $formulario ) ;
 				}
 				$FrmRpta = FrmEmergente("ACTUALIZAR ".$_SESSION["S_cParNombre"], $formulario);
 
@@ -293,27 +300,32 @@
 				$MsjAlter = "";
 				$Funcion = "";
 
-				if(empty($frm["txtcParNombre"])){
+				if(empty($frm["cParNombre_"])){
 					$MsjAlter = "Completar Abreviatura.";
 				}
-				if(empty($frm["txtcParDescripcion"])){
+				if(empty($frm["cParDescripcion_"])){
 					$MsjAlter = "Completar ".$_SESSION["S_cParNombre"];
 				}
 
-				if($MsjAlter==""){
+				if($MsjAlter=="")
+				{
+					$nParCodigo 	 = $frm["nParCodigo_"] ;
+					$nParClase       = $_SESSION["S_nParClase"] ;
+					$cParNombre      = Mayusc($frm["cParNombre_"]);
+					$cParDescripcion = Mayusc($frm["cParDescripcion_"]);
 
-					$objBeanParametro = new  Bean_parametro() ;
-				  	$objBeanParametro->setnParClase($_SESSION["S_nParClase"]) ;
-					$objBeanParametro->setnParCodigo($frm["txtnParCodigo"]);
-					$objBeanParametro->setcParNombre(Mayusc($frm["txtcParNombre"]));
-					$objBeanParametro->setcParDescripcion(Mayusc($frm["txtcParDescripcion"])) ;
+					$bean_parametro = new  Bean_parametro() ;
+					$bean_parametro->setnParCodigo($nParCodigo);
+				  	$bean_parametro->setnParClase($nParClase) ;
+					$bean_parametro->setcParNombre($cParNombre);
+					$bean_parametro->setcParDescripcion($cParDescripcion) ;
 
 					$objParametro = new ClsParametro();
 					try
 		        	{	# iniciamos la transaccion
 		        		$objParametro->beginTransaction() ;
-		        		$objParametro->Upd_Parametro($objBeanParametro);
-						Insertar_Transaccion(102,"ACTUALIZO PARAMETRO: ".$_SESSION["S_cParNombre"]." - nParCodigo : ".$frm["txtnParCodigo"]."- nParClase : ".$_SESSION["S_nParClase"]." - cParDescripcion : ".Mayusc($frm["txtcParDescripcion"]),"") ;
+		        		$objParametro->Upd_Parametro($bean_parametro);
+						Insertar_Transaccion(2,"ACTUALIZO PARAMETRO: ".$_SESSION["S_cParNombre"]." - nParCodigo : ".$nParCodigo."- nParClase : ".$nParClase." - cParDescripcion : ".$cParDescripcion,"") ;
 						# si todo a tendido exito
 		        		$objParametro->commit();
 
@@ -359,17 +371,17 @@
 				$MsjAlter = "";
 				$Funcion = "#";
 
-				$objBeanParametro = new  Bean_parametro() ;
-			  	$objBeanParametro->setnParClase($_SESSION["S_nParClase"]) ;
-				$objBeanParametro->setnParCodigo($nParCodigo);
-				$objBeanParametro->setnParTipo(0);
+				$bean_parametro = new  Bean_parametro() ;
+			  	$bean_parametro->setnParClase($_SESSION["S_nParClase"]) ;
+				$bean_parametro->setnParCodigo($nParCodigo);
+				$bean_parametro->setnParEstado(0);
 
 				try
 	        	{
 					$objParametro = new ClsParametro();
 	        		# iniciamos la transaccion
 	        		$objParametro->beginTransaction() ;
-					$objParametro->Upd_Estado_Parametro($objBeanParametro);
+					$objParametro->Upd_Parametro_Estado($bean_parametro);
 					Insertar_Transaccion(3 ,"ELIMINO PARAMETRO: nParCodigo : ".$nParCodigo."- nParClase : ".$_SESSION["S_nParClase"],"") ;
 
 					# si todo a tendido exito
@@ -395,15 +407,17 @@
 					$formulario ="";
 				    $formulario .='
 				    	<div class="vform vformContenedor">
-				    		<input type="hidden" name="txtnParCodigo" value="'.$nParCodigo.'" />
+				    		<input type="hidden" name="nParCodigo_" value="'.$nParCodigo.'" />
 							<fieldset class="c12" >
-								<fieldset class="c6" >
-									<label for="txtcParNombre"> ABREVIATURA </label>
-									<input class="icon-text" type="text" id="txtcParNombre" name="txtcParNombre" placeholder ="INGRESE ABREVIATURA"  value="'.$cParNombre.'">
+								<fieldset class="c5" >
+									<label for="cParNombre_"> ABREVIATURA </label>
+									 <span class="pre  icon-text"></span>
+									<input class="pre" type="text" id="cParNombre_" name="cParNombre_" placeholder ="INGRESE ABREVIATURA"  value="'.$cParNombre.'" maxlength="30">
 								</fieldset>
-								<fieldset class="c6" >
-									<label for="txtcParDescripcion">'.$_SESSION["S_cParNombre"].'  </label>
-									<input class="icon-text" type="text" id="txtcParDescripcion" name="txtcParDescripcion" placeholder ="INGRESE '.$_SESSION["S_cParNombre"].'" value="'.$cParDescripcion.'">
+								<fieldset class="c7" >
+									<label for="cParDescripcion_">'.$_SESSION["S_cParNombre"].'  </label>
+									 <span class="pre  icon-text"></span>
+									<input class="pre" type="text" id="cParDescripcion_" name="cParDescripcion_" placeholder ="INGRESE '.$_SESSION["S_cParNombre"].'" value="'.$cParDescripcion.'">
 								</fieldset>
 							</fieldset>
 							'.botonRegistrar($funcion).'
@@ -413,18 +427,31 @@
 			}
 
 		# REPORTE DE ARTES DEPESCA
-			function Reportes_Parametro($frm="")
+			function Rpt_Parametro_Pdf($frm="")
 			{
-				$objBeanParametro = new  Bean_parametro() ;
-		    	$objBeanParametro->setnOriRegistros(0) ;
-				$objBeanParametro->setnNumRegMostrar(0) ;
-				$objBeanParametro->setnPagRegistro(0) ;
-				$objBeanParametro->setnParClase($_SESSION["S_nParClase"]) ;
-				$objBeanParametro->setcParNombre("-") ;
-				$objBeanParametro->setcParDescripcion("-") ;
+				$bean_parametro = new  Bean_parametro() ;
+				if(empty($frm["B_cParDescripcion_"]))
+				{
+					 $cParDescripcion="-";
+				}else{
+					$cParDescripcion=$frm["B_cParDescripcion_"];
+				}
+				if(empty($frm["B_cParNombre_"]))
+				{
+					 $cParNombre="-";
+				}else{
+					 $cParNombre=$frm["B_cParNombre_"];
+				}
+
+		    	$bean_parametro->setnOriRegistros(0) ;
+				$bean_parametro->setnNumRegMostrar(0) ;
+				$bean_parametro->setnPagRegistro(0) ;
+				$bean_parametro->setnParClase($_SESSION["S_nParClase"]) ;
+				$bean_parametro->setcParNombre( $cParNombre) ;
+				$bean_parametro->setcParDescripcion($cParDescripcion) ;
 
 				$objParametro = new ClsParametro();
-			    $data =$objParametro->Filtrar_Parametro($objBeanParametro);
+			    $data =$objParametro->Filtrar_Parametro($bean_parametro);
 
 				$objResponse = new xajaxResponse();
 
@@ -436,9 +463,9 @@
 					$formulario .= "<table class='table'>" ;
 					$formulario .='
 							<tr class="border-bottom">
-								<th class="" style="width:20%;"> Número</th>
+								<th class="" style="width:10%;"> Número</th>
 								<th class="" style="width: 30% ;">Abreviatura</th>
-								<th class="" style="width: 50%;">'.$_SESSION["S_cParNombre"].'</th>
+								<th class="" style="width: 60%;">'.$_SESSION["S_cParNombre"].'</th>
 							</tr>
 						' ;
 
@@ -447,11 +474,11 @@
 					for ($i = 0; $i < count($data["cuerpo"]); $i++)
 	            	{
 							$formulario.="<tr>";
-		                    $formulario.= 	"<td style='text-align: center ;'>".$i." </td>";
+		                    $formulario.= 	"<td style='text-align: center ;'>".($i+1)." </td>";
 						   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParNombre"]."</td>";
 						   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParDescripcion"]."</td>";
 							$formulario.="</tr>";
-							$i++;
+
 					}
 					$formulario .= "</tbody>" ;
 					$formulario .= "<tfoot>" ;
@@ -467,7 +494,7 @@
 				$HTML ="<html>
 							<body>
 							<br/>
-								<h3 class='rounded text-center mayusc title'>".$_SESSION["S_cParNombre"]."</h3>
+								<h3 class='rounded text-center mayusc title'> Lista de ".$_SESSION["S_cParNombre"]."</h3>
 								<br/>
 							<div>
 								".$formulario."
@@ -475,30 +502,12 @@
 							</body>
 							</html>";
 
-						$mpdf = new mPDF('utf-8', 'A4');
-						$mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
+					$mpdf = Rpt_Generar_Pdf("A4") ;
+					$fichero = '../documents/pdf.pdf';
+					$mpdf->WriteHTML($HTML);
+					$mpdf->Output(  $fichero);
+					$objResponse->script('window.open("'.$fichero.'", "_blank");');
 
-						$mpdf->defaultheaderfontsize = 6;	/* in pts */
-						// $mpdf->defaultheaderfontstyle = B;	/* blank, B, I, or BI */
-						$mpdf->defaultheaderline = 1; 	/* 1 to include line below header/above footer */
-
-						$mpdf->defaultfooterfontsize = 10;	/* in pts */
-						$mpdf->defaultfooterfontstyle = B;	/* blank, B, I, or BI */
-						$mpdf->defaultfooterline = 1; 	/* 1 to include line below header/above footer */
-
-						$mpdf->SetHeader('SELVA ANDINA ||{DATE j/m/Y}' );
-						$mpdf->SetFooter('{PAGENO}');	/* defines footer for Odd and Even Pages - placed at Outer margin */
-
-						$stylesheet = file_get_contents('./css/style-pdf.css');
-						$mpdf->WriteHTML($stylesheet,1);
-
-						$mpdf->WriteHTML($HTML);
-
-						$fichero = '../documents/grl.pdf';
-						$mpdf->Output($fichero);
-
-
-						$objResponse->script('window.open("'.$fichero.'", "_blank");return false;');
 			    return $objResponse;
 			}
 

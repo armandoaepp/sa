@@ -23,6 +23,7 @@ include_once "../beans/Bean_permail.php" ;
 include_once "../beans/Bean_pernatural.php" ;
 include_once "../beans/Bean_perrelacion.php" ;
 include_once "../beans/Bean_perparametro.php" ;
+include_once "../beans/Bean_peparparametro.php" ;
 include_once "../beans/Bean_perubigeo.php" ;
 
 # =====================	Clases Php
@@ -44,6 +45,7 @@ require_once "ClsPerTelefono.php";
 require_once "ClsPerMail.php";
 require_once "ClsPerRelacion.php";
 require_once "ClsPerParametro.php";
+require_once "ClsPerParParametro.php";
 require_once "ClsPerUbigeo.php";
 
 require_once "ClsProductor.php";

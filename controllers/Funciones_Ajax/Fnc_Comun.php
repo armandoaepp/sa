@@ -114,9 +114,9 @@
             $formulario .=  ' <div class="c9" style="width:75%;">
                             </div>
                             <div class="c3 text-right" style="width:25%;">
-                                <div id="botonCancelar" class="c2 text-right hide" >
+                                <div id="botonCancelar" class="c2 text-right hide botonCancelar"  >
                                     <a   href="#" onclick="ocultar_emergente();" >
-                                        <span class="boton-cancelar"></span>
+                                        <span >Cancelar</span>
                                     </a>
                                 </div>
                             </div>' ;
@@ -146,9 +146,9 @@
                             $formulario .=  "</div>";
                              $formulario .= '<div class="c9" style="width:75%;">
                                             <div id="labelMsj"  class="c12 MsjAlert "  ></div>
-                                            <div id="botonCancelar" class="c2 text-right hide" >
+                                            <div id="botonCancelar" class="c2 text-right hide botonCancelar"  >
                                                 <a   href="#" onclick="ocultar_emergente();" >
-                                                    <i class="boton-cancelar"></i>
+                                                    <span >Cancelar</span>
                                                 </a>
                                             </div>
                                         </div>
@@ -172,6 +172,11 @@
                                 $formulario .=  "<div class='divFila' style='text-align:center; margin-top:10px;'>";
                                 $formulario .=      "<label style='color:#000000; font-family:Arial; font-size:12px; font-weight:bold;'>¡SELECCIONES UN REGISTRO DE LA LISTA!</label>";
                                 $formulario .=  "</div>";
+                                $formulario .='<div id="botonCancelar" class="c12 hide botonCancelar text-right"  >
+                                                <a   href="#" onclick="ocultar_emergente();" >
+                                                    <span >Cancelar</span>
+                                                </a>
+                                            </div> ' ;
                                 $formulario .="</div>";
                         }
                     return $formulario;
@@ -264,10 +269,9 @@
                 $formulario .=' <div class="clear"></div>
 
                                 <div id="labelMsj"  class="c12 MsjAlert "  ></div>
-                                <div id="botonCancelar" class="c2 text-right hide" >
-                                    <a   href="#" onclick="ocultar_emergente();">
-                                        <span class="boton-cancelar">Cancelar</span>
-                                        <span class="boton-cancelar"></span>
+                                <div id="botonCancelar" class="c2 text-right hide botonCancelar"  >
+                                    <a   href="#" onclick="ocultar_emergente();" >
+                                        <span >Cancelar</span>
                                     </a>
                                 </div> ';
 

@@ -19,7 +19,8 @@
 				$cParNombre      = $bean_parametro->getcParNombre() ;
 				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
 
-				$this->query="Call usp_Filtrar_Parametro($nOriReg, $nCanReg, $nPagRegistro, '$cParNombre', '$cParDescripcion', $nParClase)";
+				// return "Call usp_Filtrar_Parametro($nOriReg, $nCanReg, $nPagRegistro, $nParClase, '$cParNombre', '$cParDescripcion')";
+				$this->query="Call usp_Filtrar_Parametro($nOriReg, $nCanReg, $nPagRegistro, $nParClase, '$cParNombre', '$cParDescripcion')";
 				$this->execute_query();
 				$data = $this->rows ;
 				return $data;
@@ -62,7 +63,7 @@
 				$data = $this->rows ;
 				return $data;
 			}
-		# SELECCIONAR EL PARAMETRO PADRE (RAIZ) DE UNA DETERMINADA CLASE
+		# SELECCIONAR EL PARAMETRO PADRE (RAIZ) DE UNA DETERMINADA CLASE 0_0
 			function Get_Parametro_Padre_nParClase($objParametroBean )
 			{
 				$nParClase       = $objParametroBean->getnParClase() ;
@@ -181,6 +182,7 @@
 				$data = $this->rows ;
 				return $data;
 			}
+
 
 
 	}
