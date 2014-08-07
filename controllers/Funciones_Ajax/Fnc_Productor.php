@@ -22,7 +22,7 @@
 
 				# Start Tab1
 				$formulario .='<div class="tab">
-								<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio" onclick="xajax_Menus_Botonera(\'100201\')">
+								<input type="radio" id="tab-1" name="tab-group-1"  checked class="tab-radio" onclick="xajax_Menus_Botonera(\'100201\');" >
 								<label for="tab-1" class="tab-label" >Productor  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
@@ -47,7 +47,7 @@
 								<label for="tab-2" class="tab-label" >Parcela  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
-									# contenedor de productor
+							# contenedor de productor
 							$formulario .='	<div id="Tab_Parcela" >
 											</div>' ;
 
@@ -62,10 +62,19 @@
 
 				# Start Tab3
 				$formulario .='<div class="tab">
-								<input type="radio" id="tab-3" name="tab-group-1"  disabled  class="tab-radio">
+								<input type="radio" id="tab-3" name="tab-group-1"  disabled  class="tab-radio" onclick="xajax_Listar_Cosechas( 0,15,1,1 ) ;">
 								<label for="tab-3" class="tab-label"  >Cosecha  </label> ' ;
 					# Start content
 					$formulario .='	<div class="content " >' ;
+
+							# contenedor de productor
+							$formulario .='	<div id="Tab_Cosecha" >
+											</div>' ;
+
+
+						# paginado paginado parcela
+						$formulario .='<div id="Cont_Pag_Cosecha_" class="c1" ></div>	<div id="tab_pag_productor"  class="c11"  style="position: relative; top: 5px; padding:0 ;">
+										</div> ';
 
 					$formulario .='	</div> ';
 					# End content

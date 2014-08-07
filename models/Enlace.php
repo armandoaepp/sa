@@ -64,6 +64,7 @@ require_once "../controllers/Funciones_Ajax/Fnc_Sector.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Productor.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Rpt_Generar.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Parcela.php";
+require_once "../controllers/Funciones_Ajax/Fnc_Cosecha.php";
 
 set_time_limit(0);
 # INICIALIZAR XAJAX
