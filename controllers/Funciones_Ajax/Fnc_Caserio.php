@@ -279,7 +279,7 @@
 							$data = $objCaserio->Get_Caserio_by_nCasCodigo($bean_caserio) ;
 				    		$cCasDescripcion = $data["cuerpo"][0]["cCasDescripcion"];
 
-							$formulario .= Frm_Caserio("Actualizar_Caserio",$nDepCodigo , $cCasDescripcion );
+							$formulario .= Frm_Caserio("Actualizar_Caserio",$nDepCodigo , $cCasDescripcion , $nCasCodigo );
 
 						# configurando emergente
 						$FrmRpta = FrmEmergente("ACTUALIZAR CASERIO", $formulario);
@@ -305,8 +305,6 @@
 						// $objResponse->assign("emergente","style.height","180px");
 						$objResponse->assign("emergente_contenido","innerHTML",$FrmRpta);
 					}
-
-
 
 			return $objResponse;
 		}
@@ -341,20 +339,24 @@
 			{
 					// $Departamento = $frm["Departamento_"] ;
 					// $Provincia    = $frm["Provincia_"];
-					$Distrito     = $frm["Distrito_"] ;
-					$txtCaserio   = Mayusc($frm["txtCaserio"]) ;
+
+					$Distrito   = $frm["Distrito_"] ;
+					$txtCaserio = Mayusc($frm["txtCaserio"]) ;
 					$nCasCodigo =  $frm["nCasCodigo"] ;
 
 					$bean_caserio   = new Bean_caserio();
 					$bean_caserio->setnCasCodigo($nCasCodigo);
 					$bean_caserio->setcCasDescripcion($txtCaserio);
 					$bean_caserio->setnDisCodigo($Distrito);
+
 					$objCaserio       = new ClsCaserio();
 
 				try
 	        	{	# iniciamos la transaccion
 	        		$objCaserio->beginTransaction() ;
 	        		$data =  $objCaserio->Upd_Caserio($bean_caserio) ;
+
+	        		// $objResponse->alert($data) ;
 
 					Insertar_Transaccion(2,"ACTUALIZO CASERIO : ".$nCasCodigo." DESCRIPCIÓN  ".$txtCaserio,"") ;
 
@@ -366,7 +368,7 @@
 	        	{
 	        		# si ha habido algun error
 	        		$objCaserio->rollback();
-	        		$MsjAlter = "Error de registro: " ;
+	        		$MsjAlter = "Error de registro ".$e->getMessage() ;
 	        	}
 			}
 
@@ -446,7 +448,7 @@
 		}
 
 	#FRM NUEVO
-		function Frm_Caserio($funcion="",$nDepCodigo = 6 ,  $cCasDescripcion = "")
+		function Frm_Caserio($funcion="",$nDepCodigo = 6 ,  $cCasDescripcion = "", $nCasCodigo = 0 )
 		{
 			$objDepartamento = new ClsDepartamento() ;
 			$bean_departamento = new Bean_departamento() ;

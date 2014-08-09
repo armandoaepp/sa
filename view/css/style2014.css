@@ -1134,7 +1134,7 @@ fieldset[disabled] .checkbox-inline {
 
 
 /* SPRITE PARA BOTONES*/
-/*[class^="boton-"],
+[class^="boton-"],
 [class*=" boton-"] {
   display: inline-block;
   width: 103px;
@@ -1143,37 +1143,19 @@ fieldset[disabled] .checkbox-inline {
   *margin-right: .3em;
   line-height: 32px;
   vertical-align: text-top;
-  background-image: url("../img/botones/btns.png");
+ /* background-image: url("../img/botones/btns.png");*/
   background-repeat: no-repeat;
   margin-top: 5px;
 }
 
-.boton-buscar { background-position: -0px -0px; }
-.boton-cancelar { background-position: -103px -0px; }
-.boton-contacto { background-position: -206px -0px; }
-.boton-editar { background-position: -0px -33px; }
-.boton-eliminar { background-position: -103px -33px; }
-.boton-guardar { background-position: -206px -33px; }
-.boton-listar { background-position: -0px -66px; }
-.boton-login { background-position: -103px -66px; }
-.boton-nuevo { background-position: -206px -66px; }
-.boton-registrar { background-position: -0px -99px; }
-.boton-regresar { background-position: -103px -99px; }
-.boton-reporte { background-position: -206px -99px; }*/
 .boton-no {
-  *margin-right: .3em;
   background-image: url("../img/botones/btn-no.png");
-  background-repeat: no-repeat;
   height: 33px;
-  line-height: 32px;
   width: 85px;
  }
  .boton-yes {
-  *margin-right: .3em;
   background-image: url("../img/botones/btn-yes.png");
-  background-repeat: no-repeat;
   height: 33px;
-  line-height: 32px;
   width: 85px;
  }
 

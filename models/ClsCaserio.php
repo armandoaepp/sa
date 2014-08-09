@@ -39,6 +39,7 @@ class ClsCaserio extends ClsConexion
 			$cCasDescripcion = $bean_caserio->getcCasDescripcion() ;
 			$nDisCodigo      = $bean_caserio->getnDisCodigo() ;
 
+			// return "CALL usp_Upd_Caserio($nCasCodigo , '$cCasDescripcion',$nDisCodigo)  ; ";
 			$this->query ="CALL usp_Upd_Caserio($nCasCodigo , '$cCasDescripcion',$nDisCodigo)  ; ";
 			$this->execute_query();
 			$data = $this->rows ;
