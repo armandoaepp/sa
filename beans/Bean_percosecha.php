@@ -1,6 +1,6 @@
 <?php
 /* Clase Bean Generada  - Creado por @armandoaepp */
-class Bean_percosecha{
+class Bean_percosecha extends Bean_general{
 //Constructor
 	public function Bean_percosecha(){}
 //Atributos
@@ -17,6 +17,11 @@ class Bean_percosecha{
 	private $fKilogramos;
 	private $cGlosa;
 	private $nPerCosEstado;
+	private $fHolgura ;
+
+	// private $nParcCodigoNew;
+	// private $nProdCodigoNew;
+
 //Propiedades
 	public function setnPerCosCodigo($nPerCosCodigo_){ $this->nPerCosCodigo=$nPerCosCodigo_;}
 	public function getnPerCosCodigo(){ return $this->nPerCosCodigo;}
@@ -40,9 +45,18 @@ class Bean_percosecha{
 	public function getfQuintales(){ return $this->fQuintales;}
 	public function setfKilogramos($fKilogramos_){ $this->fKilogramos=$fKilogramos_;}
 	public function getfKilogramos(){ return $this->fKilogramos;}
+
+	public function setfHolgura($fHolgura_){ $this->fHolgura=$fHolgura_;}
+	public function getfHolgura(){ return $this->fHolgura;}
+
 	public function setcGlosa($cGlosa_){ $this->cGlosa=$cGlosa_;}
 	public function getcGlosa(){ return $this->cGlosa;}
 	public function setnPerCosEstado($nPerCosEstado_){ $this->nPerCosEstado=$nPerCosEstado_;}
 	public function getnPerCosEstado(){ return $this->nPerCosEstado;}
+
+	// public function setnParcCodigoNew($nParcCodigoNew_){ $this->nParcCodigoNew=$nParcCodigoNew_;}
+	// public function getnParcCodigoNew(){ return $this->nParcCodigoNew;}
+	// public function setnProdCodigoNew($nProdCodigoNew_){ $this->nProdCodigoNew=$nProdCodigoNew_;}
+	// public function getnProdCodigoNew(){ return $this->nProdCodigoNew;}
 }
 ?>

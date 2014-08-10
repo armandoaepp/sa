@@ -21,6 +21,14 @@
 			$data = $this->rows ;
 			return $data;
 		}
+	# EXTRAER PERIODO ACTIVO
+		function Get_Periodo_Activo()
+		{
+			$this->query="call ups_Get_Periodo_Activo() ;";
+			$this->execute_query();
+			$data = $this->rows ;
+			return $data;
+		}
 
     # INSERTA PERIODO
 		function Set_Periodo($bean_periodo)
@@ -97,9 +105,6 @@
 		}
 	}
 
-
-
-
 	# VALIDAR EL PERIDO POR UNA FECHA
 	function Validar_Periodo_by_Fecha($bean_periodo)
 	{
@@ -110,11 +115,6 @@
 		$this->execute_query();
 		$data = $this->rows ;
 		return $data;
-		// return "call usp_Validar_Periodo_by_Fecha('$dPrdFecInic' , $nPrdTipo) ;";
-
-
 	}
 
-
 }
-?>

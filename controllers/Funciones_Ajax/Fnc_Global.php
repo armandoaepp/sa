@@ -4,5 +4,5 @@
 $xajax = new xajax();
 $xajax->configure('javascript URI','../lib/xajax/');
 
-// $xajax->configure('debug',true);
+$xajax->configure('debug',true);
 ?>

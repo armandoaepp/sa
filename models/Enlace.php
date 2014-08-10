@@ -25,6 +25,7 @@ include_once "../beans/Bean_perrelacion.php" ;
 include_once "../beans/Bean_perparametro.php" ;
 include_once "../beans/Bean_peparparametro.php" ;
 include_once "../beans/Bean_perubigeo.php" ;
+include_once "../beans/Bean_percosecha.php" ;
 
 # =====================	Clases Php
 require_once "ClsConexion.php";
@@ -51,6 +52,7 @@ require_once "ClsPerUbigeo.php";
 require_once "ClsProductor.php";
 require_once "ClsUbigeo.php";
 require_once "ClsParcela.php";
+require_once "ClsPerCosecha.php";
 
 
 
