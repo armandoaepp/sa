@@ -38,7 +38,7 @@ Class ClsPerCosecha extends ClsConexion
 		return $data;
 	}
 
-	#INSERTAR PERCOSECHA
+	#VALIDAR PERCOSECHA
 	function Validar_PerCosecha($bean_percosecha)
 	{
 		$cPerCodigo  = $bean_percosecha->getcPerCodigo() ;
@@ -51,7 +51,23 @@ Class ClsPerCosecha extends ClsConexion
 		$data = $this->rows ;
 		return $data;
 	}
-	#INSERTAR PERCOSECHA
+
+	#VALIDAR PERCOSECHA
+	function Validar_PerCosecha_Upd($bean_percosecha)
+	{
+		$nPerCosCodigo = $bean_percosecha->getnPerCosCodigo() ;
+		$cPerCodigo    = $bean_percosecha->getcPerCodigo() ;
+		$nParcCodigo   = $bean_percosecha->getnParcCodigo() ;
+		$nProdCodigo   = $bean_percosecha->getnProdCodigo() ;
+		$nPrdCodigo    = $bean_percosecha->getnPrdCodigo() ;
+
+		$this->query = "Call usp_Validar_PerCosecha_Upd($nPerCosCodigo,'$cPerCodigo', $nParcCodigo, $nProdCodigo, $nPrdCodigo)";
+		$this->execute_query();
+		$data = $this->rows ;
+		return $data;
+	}
+
+	#BUSCAR PERCOSECHA
 	function Buscar_PerCosecha_by_nPerCosCodigo($bean_percosecha)
 	{
 		$nPerCosCodigo  = $bean_percosecha->getnPerCosCodigo() ;

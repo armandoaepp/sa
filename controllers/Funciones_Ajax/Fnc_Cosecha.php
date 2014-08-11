@@ -216,18 +216,23 @@
 					$nPrdCodigo = $dataPeriodo["cuerpo"][0]["nPrdCodigo"] ;
 
 					$bean_percosecha->setcPerCodigo($cPerCodigo) ;
-					$bean_percosecha->setnParcCodigo($nParcCodigo) ;
-					$bean_percosecha->setnProdCodigo($nProdCodigo) ;
 					$bean_percosecha->setnPrdCodigo($nPrdCodigo) ;
+					$bean_percosecha->setnParcCodigo($nParcCodigo) ;
+					$bean_percosecha->setnProdCodigo(0) ;
 
-					$bean_percosecha->setcCosCodigo($cCosCodigo) ;
-					$bean_percosecha->setfHectareas($Hectareas ) ;
-					$bean_percosecha->setfQuintales($fQuintales) ;
-					$bean_percosecha->setfKilogramos($fKilogramos) ;
-					$bean_percosecha->setfHolgura($fHolgura) ;
-					$bean_percosecha->setcGlosa("") ;
+				# VALIDAR QUE PARCELA NO SE ENCUENTRE REGISTRADO PARA LA COSECHA EN LA  CAMPAÑA ACTUAL
+					$dataValParc = $objPercosecha->Validar_PerCosecha($bean_percosecha) ;
 
-				# valida que el codigo sector no exista
+			        if(count($dataValParc["cuerpo"]) > 0)
+			        {
+			            $MsjAlter = "Se encuentra registrada la parcela para la campaña actual.";
+			        }
+
+
+			    # VALIDAR QUE LA PARCELA NO SE ENCUENTRE REGISTRADA PARA LA CAMPAÑA ACTUAL
+				    $bean_percosecha->setnParcCodigo($nParcCodigo) ;
+					$bean_percosecha->setnProdCodigo($nProdCodigo) ;
+
 					$dataVal = $objPercosecha->Validar_PerCosecha($bean_percosecha) ;
 
 			        if(count($dataVal["cuerpo"]) > 0)
@@ -235,12 +240,24 @@
 			            $MsjAlter = "Ya tiene una Cosecha registrada para esta parcela con el mismo producto en la campaña actual.";
 			        }
 
+
 				# validacion en BD
 				if($MsjAlter=="")
 				{
 					# REGISTRAR DATA
 						try
 						{
+							$bean_percosecha->setcPerCodigo($cPerCodigo) ;
+							$bean_percosecha->setnParcCodigo($nParcCodigo) ;
+							$bean_percosecha->setnProdCodigo($nProdCodigo) ;
+							$bean_percosecha->setnPrdCodigo($nPrdCodigo) ;
+
+							$bean_percosecha->setcCosCodigo($cCosCodigo) ;
+							$bean_percosecha->setfHectareas($Hectareas ) ;
+							$bean_percosecha->setfQuintales($fQuintales) ;
+							$bean_percosecha->setfKilogramos($fKilogramos) ;
+							$bean_percosecha->setfHolgura($fHolgura) ;
+							$bean_percosecha->setcGlosa("") ;
 							# iniciamos la transaccion
 					        	$objPercosecha->beginTransaction() ;
 
@@ -355,13 +372,12 @@
 			if($MsjAlter == "")
 			{
 				# OBJETOS
+					$objPeriodo    = new ClsPeriodo();
+					$objPercosecha = new ClsPercosecha();
 
-					$objPercosecha   = new ClsPercosecha();
 					$bean_percosecha =  new Bean_percosecha() ;
 
 				# DATOS FRM
-
-
 					$cPerCodigo    = $frmP['rdCodigo'] ;
 					$nPerCosCodigo = $frmE["nParCodCosecha_"];
 					$nParcCodigo   = $frmE['Parcela_'] ;
@@ -375,6 +391,7 @@
 					$bean_percosecha->setnPerCosCodigo($nPerCosCodigo) ;
 					$bean_percosecha->setnParcCodigo($nParcCodigo) ;
 					$bean_percosecha->setnProdCodigo($nProdCodigo) ;
+					$bean_percosecha->setnPrdCodigo($nPrdCodigo) ;
 
 					$bean_percosecha->setcCosCodigo($cCosCodigo) ;
 					$bean_percosecha->setfHectareas($Hectareas ) ;
@@ -382,14 +399,16 @@
 					$bean_percosecha->setfKilogramos($fKilogramos) ;
 					$bean_percosecha->setfHolgura($fHolgura) ;
 
-				# valida que el codigo sector no exista
-		    	// $data = $objParametro->Validar_Parametro($bean_parametro);
+					$dataPeriodo = $objPeriodo->Get_Periodo_Activo() ;
+					$nPrdCodigo = $dataPeriodo["cuerpo"][0]["nPrdCodigo"] ;
 
-		      /*  if(count($data["cuerpo"]) > 0)
-		        {
-		            $MsjAlter = "Código se encuentra registrado";
-		        }
-				*/
+		    	# valida que el codigo no exista
+					$dataVal = $objPercosecha->Validar_PerCosecha_Upd($bean_percosecha) ;
+
+			        if(count($dataVal["cuerpo"]) > 0)
+			        {
+			            $MsjAlter = "Ya tiene una Cosecha registrada para esta parcela con el mismo producto en la campaña actual.";
+			        }
 				# validacion en BD
 				if($MsjAlter=="")
 				{
@@ -552,7 +571,7 @@
 	            $formulario .='<fieldset class="c6 ">
 	                                <label for="holgura_"> % Extra </label>
 	                                <span class="pre  icon-text"></span>
-	                                <input type="text" class="pre " name="holgura_" id="holgura_" value="'.$fHolgura.'" placeholder="INGRESE holgura " onfocus="Validar_Decimal(this) ;" maxlength="4">
+	                                <input type="text" class="pre " name="holgura_" id="holgura_" value="'.$fHolgura.'" placeholder="INGRESE holgura " onfocus="Validar_Decimal(this) ;" maxlength="3">
 	                            </fieldset>';
 
 	            $formulario .=' <div id="labelMsj" class="c12 MsjAlert "></div>
