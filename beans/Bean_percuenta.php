@@ -27,3 +27,4 @@ class Bean_percuenta{
 	public function setnPerCtaEstado($nPerCtaEstado_){ $this->nPerCtaEstado=$nPerCtaEstado_;}
 	public function getnPerCtaEstado(){ return $this->nPerCtaEstado;}
 }
+?>

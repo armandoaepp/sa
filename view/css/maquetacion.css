@@ -37,11 +37,12 @@ body{
      background-repeat: repeat;
 }
 .border-container{
-	/*background: white;*/
 	background: #fcfcfc;
-	border-left: 4px solid #abdc28;
+	border-left: 4px solid #0181C6;
+  border-right: 4px solid #0181C6;
+  /*border-left: 4px solid #abdc28;*/
+  /*border-right: 4px solid #abdc28;*/
 	border-radius: 20px;
-	border-right: 4px solid #abdc28;
 	bottom: 30px;
 	font-size: 19px;
 	max-height: 476px ;
@@ -72,15 +73,7 @@ body{
   background: -ms-linear-gradient(top, rgba(37,141,200,1) 0%,rgba(71,153,193,1) 50%,rgba(37,141,200,1) 100%);
   background: linear-gradient(to bottom, rgba(37,141,200,1) 0%,rgba(71,153,193,1) 50%,rgba(37,141,200,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#258dc8', endColorstr='#258dc8',GradientType=0 );
-  /*
-	background: #9dd53a;
-	background: -moz-linear-gradient(top, #9dd53a 0%, #80c217 0%, #80c217 5%, #a1d54f 50%, #80c217 86%, #7cbc0a 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#9dd53a), color-stop(0%,#80c217), color-stop(5%,#80c217), color-stop(50%,#a1d54f), color-stop(86%,#80c217), color-stop(100%,#7cbc0a));
-	background: -webkit-linear-gradient(top, #9dd53a 0%,#80c217 0%,#80c217 5%,#a1d54f 50%,#80c217 86%,#7cbc0a 100%);
-	background: -o-linear-gradient(top, #9dd53a 0%,#80c217 0%,#80c217 5%,#a1d54f 50%,#80c217 86%,#7cbc0a 100%);
-	background: -ms-linear-gradient(top, #9dd53a 0%,#80c217 0%,#80c217 5%,#a1d54f 50%,#80c217 86%,#7cbc0a 100%);
-	background: linear-gradient(to bottom, #9dd53a 0%,#80c217 0%,#80c217 5%,#a1d54f 50%,#80c217 86%,#7cbc0a 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9dd53a', endColorstr='#7cbc0a',GradientType=0 );*/
+
 }
 
 
@@ -122,10 +115,10 @@ body{
 }
 
 .nav li ul {
-	/*background: #9dd53a;*/
   background: #258dc8 ;
 	display:none;
-	min-width:150px;
+  /*min-width: inherit;*/
+	min-width:170px;
 	position:absolute;
 	max-width: 100% ;
 }
@@ -135,14 +128,16 @@ body{
 }
 
 .nav li ul li ul {
-	float: right;
-	right:-145px;
-	position:absolute;
+  float: right;
+	right:-170px;
+	/*position:absolute;*/
 	top:0;
+  /*font-size:*/
 }
 
 .nav li ul li  {
-	width:100%
+	width:100%;
+
 }
 .botonera , .title-user{
 	list-style: none;

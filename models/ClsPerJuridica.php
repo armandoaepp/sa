@@ -3,14 +3,15 @@ class ClsPerJuridica extends ClsConexion
 {
 
 		# Funcion para seleccionar Provincias por departamentos
-		function Get_Sectores_by_nCasCodigo($bean_caserio )
+		function Get_PerJuridica_by_cPerUsuario($bean_perjuridica )
 		{
-			$nCasCodigo = $bean_caserio->getnCasCodigo() ;
-			$this->query = "CALL usp_Get_Sectores_by_nCasCodigo( $nCasCodigo)  ; ";
+			$cPerCodigo = $bean_perjuridica->getcPerCodigo() ;
+			$this->query = "CALL usp_Get_PerJuridica_by_cPerUsuario( '$cPerCodigo')  ; ";
 			$this->execute_query();
 			$data = $this->rows ;
 			return $data;
 		}
+
 }
 
 ?>

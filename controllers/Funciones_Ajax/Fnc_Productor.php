@@ -104,7 +104,7 @@
 			# Status
 				$bean_parametro->setnParClase(2003);
 				$dataStatus= $objParametro->Get_Parametro_By_cParClase($bean_parametro) ;
-				$OptionStatus = SelectOption($dataStatus, 'nParCodigo', 'cParDescripcion',$Status);
+				$OptionStatus = SelectOption($dataStatus, 'nParCodigo', 'cParDescripcion',-1);
 
 			$formulario ='';
 			$formulario .= ' <div class="ContenedorTable" style="width: 103%; left: -20px; position: relative;"> ' ;
