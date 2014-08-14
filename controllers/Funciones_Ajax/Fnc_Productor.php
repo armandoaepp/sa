@@ -411,7 +411,14 @@
 						try
 						{
 							# iniciamos la transaccion
-					        	$objPersona->beginTransaction() ;
+								$objPersona->beginTransaction() ;
+								$objPerNatural->beginTransaction();
+								$objPerDocumento->beginTransaction();
+								$objPerTelefono->beginTransaction();
+								$objPerMail->beginTransaction();
+								$objPerRelacion->beginTransaction();
+								$objPerParametro->beginTransaction();
+								$objPerUbigeo->beginTransaction();
 							# Registrar Persona
 								$bean_persona->setcPerNombre($cPerNombre ) ;
 								$bean_persona->setcPerApellidos($cPerApellidoPat. " ". $cPerApellidoMat) ;
@@ -423,6 +430,15 @@
 								$cPerCodigo  =  $dataPersona["cuerpo"][0]["cPerCodigo"] ;
 								// $objResponse->alert($cPerCodigo) ;
 
+							# Registrar PerNatural
+								$bean_pernatural->setcPerCodigo($cPerCodigo) ;
+								$bean_pernatural->setcPerNatApePaterno($cPerApellidoPat) ;
+								$bean_pernatural->setcPerNatApeMaterno($cPerApellidoMat) ;
+								$bean_pernatural->setnPerNatSexo($Sexo) ;
+								$bean_pernatural->setnPerNatEstCivil(0) ;
+
+								$objPerNatural->Set_PerNatural($bean_pernatural );
+
 							# Registrar PerDocumento
 								$bean_perdocumento->setcPerCodigo($cPerCodigo) ;
 								$bean_perdocumento->setnPerDocTipo(1) ; # DNI
@@ -432,14 +448,7 @@
 
 								$objPerDocumento->Set_PerDocumento($bean_perdocumento ) ;
 
-							# Registrar PerNatural
-								$bean_pernatural->setcPerCodigo($cPerCodigo) ;
-								$bean_pernatural->setcPerNatApePaterno($cPerApellidoPat) ;
-								$bean_pernatural->setcPerNatApeMaterno($cPerApellidoMat) ;
-								$bean_pernatural->setnPerNatSexo($Sexo) ;
-								$bean_pernatural->setnPerNatEstCivil(0) ;
 
-								$objPerNatural->Set_PerNatural($bean_pernatural );
 
 							# Registrar PerRealacion
 								$bean_perrelacion->setcPerCodigo($cPerCodigo) ;
@@ -501,13 +510,28 @@
 
 							# si todo a tendido exito
 				        		$objPersona->commit();
+				        		$objPerNatural->commit();
+								$objPerDocumento->commit();
+								$objPerTelefono->commit();
+								$objPerMail->commit();
+								$objPerRelacion->commit();
+								$objPerParametro->commit();
+								$objPerUbigeo->commit();
+
 				        		$Funcion = "xajax_Listar_Productores(0,15,1,1); ocultar_emergente();";
 						}catch(Exception $e)
 			        	{
 			        		# si ha habido algun error
 			        		$objPersona->rollback();
-			        		// $MsjAlter =  "Error de registro.".$e->getMessage() ;
-			        		$MsjAlter =  "Error de registro.";
+			        		$objPerNatural->rollback();
+							$objPerDocumento->rollback();
+							$objPerTelefono->rollback();
+							$objPerMail->rollback();
+							$objPerRelacion->rollback();
+							$objPerParametro->rollback();
+							$objPerUbigeo->rollback();
+			        		$MsjAlter =  "Error de registro.".$e->getMessage() ;
+			        		// $MsjAlter =  "Error de registro.";
 			        	}
 				}
 			}

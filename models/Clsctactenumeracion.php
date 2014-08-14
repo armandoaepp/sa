@@ -9,7 +9,8 @@ class ClsCtaCteNumeracion extends ClsConexion {
 		$nSerie       = $bean_ctactenumeracion->getnSerie();
 		$Numero       = $bean_ctactenumeracion->getNumero();
 
-		$this->query = "CALL usp_Set_CtaCteNumeracion('$cPerJuridica','$nComTipo','$nSerie','$Numero')";
+		// return "CALL usp_Set_CtaCteNumeracion('$cPerJuridica','$nComTipo','$nSerie','$Numero')";
+		$this->query = "CALL usp_Set_CtaCteNumeracion('$cPerJuridica',$nComTipo,$nSerie,'$Numero')";
 		$this->execute_query();
 		$data = $this->rows ;
 		return $data;
@@ -23,7 +24,7 @@ class ClsCtaCteNumeracion extends ClsConexion {
 		$nSerie = $bean_ctactenumeracion->getnSerie();
 		$Numero = $bean_ctactenumeracion->getNumero();
 
-		$this->query = "CALL usp_Upd_ctactenumeracion('$cPerJuridica','$nComTipo','$nSerie','$Numero')";
+		$this->query = "CALL usp_Upd_ctactenumeracion('$cPerJuridica',$nComTipo,$nSerie,'$Numero')";
 		$this->execute_query();
 		$data = $this->rows ;
 

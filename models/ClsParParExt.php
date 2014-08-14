@@ -13,7 +13,7 @@ class ClsParParExt extends ClsConexion {
 		$cParParExtValor = $bean_parparext->getcParParExtValor();
 		$cParParExtGlosa = $bean_parparext->getcParParExtGlosa();
 
-		$this->query = "CALL usp_Set_ParParExt('$nParSrcCodigo','$nParSrcClase','$nParDstCodigo','$nParDstClase','$nObjCodigo','$nObjTipo','$cParParExtValor','$cParParExtGlosa')";
+		$this->query = "CALL usp_Set_ParParExt($nParSrcCodigo, $nParSrcClase, $nParDstCodigo, $nParDstClase, $nObjCodigo, $nObjTipo, '$cParParExtValor','$cParParExtGlosa')";
 		$this->execute_query();
 		$data = $this->rows ;
 		return $data;

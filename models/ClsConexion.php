@@ -1,6 +1,6 @@
 <?php
 /*
-	Autor           :   Armando Enrique Pisfil Puemape
+    Autor           :   Armando Enrique Pisfil Puemape
     Fecha           :   27/12/2014
     Clase           :   ClsConexion
     Estado          :   OK
@@ -8,11 +8,7 @@
 */
  Class ClsConexion
 {
-   /* private static $db_host = 'www.planeatec.com';
-    private static $db_user = 'planeate_user';
-    private static $db_pass = '+-*planeatec+-*';
-    protected $db_name      = 'planeate_sa';
-*/
+
     private static $db_host = '127.0.0.1';
     private static $db_user = 'root';
     private static $db_pass = '';
@@ -28,10 +24,10 @@
     # Conectar a la base de datos utilizamos la libreria pdo
     private function open_connection()
     {
-    	$cadena=$this->db_driver.":host=".self::$db_host.";dbname=" .$this->db_name;
-		$this->conn = new PDO($cadena,self::$db_user,self::$db_pass);
+        $cadena=$this->db_driver.":host=".self::$db_host.";dbname=" .$this->db_name;
+        $this->conn = new PDO($cadena,self::$db_user,self::$db_pass);
         # para manejar errores y excepcciones especiales para el manejo de transacciones
-		$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         # codificacion utf-8
         $this->conn->query("SET NAMES 'utf8'");
     }
@@ -60,7 +56,6 @@
         $stm = $this->conn->prepare($this->query);
         $stm->execute() ;
         $this->rows= array("cuerpo"=> $stm->fetchAll());
-      	 var_dump($this->rows);
         $this->close_connection();
     }
     # EJECUTAR UN QUERY DEL ITPO INSERT , DELETE , UPDATE , SELECT
@@ -71,7 +66,7 @@
     {
         # hasActiveTransaction si es vdd entonces esta iniciada una transaccion
         if( $this->hasActiveTransaction==false)
-    	$this->open_connection();
+        $this->open_connection();
 
         $stm = $this->conn->prepare($this->query);
         if($stm->execute())
@@ -110,6 +105,3 @@
 
 }
 
-
-
-?>

@@ -202,75 +202,86 @@
 
 			if($MsjAlter=="")
 			{
-				$nParCodigo       = $frm["nParCodigo_"] ;
-				$nPuntoEmision    = $frm["nPuntoEmision_"] ;
-				$nComprobante     = $frm["nComprobante_"] ;
-				$nSerie           = $frm["nSerie_"] ;
-				$nNumeracionSerie = $frm["nNumeracionSerie_"] ;
+				# CARGAR BEANS
+					// $nParCodigo       = $frm["nParCodigo_"] ;
+					$nPuntoEmision    = $frm["nPuntoEmision_"] ;
+					$nComprobante     = $frm["nComprobante_"] ;
+					$nSerie           = $frm["nSerie_"] ;
+					$nNumeracionSerie = $frm["nNumeracionSerie_"] ;
+					# EXTRAER EL CODIGO PERJURIDICA
+					$cPerJuridica = 2 ; #Get_cPerCodigo_PerJuridica() ;
 
-				$objCtaCteNumeracion   = new ClsCtaCteNumeracion() ;
-				$bean_ctactenumeracion =  new Bean_ctactenumeracion() ;
+				# OBJECTOS
+					$bean_ctactenumeracion =  new Bean_ctactenumeracion() ;
+					$bean_parparametro     =  new Bean_parparametro() ;
+					$bean_parparext        =  new Bean_parparext() ;
 
-				$objParParametro   = new ClsParParametro() ;
-				$bean_parparametro =  new Bean_parparametro() ;
+					$objCtaCteNumeracion = new ClsCtaCteNumeracion() ;
+					$objParParametro     = new ClsParParametro() ;
+					$objParParExt        = new ClsParParExt() ;
 
-				$objParParExt   = new ClsParParExt() ;
-				$bean_parparext =  new Bean_parparext() ;
+					$bean_parparametro->setnParSrcCodigo($nPuntoEmision);
+					$bean_parparametro->setnParSrcClase(1007);
+					$bean_parparametro->setnParDstCodigo($nComprobante);
+					$bean_parparametro->setnParDstClase(1008);
+					$bean_parparametro->setnParDstClase(1008);
+					$bean_parparametro->setcValor("PE-COMPROBANTE");
+
+					$bean_parparext->setnParSrcCodigo($nPuntoEmision);
+					$bean_parparext->setnParSrcClase(1007);
+					$bean_parparext->setnParDstCodigo($nComprobante);
+					$bean_parparext->setnParDstClase(1008);
+					// $bean_parparext->setnObjCodigo($nSerie);
+					$bean_parparext->setnObjCodigo("jfhgsjfdhgkshdfgj");
+					$bean_parparext->setnObjTipo(1009);
+					$bean_parparext->setcParParExtValor($nNumeracionSerie);
+					$bean_parparext->setcParParExtGlosa("PE-COMPROBANTE-SERIE-Nro");
 
 
-				$objAsignarSerie      = new ClsAsignarSerie();
+					$bean_ctactenumeracion->setcPerJuridica($cPerJuridica);
+					$bean_ctactenumeracion->setnComTipo($nComprobante);
+					$bean_ctactenumeracion->setnSerie($nSerie);
+					$bean_ctactenumeracion->setNumero($nNumeracionSerie);
 
 
-				$objParametro   = new ClsParametro();
-				$bean_parametro = new Bean_parametro() ;
 
 
-				// $bean_parametro->setcParDescripcion($AsignarSerie );
-				$bean_parametro->setcParJerarquia($nCaserio);
-				$bean_parametro->setcParDescripcion("-" );
-				$bean_parametro->setcParNombre($cParNombre );
-				$bean_parametro->setnParClase( 2002 );
+					# Registro datos
+		        		try
+			        	{
+			        		# iniciamos la transaccion
+				        		$objCtaCteNumeracion->beginTransaction() ;
+				        		$objParParametro->beginTransaction() ;
+				        		$objParParExt->beginTransaction() ;
 
-				# valida que el codigo sector no exista
-		    	$data = $objParametro->Validar_Parametro($bean_parametro);
+			        		# registramos cta Numeracion
+								$data = $objCtaCteNumeracion->Set_CtaCteNumeracion($bean_ctactenumeracion)  ;
 
-		        if(count($data["cuerpo"]) > 0)
-		        {
-		            $MsjAlter = "Código se encuentra registrado";
-		        }
-		        else
-		        {
-		        	# validar que la descripcion no exista para el distrio
-		        	$bean_parametro->setcParDescripcion( $AsignarSerie  );
-		        	$bean_parametro->setcParJerarquia( $nCaserio  );
-		    		$data = $objParametro->Get_Parametro_cParDesc_by_cParJeranquia($bean_parametro);
+			        		# REGISTRAR PARPARAMETRO( RELACIONAR EL PUNTO DE EMISION CON EL COMPROBANTE DE PAGO )
+			        			$objParParametro->Set_ParParametro($bean_parparametro);
 
-		        	if(count($dataFecha["cuerpo"]) > 0)
-		        	{
+			        		# REgistrar PARPAREXT RELACIONAMOS EL PE-COMPROBANTE-SERIE-NUMERACION CON LA QUE SE REGISTRA POR PRIMERA VES
+			        			$objParParExt->Set_ParParExt($bean_parparext) ;
 
-		            	$MsjAlter = "Ya Existe el nombre del AsignarSerie para el Distrito" ;
-		        	}else
-		        	{
-			        		#	Registro datos de AsignarSerie
-			        		try
-				        	{	# iniciamos la transaccion
-				        		$objAsignarSerie->beginTransaction() ;
+			        		# registramos la transaccion que hizo el usuario
+								Insertar_Transaccion(1,"NUEVO ASIGINACIÓN DE SERIE A COMPROBANTE: cPerJuridica : ".$nPuntoEmision.", nComprobante:".$nComprobante.", nSerie:".$nSerie.", nNumeracionSerie:".$nNumeracionSerie,"") ; # si todo a tendido exito
 
-				        		# REGISTRAR EL AsignarSerie COMO PARAMETRO
-				        		$data = $objParametro->Set_Parametro($bean_parametro);
-								Insertar_Transaccion(1,"NUEVO SECTOR: nParCodigo : ".$data["cuerpo"][0]["nParCodigo"]." - nParClase : 2002","") ;
-								# si todo a tendido exito
-				        		$objAsignarSerie->commit();
-				        		$Funcion = "xajax_Listar_AsignarSeries(0,20,1,1); ocultar_emergente();";
+							# si todo a tendido exito
+				        		$objCtaCteNumeracion->commit();
+				        		$objParParametro->commit();
+				        		$objParParExt->commit();
 
-				        	}catch(Exception $e)
-				        	{
-				        		# si ha habido algun error
-				        		$objAsignarSerie->rollback();
-				        		$MsjAlter =  "Error de registro.";
-				        	}
-			        }
-		        }
+			        		$Funcion = "xajax_Listar_AsignarSeries(0,20,1,1); ocultar_emergente();";
+
+			        	}catch(Exception $e)
+			        	{
+			        		# si ha habido algun error
+								$objCtaCteNumeracion->rollback();
+								$objParParametro->rollback();
+								$objParParExt->rollback();
+
+			        		$MsjAlter =  "Error de registro.";
+			        	}
 
 
 			}
