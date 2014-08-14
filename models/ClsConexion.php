@@ -55,7 +55,8 @@
         $this->open_connection();
         $stm = $this->conn->prepare($this->query);
         $stm->execute() ;
-        $this->rows= array("cuerpo"=> $stm->fetchAll());
+        $this->rows= array("cuerpo"=> $stm->fetchAll(PDO::FETCH_ASSOC));
+
         $this->close_connection();
     }
     # EJECUTAR UN QUERY DEL ITPO INSERT , DELETE , UPDATE , SELECT
@@ -64,16 +65,23 @@
     # PARA PODER EJECUTAR LOS PROCEMIENTOS ALMACENADO Y COLOCARLOS EN EL ARRARY POR LO MENOS DEBE DE RETORNAR UN FILA
     protected function execute_query()
     {
+        $data = array();
         # hasActiveTransaction si es vdd entonces esta iniciada una transaccion
         if( $this->hasActiveTransaction==false)
-        $this->open_connection();
+            $this->open_connection();
 
         $stm = $this->conn->prepare($this->query);
         if($stm->execute())
         {
+            # Verificacmos si el resultado tiene columnas para no tener problemas con los INSERT, UPDATE o DELETE
             # esto para que el metodo de conexion no duelva error cuando se trabaja con transacciones
-            $this->rows= array("cuerpo"=> $stm->fetchAll());
+            $cuenta_col = $stm->columnCount() ;
+            if ($cuenta_col > 0)
+            {
+                $data  = $stm->fetchAll(PDO::FETCH_ASSOC) ; # solo se accede por nombres de columnas y facil convertir en json
+            }
         }
+        $this->rows = array("cuerpo"=> $data );
     }
     # Iniciar un transaccion
     public function beginTransaction()

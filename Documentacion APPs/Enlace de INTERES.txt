@@ -1,0 +1,2 @@
+# solucion que se echo para la conexion (INSERT, UPDATE, DELETE que no devuelven nada )
+http://php.net/manual/es/pdostatement.columncount.php

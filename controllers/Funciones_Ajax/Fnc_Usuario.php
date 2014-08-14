@@ -103,7 +103,7 @@ $xajax->registerFunction("Menus_Botonera");
 			for ($i = 0; $i < count($dataSubmenu["cuerpo"]); $i++)
 			{
 				$submenu .= '<li> ' ;
-				$submenu .= '	<a href="#"  onclick="xajax_Menus_Botonera('.$dataSubmenu["cuerpo"][$i]["nPerUsuAccCodigo"].'); '.$dataSubmenu["cuerpo"][$i]["cParNombre"].'" >'.ucwords(($dataSubmenu["cuerpo"][$i]["NombreMenu"])).' <span class="flecha">&#9654;</span></a>' ;
+				$submenu .= '	<a href="#"  onclick="xajax_Menus_Botonera('.$dataSubmenu["cuerpo"][$i]["nPerUsuAccCodigo"].'); '.$dataSubmenu["cuerpo"][$i]["cParNombre"].'" >'.ucwords($dataSubmenu["cuerpo"][$i]["NombreMenu"]).' <span class="flecha">&#9654;</span></a>' ;
 				// $submenu .= '	<a href="#"  onclick="xajax_Menus_Botonera('.$dataSubmenu["cuerpo"][$i]["nPerUsuAccCodigo"].'); '.$dataSubmenu["cuerpo"][$i]["cParNombre"].'" >'. ucwords(strtolower($dataSubmenu["cuerpo"][$i]["NombreMenu"])) .' <span class="flecha">&#9654;</span></a>' ;
 				$submenu .=	subMenu($dataSubmenu["cuerpo"][$i]["CanJerarquia"] , $dataSubmenu["cuerpo"][$i]["cParJerarquia"], $nModCodigo) ;
 				$submenu .= '</li> '."\n" ;
@@ -129,9 +129,9 @@ $xajax->registerFunction("Menus_Botonera");
 			for ($i = 0; $i < count($data["cuerpo"]); $i++)
 			{
 				$botonera .= '<li>';
-				$botonera .= '	<a href="#" id="'.$data["cuerpo"][$i][8].'" onclick="'.$data["cuerpo"][$i][10].'"  title="'.$data["cuerpo"][$i][8].'" >' ;
-				$botonera .= '		<span class="nav-btn-nombre"> '.$data["cuerpo"][$i][8].' </span> ' ;
-				$botonera .= '		<span class="post '.$data["cuerpo"][$i][7].'"> </span> ' ;
+				$botonera .= '	<a href="#" id="'.$data["cuerpo"][$i]["cParDescripcion"].'" onclick="'.$data["cuerpo"][$i]["cValor"].'"  title="'.$data["cuerpo"][$i]["cParDescripcion"].'" >' ;
+				$botonera .= '		<span class="nav-btn-nombre"> '.$data["cuerpo"][$i]["cParDescripcion"].' </span> ' ;
+				$botonera .= '		<span class="post '.$data["cuerpo"][$i]["cParNombre"].'"> </span> ' ;
 				$botonera .= '	</a> ' ;
 				$botonera .= '</li> ' ;
 			}

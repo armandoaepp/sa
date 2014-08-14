@@ -231,8 +231,8 @@
 					$bean_parparext->setnParSrcClase(1007);
 					$bean_parparext->setnParDstCodigo($nComprobante);
 					$bean_parparext->setnParDstClase(1008);
-					// $bean_parparext->setnObjCodigo($nSerie);
-					$bean_parparext->setnObjCodigo("jfhgsjfdhgkshdfgj");
+					$bean_parparext->setnObjCodigo($nSerie);
+					// $bean_parparext->setnObjCodigo("jfhgsjfdhgkshdfgj");
 					$bean_parparext->setnObjTipo(1009);
 					$bean_parparext->setcParParExtValor($nNumeracionSerie);
 					$bean_parparext->setcParParExtGlosa("PE-COMPROBANTE-SERIE-Nro");
