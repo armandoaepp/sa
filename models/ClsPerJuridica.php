@@ -1,7 +1,11 @@
 <?php
 class ClsPerJuridica extends ClsConexion
 {
-
+# CONSTRUCTOR
+	function ClsPerJuridica($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		# Funcion para seleccionar Provincias por departamentos
 		function Get_PerJuridica_by_cPerUsuario($bean_perjuridica )
 		{

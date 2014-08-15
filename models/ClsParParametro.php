@@ -2,6 +2,11 @@
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsParParametro extends ClsConexion {
 
+	# CONSTRUCTOR
+	function ClsParParametro($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 
 
 	# Filtrar ParParametro por nParCodigo

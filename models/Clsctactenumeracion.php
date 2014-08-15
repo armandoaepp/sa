@@ -1,6 +1,12 @@
 <?php
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsCtaCteNumeracion extends ClsConexion {
+	# CONSTRUCTOR
+	function ClsCtaCteNumeracion($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
+
 # Método Insertar
 	public function Set_CtaCteNumeracion($bean_ctactenumeracion)
 	{

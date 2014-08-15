@@ -1,6 +1,11 @@
 <?php
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsCuentaCorriente extends ClsConexion {
+	# CONSTRUCTOR
+	function ClsCuentaCorriente($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 # Método Insertar
 	public function Set_cuentacorriente($bean_cuentacorriente)
 	{

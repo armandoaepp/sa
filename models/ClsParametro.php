@@ -8,7 +8,11 @@
 
 	Class ClsParametro extends ClsConexion
 	{
-
+# CONSTRUCTOR
+	function ClsParametro($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		#  FUNCIÓN PARA FILTRAR PARAMETRO
 			function Filtrar_Parametro($bean_parametro)
 			{

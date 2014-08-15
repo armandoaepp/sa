@@ -1,7 +1,11 @@
 <?php
 class ClsPerRelacion extends ClsConexion
 {
-
+# CONSTRUCTOR
+	function ClsPerRelacion($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		# INSERTAR
 		function Set_PerRelacion($bean_perrelacion )
 		{

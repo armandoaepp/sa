@@ -2,6 +2,11 @@
 
 Class ClsPerParParametro extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsPerParParametro($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	#Funcion para cargar las provincias
 	function Set_PerParParametro($bean_perparparametro)
 	{

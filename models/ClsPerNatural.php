@@ -1,7 +1,11 @@
 <?php
 class ClsPerNatural extends ClsConexion
 {
-
+# CONSTRUCTOR
+	function ClsPerNatural($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		# Funcion para seleccionar Provincias por departamentos
 		function Set_PerNatural($bean_pernatural )
 		{

@@ -1,6 +1,11 @@
 <?php
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsCtaCteDetalle extends ClsConexion {
+	# CONSTRUCTOR
+	function ClsCtaCteDetalle($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 # Método Insertar
 	public function Set_ctactedetalle($bean_ctactedetalle)
 	{

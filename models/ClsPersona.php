@@ -1,7 +1,11 @@
 <?php
 class ClsPersona extends ClsConexion
 {
-
+# CONSTRUCTOR
+	function ClsPersona($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	# Funcion insertar tabla persona ->  nPerTipo si es una persona  juridica(2) o natural(1).
 		function Set_Persona($bean_persona )
 		{

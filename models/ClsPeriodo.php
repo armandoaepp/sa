@@ -7,6 +7,11 @@
 	Estado			:	Desarrollo
 */
 	Class ClsPeriodo extends ClsConexion{
+		# CONSTRUCTOR
+	function ClsPeriodo($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 
 	# function Get_Sel_Periodos($nOriReg, $nCanReg,  $nPagRegistro,  $cPrdDescripcion="-")
 		function Get_Sel_Periodos($bean_periodo)
@@ -40,6 +45,7 @@
 			$nPrdTipo        = $bean_periodo->getnPrdTipo();
 			$nPrdEstado      = $bean_periodo->getnPrdEstado();
 
+			// return "CALL usp_Set_Periodo('$cPrdDescripcion' ,  '$dPrdFecInic' ,  '$dPrdFecFin' , $nPrdTipo ,$nPrdEstado) ;";
 			$this->query="call usp_Set_Periodo('$cPrdDescripcion' ,  '$dPrdFecInic' ,  '$dPrdFecFin' , $nPrdTipo ,$nPrdEstado) ;";
 			$this->execute_query();
 			$data = $this->rows ;
@@ -116,5 +122,15 @@
 		$data = $this->rows ;
 		return $data;
 	}
+
+		# ACTUALIZAR TODOS LOS PERIODOS AL ESTADO 2: CERRADOS
+	function Cerrar_Periodos()
+	{
+		$this->query="call usp_Cerrar_Periodos() ;";
+		$this->execute_query();
+		$data = $this->rows ;
+		return $data;
+	}
+
 
 }

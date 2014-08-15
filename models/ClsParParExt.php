@@ -1,6 +1,13 @@
 <?php
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsParParExt extends ClsConexion {
+
+# CONSTRUCTOR
+	function ClsParParExt($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
+
 # Método Insertar
 	public function Set_ParParExt($bean_parparext)
 	{

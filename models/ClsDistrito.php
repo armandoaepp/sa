@@ -2,6 +2,11 @@
 
 Class ClsDistrito extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsDistrito($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	#Funcion para cargar las provincias
 	function Get_Distritos_by_nProCodigo($bean_distrito){
 

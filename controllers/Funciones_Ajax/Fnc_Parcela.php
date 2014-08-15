@@ -194,12 +194,12 @@
 			if($MsjAlter == "")
 			{
 				# OBJETOS
-					$bean_persona      =  new Bean_persona() ;
+					// $bean_persona      =  new Bean_persona() ;
 					$bean_perparametro =  new Bean_perparametro() ;
 					$bean_parametro    =  new Bean_parametro() ;
 
-					$objPersona      = new ClsPersona();
-					$objPerParametro = new ClsPerParametro();
+					// $objPersona      = new ClsPersona();
+					// $objPerParametro = new ClsPerParametro();
 					$objParametro    = new ClsParametro();
 
 				# DATOS FRM
@@ -229,8 +229,15 @@
 					# REGISTRAR DATA
 						try
 						{
+							# instancio los objecto y si es necesario vuelvo a chancar algun objeto anterior
+							$objParametro    = new ClsParametro();
+							# llamamos al metodo que retorna la conexion
+							$cnx = $objParametro->get_connection() ;
+							# enviamos la connection al restos de las clase
+							$objPerParametro = new ClsPerParametro($cnx );
+
 							# iniciamos la transaccion
-					        	$objPersona->beginTransaction() ;
+					        	$objParametro->beginTransaction() ;
 
 					        # REGISTRAR PARCELA COMO PARAMETRO
 								$bean_parametro->setcParNombre($cParNomCodParcela );
@@ -250,15 +257,15 @@
 								$dat1 = $objPerParametro->Set_PerParametro($bean_perparametro ) ;
 
 							# INSERTAMOS LA TRANSACCION
-								Insertar_Transaccion(1,"NUEVO PARCELA nParCodigo: ".$nParCodigo.", cPerCodigo:".$cPerCodigo.", cParDescParcela:".$cParDescParcela ,"") ;
+								Insertar_Transaccion(1,"NUEVO PARCELA nParCodigo: ".$nParCodigo.", cPerCodigo:".$cPerCodigo.", cParDescParcela:".$cParDescParcela ,"",$cnx) ;
 
 							# si todo a tendido exito
-				        		$objPersona->commit();
+				        		$objParametro->commit();
 				        		$Funcion = "xajax_Listar_Parcelas( 0,15,1,1 ) ; ocultar_emergente();";
 						}catch(Exception $e)
 			        	{
 			        		# si ha habido algun error
-			        		$objPersona->rollback();
+			        		$objParametro->rollback();
 			        		// $MsjAlter =  "Error de registro.".$e->getMessage() ;
 			        		$MsjAlter =  "Error de registro.";
 			        	}
@@ -370,7 +377,7 @@
 					$bean_parametro    =  new Bean_parametro() ;
 
 					// $objPersona      = new ClsPersona();
-					$objPerParametro = new ClsPerParametro();
+					// $objPerParametro = new ClsPerParametro();
 					$objParametro    = new ClsParametro();
 
 				# DATOS FRM
@@ -401,6 +408,13 @@
 					# REGISTRAR DATA
 						try
 						{
+							# instancio los objecto y si es necesario vuelvo a chancar algun objeto anterior
+							$objParametro    = new ClsParametro();
+							# llamamos al metodo que retorna la conexion
+							$cnx = $objParametro->get_connection() ;
+							# enviamos la connection al restos de las clase
+							$objPerParametro = new ClsPerParametro($cnx );
+
 							# iniciamos la transaccion
 					        	$objParametro->beginTransaction() ;
 
@@ -424,7 +438,7 @@
 								$dat1 = $objPerParametro->Upd_PerParametro($bean_perparametro ) ;
 
 							# INSERTAMOS LA TRANSACCION
-								Insertar_Transaccion(2,"ACTUALIZAR PARCELA nParCodigo: ".$nParCodigo.", cPerCodigo:".$cPerCodigo.", cParDescParcela:".$cParDescParcela ,"") ;
+								Insertar_Transaccion(2,"ACTUALIZAR PARCELA nParCodigo: ".$nParCodigo.", cPerCodigo:".$cPerCodigo.", cParDescParcela:".$cParDescParcela ,"", $cnx) ;
 
 							# si todo a tendido exito
 				        		$objParametro->commit();
@@ -480,8 +494,8 @@
 			$MsjAlter = "&nbsp;";
 			$Funcion = "";
 
-			$objPerParametro = new ClsPerParametro();
-			$objParametro   = new ClsParametro();
+			// $objPerParametro = new ClsPerParametro();
+			// $objParametro   = new ClsParametro();
 
 			$bean_parametro    = new Bean_parametro();
 			$bean_perparametro = new Bean_perparametro();
@@ -503,13 +517,23 @@
 
 
 			try
-	    	{	# iniciamos la transaccion
+	    	{
+	    		# instancio los objecto y si es necesario vuelvo a chancar algun objeto anterior
+				$objParametro    = new ClsParametro();
+				# llamamos al metodo que retorna la conexion
+				$cnx = $objParametro->get_connection() ;
+				# enviamos la connection al restos de las clase
+				$objPerParametro = new ClsPerParametro($cnx );
+
+
+
+	    		# iniciamos la transaccion
 	    		$objParametro->beginTransaction() ;
     			# Actulizar estado del paramentro  como Sector
 				$objParametro->Upd_Parametro_Estado($bean_parametro);
 				$objPerParametro->Upd_PerParametro_Estado($bean_perparametro);
 
-				Insertar_Transaccion(3,"ELIMNO PARCELA: cPerCodigo: ".$cPerCodigo." nParCodigo : ".$nParCodigo." - nParClase : 2006 ","") ;
+				Insertar_Transaccion(3,"ELIMNO PARCELA: cPerCodigo: ".$cPerCodigo." nParCodigo : ".$nParCodigo." - nParClase : 2006 ","", $cnx) ;
 
 				# si todo a tendido exito
 	    		$objParametro->commit();

@@ -1,6 +1,11 @@
 <?php
 class ClsUbigeo extends ClsConexion
 {
+# CONSTRUCTOR
+	function ClsUbigeo($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 
 	#Funcion extrar el ubigeo completo atraves del codigo del sector : sector->distrito->provincia->departamento
 	function Get_Ubigeo_nParCodSector($bean_parametro)

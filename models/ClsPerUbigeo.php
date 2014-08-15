@@ -2,6 +2,11 @@
 
 Class ClsPerUbigeo extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsPerUbigeo($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	# INSERTAR
 	function Set_PerUbigeo($bean_perubigeo){
 

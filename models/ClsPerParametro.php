@@ -2,6 +2,11 @@
 
 Class ClsPerParametro extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsPerParametro($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	# INSERTAR
 	function Set_PerParametro($bean_perparametro ){
 

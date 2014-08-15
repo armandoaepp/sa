@@ -229,7 +229,8 @@
 		        {
 		        		#	Registro datos de Caserio
 		        		try
-			        	{	# iniciamos la transaccion
+			        	{
+			        		# iniciamos la transaccion
 			        		$objCaserio->beginTransaction() ;
 			        		$dataCaserio = $objCaserio->Set_Caserio($bean_caserio);
 			        		$nCasCodigo  = $dataCaserio["cuerpo"][0]["nCasCodigo"] ;

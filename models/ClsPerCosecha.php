@@ -2,6 +2,11 @@
 
 Class ClsPerCosecha extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsPerCosecha($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	#SELECCIONAR COSECHA POR PERSONA
 	function Get_PerCoseha_by_cPerCodigo($bean_percosecha)
 	{

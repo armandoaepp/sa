@@ -1,6 +1,11 @@
 <?php
 class ClsCaserio extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsCaserio($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 
 	# Funcion para seleccionar Provincias por departamentos
 		function Get_Sel_Caserios($bean_caserio, $bean_distrito , $bean_provincia,$bean_departamento )
@@ -14,7 +19,7 @@ class ClsCaserio extends ClsConexion
 				$cCasDescripcion = $bean_caserio->getcCasDescripcion() ;
 
 			// return "CALL usp_Get_Sel_Caserios($nOriReg , $nCanReg , $nPagRegistro , '$cDepDescripcion' , '$cProDescripcion' ,'$cDisDescripcion','$cCasDescripcion' )  ; ";
-			$this->query ="CALL usp_Get_Sel_Caserios($nOriReg , $nCanReg , $nPagRegistro , '$cDepDescripcion' , '$cProDescripcion' ,'$cDisDescripcion','$cCasDescripcion' )  ; ";
+			$this->query = "CALL usp_Get_Sel_Caserios($nOriReg , $nCanReg , $nPagRegistro , '$cDepDescripcion' , '$cProDescripcion' ,'$cDisDescripcion','$cCasDescripcion' )  ; ";
 			$this->execute_query();
 			$data = $this->rows ;
 			return $data;

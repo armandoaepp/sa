@@ -1,6 +1,11 @@
 <?php
 class ClsSector extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsSector($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	# Funcion para seleccionar Provincias por departamentos
 		function Get_Sel_Sectores($bean_parametro , $bean_caserio, $bean_distrito , $bean_provincia   )
 		{

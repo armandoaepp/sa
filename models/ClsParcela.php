@@ -1,6 +1,11 @@
 <?php
 class ClsParcela extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsParcela($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	# Funcion para seleccionar Provincias por departamentos
 		function Get_Parcelas_by_cPerCodigo($bean_parametro ,$bean_perparametro   )
 		{

@@ -26,7 +26,7 @@
 							<table style="width:100%;">
 								<tr class="title-table text-left" >
 									<th  style="width:10%;">&nbsp; CÓDIGO </th>
-									<th  style="width:40%;">&nbsp; PERIODO </th>
+									<th  style="width:40%;">&nbsp; CAMPAÑA </th>
 									<th  style="width:20%;">&nbsp; FECHA INICIO </th>
 									<th  style="width:20%;">&nbsp; FECHA FIN</th>
 									<th  style="width:10%;">&nbsp; ESTADO </th>
@@ -37,7 +37,7 @@
 									    <input  type="search" disabled="disabled" name="" placeholder="" />
 									</td>
 									<td>
-						    		    <input type="search" name="cParDescripcion_" id="cParDescripcion_" placeholder="Buscar Periodo"
+						    		    <input type="search" name="cParDescripcion_" id="cParDescripcion_" placeholder="Buscar Campaña"
 						    		    onkeyup="'.$FuncionEnter.'"
 							    		onsearch="'.$FuncionSearch.'" />
 									</td>
@@ -151,7 +151,7 @@
 			// LLAMAR A LA FUNCION QUE CREA EL FORMULARIO
 			$formulario =  Frm_Periodo("Insertar_Periodo");
 			# configurando emergente
-				$FrmRpta = FrmEmergente("NUEVO PERIODO", $formulario);
+				$FrmRpta = FrmEmergente("NUEVA CAMPAÑA", $formulario);
 				$objResponse->script("mostrar_emergente();");
 				// $objResponse->assign("emergente","style.height","180px");
 				$objResponse->assign("emergente_contenido","innerHTML",$FrmRpta);
@@ -191,10 +191,11 @@
 				$dFechaFin       = fecha_es_db($frm["dFechaFin"] );
 				$cParObservacion = Mayusc($frm["cParObservacion"]) ;
 
-				$objPeriodo       = new ClsPeriodo();
-				$objParametro     = new ClsParametro();
 				$bean_parametro = new Bean_parametro() ;
 				$bean_periodo   = new Bean_periodo();
+
+				$objPeriodo   = new ClsPeriodo();
+				// $objParametro = new ClsParametro();
 
 				$bean_periodo->setnPrdCodigo(0);
 				$bean_periodo->setcPrdDescripcion($cPrdDescripcion);
@@ -239,11 +240,19 @@
 
 			        		#	Registro datos de Periodo
 			        		try
-				        	{	# iniciamos la transaccion
-				        		$objPeriodo->beginTransaction() ;
+				        	{
+				        		# INSTANCIOAMOS EL OBJECTO INICIAL
+					        		$objPeriodo   = new ClsPeriodo();
+								# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+									$cnx = $objPeriodo->get_connection() ;
+								# ENVIAMOS LA CONNECTION AL RESTOS DE LAS CLASE
+									$objParametro = new ClsParametro($cnx);
+								# INICIAMOS LA TRANSACCION
+				        			$objPeriodo->beginTransaction() ;
+
 				        		$dataPeriodo = $objPeriodo->Set_Periodo($bean_periodo);
-				        		$nParCodigo = $dataPeriodo["cuerpo"][0][0] ;
-				        		// $nParCodigo = $dataPeriodo["cuerpo"][0]["nParCodigo"] ;
+				        		$nParCodigo = $dataPeriodo["cuerpo"][0]["nPrdCodigo"] ;
+				        		// $objResponse->alert($nParCodigo) ;
 
 				        		// $objResponse->alert($nParCodigo);
 				        		# REGISTRAR EL PERIODO COMO PARAMETRO
@@ -253,7 +262,8 @@
 								$bean_parametro->setcParDescripcion($cPrdDescripcion) ;
 
 				        		$data = $objParametro->Ins_Parametro($bean_parametro);
-								Insertar_Transaccion(1,"NUEVO PERIODO: nParCodigo : ".$nParCodigo." - nParClase : 2001 - cParDescripcion : ".$cPrdDescripcion,"") ;
+								Insertar_Transaccion(1,"NUEVO PERIODO: nParCodigo : ".$nParCodigo." - nParClase : 2001 - cParDescripcion : ".$cPrdDescripcion,"",$cnx) ;
+
 								# si todo a tendido exito
 				        		$objPeriodo->commit();
 				        		$Funcion = "xajax_Listar_Periodos(0,20,1,1); ocultar_emergente();";
@@ -262,8 +272,8 @@
 				        	{
 				        		# si ha habido algun error
 				        		$objPeriodo->rollback();
-				        		// $MsjAlter =  "Error de registro.".$e->getMessage() ;
-				        		$MsjAlter =  "Error de registro." ;
+				        		$MsjAlter =  "Error de registro.".$e->getMessage() ;
+				        		// $MsjAlter =  "Error de registro." ;
 				        	}
 
 			        	}
@@ -326,7 +336,7 @@
 					}
 
 			# configurando emergente
-				$FrmRpta = FrmEmergente("ACTUALIZAR PERIODO", $formulario);
+				$FrmRpta = FrmEmergente("ACTUALIZAR CAMPAÑA", $formulario);
 				$objResponse->script("mostrar_emergente();");
 				// $objResponse->assign("emergente","style.height","180px");
 				$objResponse->assign("emergente_contenido","innerHTML",$FrmRpta);
@@ -372,21 +382,29 @@
 					$bean_periodo->setdPrdFecFin($dFechaFin);
 					$bean_periodo->setnPrdTipo(1);
 
-					$objPeriodo       = new ClsPeriodo();
+					// $objPeriodo       = new ClsPeriodo();
 					# REGISTRAR EL PERIODO COMO PARAMETRO
-					$objParametro     = new ClsParametro();
+					// $objParametro     = new ClsParametro();
 					$bean_parametro = new Bean_parametro() ;
 				  	$bean_parametro->setnParCodigo($nParPeriodo) ;
 				  	$bean_parametro->setnParClase(2001) ;
 					$bean_parametro->setcParNombre($cParObservacion);
 					$bean_parametro->setcParDescripcion($cPrdDescripcion) ;
 				try
-	        	{	# iniciamos la transaccion
-	        		$objPeriodo->beginTransaction() ;
-	        		$data = $objPeriodo->Upd_Periodo($bean_periodo);
+	        	{
+	        		# INSTANCIOAMOS EL OBJECTO INICIAL
+		        		$objPeriodo   = new ClsPeriodo();
+					# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+						$cnx = $objPeriodo->get_connection() ;
+					# ENVIAMOS LA CONNECTION AL RESTOS DE LAS CLASE
+						$objParametro = new ClsParametro($cnx);
+					# INICIAMOS LA TRANSACCION
+	        			$objPeriodo->beginTransaction() ;
+	        		# INSERT CORRESPONDIENTE
+		        		$data = $objPeriodo->Upd_Periodo($bean_periodo);
 
-	        		$objParametro->Upd_Parametro($bean_parametro);
-					Insertar_Transaccion(2,"ACTUALIZO PERIODO: nParCodigo : ".$nParPeriodo." - nParClase : 2001 - cParDescripcion : ".$cPrdDescripcion,"") ;
+		        		$objParametro->Upd_Parametro($bean_parametro);
+						Insertar_Transaccion(2,"ACTUALIZO PERIODO: nParCodigo : ".$nParPeriodo." - nParClase : 2001 - cParDescripcion : ".$cPrdDescripcion,"",$cnx) ;
 
 					# si todo a tendido exito
 	        		$objPeriodo->commit();
@@ -425,7 +443,7 @@
 
 			$formulario = FrmEliminar("ConfEliminar_Periodo",$rdCodigo);
 
-			$FrmRpta = FrmEmergente("ELIMINAR PERIODO", $formulario);
+			$FrmRpta = FrmEmergente("ELIMINAR CAMPAÑA", $formulario);
 			$objResponse->script("mostrar_emergente();");
 			$objResponse->assign("emergente","style.height","130px");
 			$objResponse->assign("emergente_contenido","innerHTML",utf8_encode($FrmRpta));
@@ -451,14 +469,16 @@
 					$arr = explode('-', $frm["rdCodigo"]);
 					$nEstado  = $arr[1];
 
-					if($nEstado == 1 ){
-						$mensaje = "¿Esta Seguro de Cerrar Campaña ?";
-						$titulo  = "CERRAR CAMPAÑA";
+					if($nEstado == 1 )
+					{
+						$mensaje  = "¿Esta Seguro de Cerrar Campaña ?";
+						$titulo   = "CERRAR CAMPAÑA";
 						$rdCodgio = $arr[0]."','2";
 					}
-					elseif($nEstado == 2 ){
-						$mensaje = "¿Esta Seguro de Aperturar Campaña ?";
-						$titulo  = "APERTURAR CAMPAÑA";
+					elseif($nEstado == 2 )
+					{
+						$mensaje  = "¿Esta Seguro de Aperturar Campaña ?";
+						$titulo   = "APERTURAR CAMPAÑA";
 						$rdCodgio = $arr[0]."','1";
 					}
 			}
@@ -477,21 +497,27 @@
 		function ConfEliminar_Periodo($nParPerCodigo , $nEstado = 0 )
 		{
 			$objResponse = new xajaxResponse();
-			$objPeriodo = new ClsPeriodo();
+
 
 			$MsjAlter = "&nbsp;";
 			$Funcion = "";
 
-			$objPeriodo       = new ClsPeriodo();
+
 			$bean_periodo   = new Bean_periodo();
 			$bean_periodo->setnPrdCodigo($nParPerCodigo);
 			$bean_periodo->setnPrdEstado($nEstado);
 
 			try
-	    	{	# iniciamos la transaccion
-	    		$objPeriodo->beginTransaction() ;
-
-				// $AdoPrd = $objPeriodo->Upd_Periodo_Estado($nParCodigo , $nEstado) ;
+	    	{
+	    		# INSTANCIOAMOS EL OBJECTO INICIAL
+	        		$objPeriodo   = new ClsPeriodo();
+				# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+					$cnx = $objPeriodo->get_connection() ;
+				# ENVIAMOS LA CONNECTION AL RESTOS DE LAS CLASE
+					$objParametro = new ClsParametro($cnx);
+				# INICIAMOS LA TRANSACCION
+        			$objPeriodo->beginTransaction() ;
+        		# INSERT CORRESPONDIENTE
 
 	    		$data = $objPeriodo->Upd_Periodo_Estado($bean_periodo);
 	    		if($nEstado == 0)
@@ -526,24 +552,31 @@
 		}
 
 	#CONFIRMAR ELIMINACION
-		function ConfCerrar_Periodo($nParPerCodigo , $nEstado = 0 )
+		function ConfCerrar_Periodo($nParPrdCodigo , $nEstado = 0 )
 		{
 			$objResponse = new xajaxResponse();
 
 			$MsjAlter = "&nbsp;";
 			$Funcion = "";
 
-			$objPeriodo       = new ClsPeriodo();
-			$bean_periodo   = new Bean_periodo();
-			$bean_periodo->setnPrdCodigo($nParPerCodigo);
+			$objPeriodo   = new ClsPeriodo();
+			$bean_periodo = new Bean_periodo();
+
+			$bean_periodo->setnPrdCodigo($nParPrdCodigo);
 			$bean_periodo->setnPrdEstado($nEstado);
 
 			try
-	    	{	# iniciamos la transaccion
-	    		$objPeriodo->beginTransaction() ;
+	    	{
+    			# INSTANCIOAMOS EL OBJECTO INICIAL
+	        		$objPeriodo   = new ClsPeriodo();
+				# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+					$cnx = $objPeriodo->get_connection() ;
+				# INICIAMOS LA TRANSACCION
+        			$objPeriodo->beginTransaction() ;
 
-	    		$data = $objPeriodo->Upd_Periodo_Estado($bean_periodo);
-				Insertar_Transaccion(4,"CERRO Y/O APERTURO PERIODO: nParCodigo : ".$nParPerCodigo." - nParClase : 2001 - cParDescripcion : ".$cPrdDescripcion,"") ;
+	    		$objPeriodo->Cerrar_Periodos() ;
+	    		$objPeriodo->Upd_Periodo_Estado($bean_periodo);
+				Insertar_Transaccion(4,"CERRO Y/O APERTURO PERIODO: nParCodigo : ".$nParPrdCodigo." - nParClase : 2001 - nPrdEstado: ".$nEstado,"",$cnx) ;
 
 				# si todo a tendido exito
 	    		$objPeriodo->commit();

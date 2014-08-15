@@ -1,6 +1,11 @@
 <?php
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsPerCuenta extends ClsConexion {
+	# CONSTRUCTOR
+	function ClsPerCuenta($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 # Método Insertar
 public function Set_percuenta($bean_percuenta)
 {

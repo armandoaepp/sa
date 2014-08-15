@@ -2,6 +2,11 @@
 
 Class ClsProductor extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsProductor($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	#Funcion, extraer Productores
 	function Get_Productores($bean_persona , $bean_perdocumento , $bean_parametro ){
 

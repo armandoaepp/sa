@@ -369,14 +369,8 @@
 					$bean_perparametro =  new Bean_perparametro() ;
 					$bean_perubigeo    =  new Bean_perubigeo() ;
 
-					$objPersona      = new ClsPersona();
-					$objPerNatural   = new ClsPerNatural();
 					$objPerDocumento = new ClsPerDocumento();
-					$objPerTelefono  = new ClsPerTelefono();
-					$objPerMail      = new ClsPerMail();
-					$objPerRelacion  = new ClsPerRelacion();
-					$objPerParametro = new ClsPerParametro();
-					$objPerUbigeo    = new ClsPerUbigeo();
+
 
 				# DATOS FRM
 					$cPerDocumento      = $frm['cPerDocumento_'] ;
@@ -410,15 +404,22 @@
 					# REGISTRAR DATA
 						try
 						{
-							# iniciamos la transaccion
-								$objPersona->beginTransaction() ;
-								$objPerNatural->beginTransaction();
-								$objPerDocumento->beginTransaction();
-								$objPerTelefono->beginTransaction();
-								$objPerMail->beginTransaction();
-								$objPerRelacion->beginTransaction();
-								$objPerParametro->beginTransaction();
-								$objPerUbigeo->beginTransaction();
+							# INSTANCIOAMOS EL OBJECTO INICIAL
+				        		$objPersona = new ClsPersona();
+							# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+								$cnx = $objPersona->get_connection() ;
+							# ENVIAMOS LA CONNECTION AL RESTOS DE LAS CLASE
+								$objPerNatural   = new ClsPerNatural($cnx);
+								$objPerDocumento = new ClsPerDocumento($cnx);
+								$objPerTelefono  = new ClsPerTelefono($cnx);
+								$objPerMail      = new ClsPerMail($cnx);
+								$objPerRelacion  = new ClsPerRelacion($cnx);
+								$objPerParametro = new ClsPerParametro($cnx);
+								$objPerUbigeo    = new ClsPerUbigeo($cnx);
+
+							# INICIAMOS LA TRANSACCION
+			        			$objPersona->beginTransaction() ;
+
 							# Registrar Persona
 								$bean_persona->setcPerNombre($cPerNombre ) ;
 								$bean_persona->setcPerApellidos($cPerApellidoPat. " ". $cPerApellidoMat) ;
@@ -447,8 +448,6 @@
 								$bean_perdocumento->setnPerDocCategoria(0) ; # NINGUNA
 
 								$objPerDocumento->Set_PerDocumento($bean_perdocumento ) ;
-
-
 
 							# Registrar PerRealacion
 								$bean_perrelacion->setcPerCodigo($cPerCodigo) ;
@@ -506,30 +505,16 @@
 								$objPerUbigeo->Set_PerUbigeo($bean_perubigeo) ;
 
 							# INSERTAMOS LA TRANSACCION
-								Insertar_Transaccion(1,"NUEVO PERSONA : ".$cPerCodigo." Nombre Caserio ".$cPerApellidoPat. " ". $cPerApellidoMat ,"") ;
+								Insertar_Transaccion(1,"NUEVO PERSONA : ".$cPerCodigo." Nombre Caserio ".$cPerApellidoPat. " ". $cPerApellidoMat ,"",$cnx) ;
 
 							# si todo a tendido exito
 				        		$objPersona->commit();
-				        		$objPerNatural->commit();
-								$objPerDocumento->commit();
-								$objPerTelefono->commit();
-								$objPerMail->commit();
-								$objPerRelacion->commit();
-								$objPerParametro->commit();
-								$objPerUbigeo->commit();
 
 				        		$Funcion = "xajax_Listar_Productores(0,15,1,1); ocultar_emergente();";
 						}catch(Exception $e)
 			        	{
 			        		# si ha habido algun error
 			        		$objPersona->rollback();
-			        		$objPerNatural->rollback();
-							$objPerDocumento->rollback();
-							$objPerTelefono->rollback();
-							$objPerMail->rollback();
-							$objPerRelacion->rollback();
-							$objPerParametro->rollback();
-							$objPerUbigeo->rollback();
 			        		$MsjAlter =  "Error de registro.".$e->getMessage() ;
 			        		// $MsjAlter =  "Error de registro.";
 			        	}
@@ -700,15 +685,7 @@
 					$bean_perparametro =  new Bean_perparametro() ;
 					$bean_perubigeo    =  new Bean_perubigeo() ;
 
-					$objPersona      = new ClsPersona();
-					$objPerNatural   = new ClsPerNatural();
 					$objPerDocumento = new ClsPerDocumento();
-					$objPerTelefono  = new ClsPerTelefono();
-					$objPerMail      = new ClsPerMail();
-					$objPerRelacion  = new ClsPerRelacion();
-					$objPerParametro = new ClsPerParametro();
-					$objPerUbigeo    = new ClsPerUbigeo();
-
 				# DATOS FRM
 					$cPerCodigo         = $frm['cPerCodigo_'] ;
 					$cPerDocumento      = $frm['cPerDocumento_'] ;
@@ -745,8 +722,22 @@
 					# ACTUALIZAR DATA
 						try
 			        	{
-			        		# iniciamos la transaccion
+			        		# INSTANCIOAMOS EL OBJECTO INICIAL
+				        		$objPersona = new ClsPersona();
+							# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+								$cnx = $objPersona->get_connection() ;
+							# ENVIAMOS LA CONNECTION AL RESTOS DE LAS CLASE
+								$objPerNatural   = new ClsPerNatural($cnx);
+								$objPerDocumento = new ClsPerDocumento($cnx);
+								$objPerTelefono  = new ClsPerTelefono($cnx);
+								$objPerMail      = new ClsPerMail($cnx);
+								$objPerRelacion  = new ClsPerRelacion($cnx);
+								$objPerParametro = new ClsPerParametro($cnx);
+								$objPerUbigeo    = new ClsPerUbigeo($cnx);
+
+							# INICIAMOS LA TRANSACCION
 			        			$objPersona->beginTransaction() ;
+
 
 				        		# Actulizar Persona
 									$bean_persona->setcPerCodigo($cPerCodigo ) ;
@@ -819,7 +810,7 @@
 									$dat = $objPerUbigeo->Upd_PerUbigeo($bean_perubigeo) ;
 									// $objResponse->alert($dat) ;
 
-								Insertar_Transaccion(2,"ACTUALIZO PRODUCTOR : ".$cPerCodigo." DESCRIPCIÓN  ".$cPerApellidoPat. " ". $cPerApellidoMat,"") ;
+								Insertar_Transaccion(2,"ACTUALIZO PRODUCTOR : ".$cPerCodigo." DESCRIPCIÓN  ".$cPerApellidoPat. " ". $cPerApellidoMat,"",$cnx) ;
 
 							# si todo a tendido exito
 				        		$objPersona->commit();
@@ -877,8 +868,8 @@
 			$MsjAlter = "&nbsp;";
 			$Funcion = "";
 
-			$objPerRelacion   = new ClsPerRelacion();
 			$bean_perrelacion = new Bean_perrelacion() ;
+
 
 
 
@@ -888,13 +879,18 @@
 			$bean_perrelacion->setnPerRelEstado($nEstado ) ;
 
 			try
-	    	{	# iniciamos la transaccion
-	    		$objPerRelacion->beginTransaction() ;
+	    	{	# INSTANCIOAMOS EL OBJECTO INICIAL
+	        	$objPerRelacion   = new ClsPerRelacion();
+				# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+					$cnx = $objPerRelacion->get_connection() ;
+				# INICIAMOS LA TRANSACCION
+			        $objPerRelacion->beginTransaction() ;
+
     			# Actulizar estado del paramentro  como Sector
 				$dat = $objPerRelacion->Upd_PerRelacion_Estado($bean_perrelacion);
 				// $objResponse->alert($dat) ;
 
-				Insertar_Transaccion(3,"ELIMNO PRODUCTOR: nPerCodigo : ".$nPerCodigo." - Usuario  :  ".$_SESSION['S_usuario'],"") ;
+				Insertar_Transaccion(3,"ELIMNO PRODUCTOR: nPerCodigo : ".$nPerCodigo." - Usuario  :  ".$_SESSION['S_usuario'],"",$cnx) ;
 
 				# si todo a tendido exito
 	    		$objPerRelacion->commit();
@@ -977,7 +973,7 @@
 	                        </fieldset>';
 			  	$formulario .='<fieldset class="c6 ">
 	                                <label for="Email_">Email</label>
-	                                <span class="pre  icon-email"></span>
+	                                <span class="pre  icon-mail"></span>
 	                                <input type="email" class="pre " name="Email_" id="Email_" value="'.$Email.'" placeholder="INGRESE EMAIL ">
 	                            </fieldset>';
 

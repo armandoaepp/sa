@@ -8,6 +8,11 @@
 
 		Class ClsUsuario extends ClsConexion
 		{
+			# CONSTRUCTOR
+	function ClsUsuario($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 			//Funcion Verificar si existe el Usuario
 			function Get_Usuario_By_Clave_UserName($bean_perusuario)
 			{

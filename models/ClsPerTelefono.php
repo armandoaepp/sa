@@ -1,7 +1,11 @@
 <?php
 class ClsPerTelefono extends ClsConexion
 {
-
+# CONSTRUCTOR
+	function ClsPerTelefono($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		# Funcion INsERTAR
 		function Set_PerTelefono($bean_pertelefono )
 		{

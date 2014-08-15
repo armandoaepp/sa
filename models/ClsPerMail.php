@@ -1,7 +1,11 @@
 <?php
 class clsPerMail extends ClsConexion
 {
-
+# CONSTRUCTOR
+	function clsPerMail($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		# Funcion MaiL
 		function Set_PerMail($bean_permail )
 		{

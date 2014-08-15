@@ -1,6 +1,11 @@
 <?php
 /* Clase Generada desde PlaneaTec-PHP - Creado por @armandaepp */
 class ClsCtaCteComprobante extends ClsConexion {
+	# CONSTRUCTOR
+	function ClsCtaCteComprobante($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 # Método Insertar
 	public function Set_ctactecomprobante($bean_ctactecomprobante)
 	{

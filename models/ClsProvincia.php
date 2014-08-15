@@ -2,6 +2,11 @@
 
 Class ClsProvincia extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsProvincia($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	#Funcion para cargar las provincias
 	function Get_Provincias_by_nDepCodigo($bean_provincia){
 

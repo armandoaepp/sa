@@ -1,7 +1,11 @@
 <?php
 
-Class ClsDepartamento extends ClsConexion
-{
+Class ClsDepartamento extends ClsConexion{
+	# CONSTRUCTOR
+	function ClsDepartamento($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 	#Funcion para cargar los departamentos.
 	function Get_Departamentos_by_nPaiCodigo($bean_departamento ){
 

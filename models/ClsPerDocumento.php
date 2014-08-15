@@ -1,6 +1,11 @@
 <?php
 class ClsPerDocumento extends ClsConexion
 {
+	# CONSTRUCTOR
+	function ClsPerDocumento($cnx  = null  )
+	{
+			$this->conn = $cnx;
+	}
 		# Funcion para seleccionar Provincias por departamentos
 		function Set_PerDocumento($bean_perdocumento )
 		{
