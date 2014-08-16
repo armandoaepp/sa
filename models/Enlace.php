@@ -81,6 +81,8 @@ require_once "ClsCtaCtePago.php";
 require_once "ClsCtaCteServicio.php";
 require_once "ClsCuentaCorriente.php";
 
+require_once "ClsSerieEmpresa.php";
+
 
 
 # =====================	Funciones Php
@@ -99,6 +101,7 @@ require_once "../controllers/Funciones_Ajax/Fnc_Cosecha.php";
 require_once "../controllers/Funciones_Ajax/Fnc_AsignarSerie.php";
 
 require_once "../controllers/Funciones_Ajax/Fnc_General.php";
+require_once "../controllers/Funciones_Ajax/Fnc_Serie_Empresa.php";
 
 set_time_limit(0);
 # INICIALIZAR XAJAX

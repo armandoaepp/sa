@@ -232,7 +232,7 @@
 		        	# validar que la descripcion no exista para el distrio
 		        	$bean_parametro->setcParDescripcion( $Sector  );
 		        	$bean_parametro->setcParJerarquia( $nCaserio  );
-		    		$data = $objParametro->Get_Parametro_cParDesc_by_cParJeranquia($bean_parametro);
+		    		$data = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
 
 		        	if(count($dataFecha["cuerpo"]) > 0)
 		        	{
@@ -376,7 +376,7 @@
 		        	# validar que la descripcion no exista para el distrio
 		        	$bean_parametro->setcParDescripcion( $Sector  );
 		        	$bean_parametro->setcParJerarquia( $nCaserio  );
-		    		$data = $objParametro->Get_Parametro_cParDesc_by_cParJeranquia($bean_parametro);
+		    		$data = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
 
 		        	if(count($dataFecha["cuerpo"]) > 0)
 		        	{

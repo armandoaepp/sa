@@ -1,18 +1,19 @@
 <?php
 	/*
 		Autor			:	ARMANDO ENRIQUE PISFIL PUEMAPE
-	  	Fecha			:	28/12/2013
-	  	Clase			:	ClsParametro_Dat
+	  	Fecha			:	15/08/2014
+	  	Clase			:	ClsParametro
 		Estado			:	OK
+		twitter			: 	@armandoaepp
 	*/
 
 	Class ClsParametro extends ClsConexion
 	{
-# CONSTRUCTOR
-	function ClsParametro($cnx  = null  )
-	{
-			$this->conn = $cnx;
-	}
+		# CONSTRUCTOR
+			function ClsParametro($cnx  = null  )
+			{
+					$this->conn = $cnx;
+			}
 		#  FUNCIÓN PARA FILTRAR PARAMETRO
 			function Filtrar_Parametro($bean_parametro)
 			{
@@ -29,8 +30,10 @@
 				$data = $this->rows ;
 				return $data;
 			}
+
 		# INSERTAR
-			function Set_Parametro($bean_parametro ) {
+			function Set_Parametro($bean_parametro )
+			{
 				$nParClase       = $bean_parametro->getnParClase() ;
 				$cParNombre      = $bean_parametro->getcParNombre() ;
 				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
@@ -41,7 +44,8 @@
 				return $data;
 			}
 		# INSERTAR PARAMETRO SIN GENERAR CODIGO
-			function Ins_Parametro($bean_parametro ) {
+			function Ins_Parametro($bean_parametro )
+			{
 				$nParCodigo      = $bean_parametro->getnParCodigo() ;
 				$nParClase       = $bean_parametro->getnParClase() ;
 				$cParNombre      = $bean_parametro->getcParNombre() ;
@@ -51,6 +55,48 @@
 				$this->execute_query();
 				$data = $this->rows ;
 				return $data;
+			}
+
+		# INSERTAR UN PARAMETRO CON nParCodigo generado
+			function Set_Parametro_nParCodigo($bean_parametro)
+			{
+				$nParClase       = $bean_parametro->getnParClase() ;
+				$cParJerarquia   = $bean_parametro->getcParJerarquia() ;
+				$cParNombre      = $bean_parametro->getcParNombre() ;
+				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
+
+				$this->query = "Call usp_Set_Parametro_nParCodigo( $nParClase ,'$cParJerarquia' ,  '$cParNombre', '$cParDescripcion' )";
+				$this->execute_query();
+				$data = $this->rows ;
+				return $data;
+			}
+
+		# INSERTAR un parametro enviado todos los parametros
+			function Set_Parametro_All($bean_parametro )
+			{
+				$nParCodigo      = $bean_parametro->getnParCodigo() ;
+				$nParClase       = $bean_parametro->getnParClase() ;
+				$cParJerarquia   = $bean_parametro->getcParJerarquia() ;
+				$cParNombre      = $bean_parametro->getcParNombre() ;
+				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
+
+				$this->query="Call usp_Set_Parametro_All($nParCodigo, $nParClase, '$cParJerarquia', '$cParNombre', '$cParDescripcion' )";
+				$this->execute_query();
+				$data = $this->rows ;
+				return $data;
+			}
+
+		#Buscar un parametro por Clase y codigo
+			function Buscar_Parametro($bean_parametro)
+			{
+				$nParCodigo      = $bean_parametro->getnParCodigo() ;
+				$nParClase       = $bean_parametro->getnParClase() ;
+
+				$this->query = "Call usp_Buscar_Parametro($nParCodigo  , $nParClase )";
+				$this->execute_query();
+				$data = $this->rows ;
+				return $data;
+				// return $this->query ;
 			}
 
 		# Filtrar un parametro
@@ -67,6 +113,7 @@
 				$data = $this->rows ;
 				return $data;
 			}
+
 		# SELECCIONAR EL PARAMETRO PADRE (RAIZ) DE UNA DETERMINADA CLASE 0_0
 			function Get_Parametro_Padre_nParClase($objParametroBean )
 			{
@@ -76,6 +123,32 @@
 				$data = $this->rows ;
 				return $data;
 
+			}
+		#Buscar un parametro por Clase
+			function Get_Parametro_By_cParClase($bean_parametro)
+			{
+				// $nParCodigo      = $bean_parametro->getnParCodigo() ;
+				$nParClase       = $bean_parametro->getnParClase() ;
+
+				$this->query = "Call usp_Get_Parametro_By_cParClase( $nParClase )";
+				$this->execute_query();
+				$data = $this->rows ;
+				return $data;
+				// return $this->query ;
+			}
+
+		# Función para extraer un paramentro por clase Jerarquia y cParDescripcion(opcional ) - se cambio -> Get_Parametro_cParDesc_by_cParJeranquia
+			function Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro)
+			{
+				$nParClase       = $bean_parametro->getnParClase() ;
+				$cParJerarquia   = $bean_parametro->getcParJerarquia() ;
+				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
+
+				// return "Call usp_Get_Parametro_by_cParDesc_cParJeranquia( $nParClase ,'$cParJerarquia' ,  '$cParDescripcion')";
+				$this->query = "Call usp_Get_Parametro_by_cPar_Desc_Jeranquia( $nParClase ,'$cParJerarquia' ,  '$cParDescripcion')";
+				$this->execute_query();
+				$data = $this->rows ;
+				return $data;
 			}
 
 		#Función para validar parametro por descripcion
@@ -105,30 +178,18 @@
 				return $data;
 			}
 
-		#Buscar un parametro por Clase y codigo
-			function Buscar_Parametro($bean_parametro)
+		#VALIDAR cParDescripcion QUE NO EXITA PARA UN  nParCodigo DIFERENTE AL QUE SE ENVIA Y QUE PERTENSCA  A LA MISMA cParJerarquia
+			function Validar_Parametro_by_cPar_Desc_Jera_Upd($bean_parametro)
 			{
 				$nParCodigo      = $bean_parametro->getnParCodigo() ;
 				$nParClase       = $bean_parametro->getnParClase() ;
+				$cParJerarquia   = $bean_parametro->getcParJerarquia() ;
+				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
 
-				$this->query = "Call usp_Buscar_Parametro($nParCodigo  , $nParClase )";
+				$this->query = "Call usp_Validar_Parametro_by_cPar_Desc_Jera_Upd($nParCodigo, $nParClase, '$cParJerarquia', '$cParDescripcion')";
 				$this->execute_query();
 				$data = $this->rows ;
 				return $data;
-				// return $this->query ;
-			}
-
-		#Buscar un parametro por Clase
-			function Get_Parametro_By_cParClase($bean_parametro)
-			{
-				// $nParCodigo      = $bean_parametro->getnParCodigo() ;
-				$nParClase       = $bean_parametro->getnParClase() ;
-
-				$this->query = "Call usp_Get_Parametro_By_cParClase( $nParClase )";
-				$this->execute_query();
-				$data = $this->rows ;
-				return $data;
-				// return $this->query ;
 			}
 
 
@@ -171,23 +232,4 @@
 				$data = $this->rows ;
 				return $data;
 			}
-
-
-		# Función para eliminar parametro enviando codigo y clase =========
-			function Get_Parametro_cParDesc_by_cParJeranquia($bean_parametro)
-			{
-				$nParClase       = $bean_parametro->getnParClase() ;
-				$cParJerarquia   = $bean_parametro->getcParJerarquia() ;
-				$cParDescripcion = $bean_parametro->getcParDescripcion() ;
-
-				// return "Call usp_Get_Parametro_cParDesc_by_cParJeranquia( $nParClase ,'$cParJerarquia' ,  '$cParDescripcion')";
-				$this->query = "Call usp_Get_Parametro_cParDesc_by_cParJeranquia( $nParClase ,'$cParJerarquia' ,  '$cParDescripcion')";
-				$this->execute_query();
-				$data = $this->rows ;
-				return $data;
-			}
-
-
-
 	}
-?>
