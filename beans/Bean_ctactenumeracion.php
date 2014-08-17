@@ -1,6 +1,6 @@
 <?php
 /* Clase Bean Generada  - Creado por @armandoaepp */
-class Bean_ctactenumeracion{
+class Bean_ctactenumeracion extends Bean_general{
 //Constructor
 	public function Bean_ctactenumeracion(){}
 //Atributos

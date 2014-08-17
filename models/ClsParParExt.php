@@ -24,7 +24,6 @@ class ClsParParExt extends ClsConexion {
 		$this->execute_query();
 		$data = $this->rows ;
 		return $data;
-
 	}
 # Método Actualizar
 	public function Upd_parparext($bean_parparext)
@@ -62,5 +61,22 @@ class ClsParParExt extends ClsConexion {
 		$this->execute_query();
 		$data = $this->rows ;
 	}
+# Método Insertar
+	public function Validar_ParParExt($bean_parparext)
+	{
+		$nParSrcCodigo   = $bean_parparext->getnParSrcCodigo();
+		$nParSrcClase    = $bean_parparext->getnParSrcClase();
+		$nParDstCodigo   = $bean_parparext->getnParDstCodigo();
+		$nParDstClase    = $bean_parparext->getnParDstClase();
+		$nObjCodigo      = $bean_parparext->getnObjCodigo();
+		$nObjTipo        = $bean_parparext->getnObjTipo();
+
+		$this->query = "CALL usp_Validar_ParParExt($nParSrcCodigo, $nParSrcClase, $nParDstCodigo, $nParDstClase, $nObjCodigo, $nObjTipo)";
+		$this->execute_query();
+		$data = $this->rows ;
+		return $data;
+
+	}
+
 }
 ?>

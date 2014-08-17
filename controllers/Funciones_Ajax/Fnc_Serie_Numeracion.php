@@ -1,39 +1,45 @@
 <?php
 
-		$xajax->registerFunction("Listar_AsignarSeries");
-		$xajax->registerFunction("Filtrar_AsignarSerie");
-		$xajax->registerFunction("Nuevo_AsignarSerie");
-		$xajax->registerFunction("Insertar_AsignarSerie");
-		$xajax->registerFunction("Editar_AsignarSerie");
-		$xajax->registerFunction("Actualizar_AsignarSerie");
-		$xajax->registerFunction("Eliminar_AsignarSerie");
-		$xajax->registerFunction("ConfEliminar_AsignarSerie");
-		$xajax->registerFunction("Cerrar_AsignarSerie");
-		$xajax->registerFunction("ConfCerrar_AsignarSerie");
-		$xajax->registerFunction("Rpt_AsignarSerie_Pdf");
+	# ASIGNAR SERIES A COMPROBANTES
+		$xajax->registerFunction("Listar_Series_Numeracion");
+		$xajax->registerFunction("Filtrar_Serie_Numeracion");
+		$xajax->registerFunction("Nuevo_Serie_Numeracion");
+		$xajax->registerFunction("Insertar_Serie_Numeracion");
+		$xajax->registerFunction("Editar_Serie_Numeracion");
+		$xajax->registerFunction("Actualizar_Serie_Numeracion");
+		$xajax->registerFunction("Eliminar_Serie_Numeracion");
+		$xajax->registerFunction("ConfEliminar_Serie_Numeracion");
+		$xajax->registerFunction("Cerrar_Serie_Numeracion");
+		$xajax->registerFunction("ConfCerrar_Serie_Numeracion");
+		$xajax->registerFunction("Rpt_Serie_Numeracion_Pdf");
 
 	# LISTAR
-		function Listar_AsignarSeries($nOriRegistros, $nNumRegMostrar, $nPagRegistro, $nPagAct)
+		function Listar_Series_Numeracion($nOriRegistros, $nNumRegMostrar, $nPagRegistro, $nPagAct)
 		{
 		    	$objResponse = new xajaxResponse();
 
 				$objParametro   = new ClsParametro();
 				$bean_parametro = new  Bean_parametro() ;
+				$objSerieNumeracion = new  ClsSerieNumeracion() ;
+
 				# PUNTO DE EMISION
 					$bean_parametro->setnParClase(1007 );
 					$dataPuntos= $objParametro->Get_Parametro_By_cParClase($bean_parametro) ;
-					$optionPE = SelectOption($dataPuntos, 'nParCodigo', 'cParDescripcion',$nPuntoEmision);
+					$optionPE = SelectOption($dataPuntos, 'nParCodigo', 'cParDescripcion',-1);
 				#  TIPOS DE COMPROBANTES DE PAGO
 					$bean_parametro->setnParClase(1008 );
 					$dataComprobante= $objParametro->Get_Parametro_By_cParClase($bean_parametro) ;
-					$optionComprobante = SelectOption($dataComprobante, 'nParCodigo', 'cParDescripcion',$nComprobante);
+					$optionComprobante = SelectOption($dataComprobante, 'nParCodigo', 'cParDescripcion',-1);
 
 				#  SERIES
+					$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
+					$bean_parametro->setcParJerarquia($cPerJuridica) ;
 					$bean_parametro->setnParClase(1009 );
-					$dataSerie = $objParametro->Get_Parametro_By_cParClase($bean_parametro) ;
-					$optionSerie = SelectOption($dataSerie , 'nParCodigo', 'cParDescripcion',$nSerie);
+					// $dataSerie = $objParametro->Get_Parametro_By_cParClase($bean_parametro) ;
+					$dataSerie = $objSerieNumeracion->Get_Parametro_by_cPerJuridica($bean_parametro) ;
+					$optionSerie = SelectOption($dataSerie , 'nParCodigo', 'cParDescripcion',-1);
 
-		   		$FuncionSearch = 'xajax_Filtrar_AsignarSerie('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );';
+		   		$FuncionSearch = 'xajax_Filtrar_Serie_Numeracion('.$nOriRegistros.', '.$nNumRegMostrar.', '.$nPagRegistro.', '.$nPagAct.',  xajax.getFormValues(FrmPrincipal) );';
 				// $FuncionEnter = ' if(event.keyCode == 13 ){'.$FuncionSearch.'} ; if( (jq(this).val()).length  == 0){	'.$FuncionSearch.' }';
 
 				$formulario ='';
@@ -53,20 +59,20 @@
 								</td>
 
 								<td>
-						    		<select name="B_cParSrcCodigo_" id="B_cParSrcCodigo_" onchange="'.$FuncionSearch.'">
+						    		<select name="B_nParSrcPuntoEmision_" id="B_nParSrcPuntoEmision_" onchange="'.$FuncionSearch.'">
 					    				<option value="0">Todos</option>
 					    				'.$optionPE.'
 					    			</select>
 								</td>
 
 								<td>
-					    		   <select name="B_cParDtsCodigo_" id="B_cParDtsCodigo_" onchange="'.$FuncionSearch.'">
+					    		   <select name="B_nParDstComprobante_" id="B_nParDstComprobante_" onchange="'.$FuncionSearch.'">
 					    				<option value="0">Todos</option>
 					    				'.$optionComprobante.'
 					    			</select>
 								</td>
 								<td>
-					    		   <select name="B_cParDtsCodigo_" id="B_cParDtsCodigo_" onchange="'.$FuncionSearch.'">
+					    		   <select name="B_nParObjSerie_" id="B_nParObjSerie_" onchange="'.$FuncionSearch.'">
 					    				<option value="0">Todos</option>
 					    				'.$optionSerie.'
 					    			</select>
@@ -84,52 +90,65 @@
 					    </div>';
 
 			    $objResponse->assign("ContenedorPrincipal","innerHTML",$formulario);
-			    $objResponse->script("xajax_Filtrar_AsignarSerie('".$nOriRegistros."', '".$nNumRegMostrar."', '".$nPagRegistro."', '".$nPagAct."',  xajax.getFormValues(FrmPrincipal) );");
+			    $objResponse->script("xajax_Filtrar_Serie_Numeracion('".$nOriRegistros."', '".$nNumRegMostrar."', '".$nPagRegistro."', '".$nPagAct."',  xajax.getFormValues(FrmPrincipal) );");
 				return $objResponse;
 		}
 
 	#LISTAR LOS REGISTROS DE BD
-		function Filtrar_AsignarSerie($nOriRegistros, $nNumRegMostrar, $nPagRegistro, $nPagAct,$frm)
+		function Filtrar_Serie_Numeracion($nOriRegistros, $nNumRegMostrar, $nPagRegistro, $nPagAct,$frm)
 		{
-			$objResponse       = new xajaxResponse();
+			$objResponse = new xajaxResponse();
 
-			$objParParmetro   = new ClsParParametro();
-			$bean_parparametro = new Bean_parparametro();
+
+			$objCtaCteNumeracion = new ClsSerieNumeracion();
+
+			$bean_parparext = new Bean_parparext();
+			$bean_ctactenumeracion = new Bean_ctactenumeracion();
 
 			# validaciones
-				if(empty($frm["B_cParSrcCodigo_"]))
+				if(empty($frm["B_nParSrcPuntoEmision_"]))
 				{
-					$nParSrcCodigo = 0;
+					$nParSrcPuntoEmision = 0;
 				}else{
-					$nParSrcCodigo = $frm["B_cParSrcCodigo_"];
+					$nParSrcPuntoEmision = $frm["B_nParSrcPuntoEmision_"];
 				}
-				if(empty($frm["B_cParDtsCodigo_"]))
+				if(empty($frm["B_nParDstComprobante_"]))
 				{
-					$nParDstCodigo = 0;
+					$nParDstComprobante = 0;
 				}else{
-					$nParDstCodigo = $frm["B_cParDtsCodigo_"];
+					$nParDstComprobante = $frm["B_nParDstComprobante_"];
 				}
+				if(empty($frm["B_nParObjSerie_"]))
+				{
+					$nParObjSerie = 0;
+				}else{
+					$nParObjSerie = $frm["B_nParObjSerie_"];
+				}
+			$bean_ctactenumeracion->setnOriRegistros($nOriRegistros) ;
+			$bean_ctactenumeracion->setnNumRegMostrar($nNumRegMostrar) ;
+			$bean_ctactenumeracion->setnPagRegistro(0) ; # que no pagine
+			$bean_parparext->setnParSrcCodigo($nParSrcPuntoEmision);
+			$bean_parparext->setnParSrcClase(1007);
+			$bean_parparext->setnParDstCodigo($nParDstComprobante);
+			$bean_parparext->setnParDstClase(1008);
+			$bean_parparext->setnObjCodigo($nParObjSerie);
+			$bean_parparext->setnObjTipo(1009);
 
-				 // $objResponse->alert( $nParDstCodigo ) ;
-			$bean_parparametro->setnOriRegistros($nOriRegistros) ;
-			$bean_parparametro->setnNumRegMostrar($nNumRegMostrar) ;
-			$bean_parparametro->setnPagRegistro(0) ; # que no pagine
-			$bean_parparametro->setnParSrcCodigo($nParSrcCodigo);
-			$bean_parparametro->setnParSrcClase(1007);
-			$bean_parparametro->setnParDstCodigo($nParDstCodigo);
-			$bean_parparametro->setnParDstClase(1008);
+			$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
+			$bean_ctactenumeracion->setcPerJuridica($cPerJuridica) ;
 
-		    $AdoRs = $objParParmetro->Filtrar_ParParametro_by_nParCodigos($bean_parparametro);
+
+		    $AdoRs = $objCtaCteNumeracion->Filtrar_SerieNumeracion($bean_ctactenumeracion,$bean_parparext);
 
 		    // $objResponse->alert(  $AdoRs ) ;
 	   		//  #Capturar el número de registros
 	    	$nNumRegExist = count($AdoRs["cuerpo"]);
 
 	    	 #Filtrar registros deacuerdo al origen de datos y y viene paginados
-			$bean_parparametro->setnPagRegistro($nPagRegistro) ; # para que pagine
+			$bean_ctactenumeracion->setnPagRegistro($nPagRegistro) ; # para que pagine
 
 		    #Filtrar registrar
-	    	$data = $objParParmetro->Filtrar_ParParametro_by_nParCodigos($bean_parparametro );
+	    	$data = $objCtaCteNumeracion->Filtrar_SerieNumeracion($bean_ctactenumeracion,$bean_parparext );
 
 
 			$formulario= "";
@@ -148,33 +167,36 @@
                     $formulario.=  	"</td>";
 				   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParSrcDescripcion"]."</td>";
 				   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParDstDescripcion"]."</td>";
+				   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParObjDescripcion"]."</td>";
+				   	$formulario.= 	"<td>".$data["cuerpo"][$i]["Numero"]."</td>";
 				   	$formulario.="</tr>";
 				}
 					$objResponse->assign("tbodyData","innerHTML",$formulario);
 				#Paginado
-				     $Paginacion = Paginar($nNumRegExist, $nNumRegMostrar,  $nPagAct,  'xajax_Filtrar_AsignarSerie', 'xajax.getFormValues(FrmPrincipal)');
+				     $Paginacion = Paginar($nNumRegExist, $nNumRegMostrar,  $nPagAct,  'xajax_Filtrar_Serie_Numeracion', 'xajax.getFormValues(FrmPrincipal)');
 				    $objResponse->assign("ContenedorPaginado","innerHTML",$Paginacion);
 			}else{
 			  	$objResponse->assign("tbodyData","innerHTML",$formulario);
 			  	$objResponse->assign("ContenedorPaginado","innerHTML",$Paginacion);
 			}
+
 			return $objResponse;
 		}
 	# NUEVO
-		function Nuevo_AsignarSerie()
+		function Nuevo_Serie_Numeracion()
 		{
 			$objResponse = new xajaxResponse();
 			#Formulario
 			// LLAMAR A LA FUNCION QUE CREA EL FORMULARIO
-			$formulario =  Frm_AsignarSerie("Insertar_AsignarSerie");
+			$formulario =  Frm_Serie_Numeracion("Insertar_Serie_Numeracion");
 			# configurando emergente
-				$FrmRpta = FrmEmergente("NUEVA ASIGINACIÓN SERIE A COMPROBANTE", $formulario);
+				$FrmRpta = FrmEmergente("NUEVA NUMERACIÓN DE SERIE", $formulario);
 				$objResponse->script("mostrar_emergente();");
 				$objResponse->assign("emergente_contenido","innerHTML",$FrmRpta);
 			return $objResponse;
 		}
 	# INSERTAR
-		function Insertar_AsignarSerie($frm)
+		function Insertar_Serie_Numeracion($frm)
 		{
 			$objResponse = new xajaxResponse();
 
@@ -202,89 +224,78 @@
 
 			if($MsjAlter=="")
 			{
-				# CARGAR BEANS
+				# Datos FRM
 					// $nParCodigo       = $frm["nParCodigo_"] ;
 					$nPuntoEmision    = $frm["nPuntoEmision_"] ;
 					$nComprobante     = $frm["nComprobante_"] ;
 					$nSerie           = $frm["nSerie_"] ;
 					$nNumeracionSerie = $frm["nNumeracionSerie_"] ;
 					# EXTRAER EL CODIGO PERJURIDICA
-					$cPerJuridica = 2 ; #Get_cPerCodigo_PerJuridica() ;
+					$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
 
 				# OBJECTOS
-					$bean_ctactenumeracion =  new Bean_ctactenumeracion() ;
-					$bean_parparametro     =  new Bean_parparametro() ;
 					$bean_parparext        =  new Bean_parparext() ;
-
-					$objCtaCteNumeracion = new ClsCtaCteNumeracion() ;
-					$objParParametro     = new ClsParParametro() ;
-					$objParParExt        = new ClsParParExt() ;
-
-					$bean_parparametro->setnParSrcCodigo($nPuntoEmision);
-					$bean_parparametro->setnParSrcClase(1007);
-					$bean_parparametro->setnParDstCodigo($nComprobante);
-					$bean_parparametro->setnParDstClase(1008);
-					$bean_parparametro->setnParDstClase(1008);
-					$bean_parparametro->setcValor("PE-COMPROBANTE");
+					$bean_ctactenumeracion =  new Bean_ctactenumeracion() ;
 
 					$bean_parparext->setnParSrcCodigo($nPuntoEmision);
 					$bean_parparext->setnParSrcClase(1007);
 					$bean_parparext->setnParDstCodigo($nComprobante);
 					$bean_parparext->setnParDstClase(1008);
 					$bean_parparext->setnObjCodigo($nSerie);
-					// $bean_parparext->setnObjCodigo("jfhgsjfdhgkshdfgj");
 					$bean_parparext->setnObjTipo(1009);
-					$bean_parparext->setcParParExtValor($nNumeracionSerie);
-					$bean_parparext->setcParParExtGlosa("PE-COMPROBANTE-SERIE-Nro");
-
+					$bean_parparext->setcParParExtValor(1); # cuando se registra en estado activo
+					$bean_parparext->setcParParExtGlosa($nNumeracionSerie); # PE-COMPROBANTE-SERIE-Nro");
 
 					$bean_ctactenumeracion->setcPerJuridica($cPerJuridica);
 					$bean_ctactenumeracion->setnComTipo($nComprobante);
 					$bean_ctactenumeracion->setnSerie($nSerie);
 					$bean_ctactenumeracion->setNumero($nNumeracionSerie);
 
+			        $objParParExt        = new ClsParParExt() ;
 
+					$data = $objParParExt->Validar_ParParExt($bean_parparext) ;
 
+					if(count($data["cuerpo"]) > 0)
+					{
+						$MsjAlter = "Ya existe asignada una serie para el comprobante seleccinado para el punto de emisión." ;
+					}
 
+					if($MsjAlter=="")
+					{
+						# Registro datos
+			        		try
+				        	{
+				        		# INSTANCIOAMOS EL OBJECTO INICIAL
+				        			$objParParExt        = new ClsParParExt() ;
+								# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+									$cnx = $objParParExt->get_connection() ;
+								# enviamos la conexion a las clases con la que se va a trabajar transacciones
+									$objCtaCteNumeracion = new ClsCtaCteNumeracion($cnx) ;
+								# INICIAMOS LA TRANSACCION
+				        			$objParParExt->beginTransaction() ;
 
-					# Registro datos
-		        		try
-			        	{
-			        		# iniciamos la transaccion
-				        		$objCtaCteNumeracion->beginTransaction() ;
-				        		$objParParametro->beginTransaction() ;
-				        		$objParParExt->beginTransaction() ;
+				        		# registramos cta Numeracion
+									$data = $objCtaCteNumeracion->Set_CtaCteNumeracion($bean_ctactenumeracion)  ;
 
-			        		# registramos cta Numeracion
-								$data = $objCtaCteNumeracion->Set_CtaCteNumeracion($bean_ctactenumeracion)  ;
+				        		# REgistrar PARPAREXT RELACIONAMOS EL PE-COMPROBANTE-SERIE-NUMERACION CON LA QUE SE REGISTRA POR PRIMERA VES
+				        			$objParParExt->Set_ParParExt($bean_parparext) ;
 
-			        		# REGISTRAR PARPARAMETRO( RELACIONAR EL PUNTO DE EMISION CON EL COMPROBANTE DE PAGO )
-			        			$objParParametro->Set_ParParametro($bean_parparametro);
+				        		# registramos la transaccion que hizo el usuario
+									Insertar_Transaccion(1,"NUEVO ASIGINACIÓN DE SERIE A COMPROBANTE: cPerJuridica : ".$nPuntoEmision.", nComprobante:".$nComprobante.", nSerie:".$nSerie.", nNumeracionSerie:".$nNumeracionSerie,"",$cnx) ; # si todo a tendido exito
 
-			        		# REgistrar PARPAREXT RELACIONAMOS EL PE-COMPROBANTE-SERIE-NUMERACION CON LA QUE SE REGISTRA POR PRIMERA VES
-			        			$objParParExt->Set_ParParExt($bean_parparext) ;
+								# si todo a tendido exito
+					        		$objParParExt->commit();
 
-			        		# registramos la transaccion que hizo el usuario
-								Insertar_Transaccion(1,"NUEVO ASIGINACIÓN DE SERIE A COMPROBANTE: cPerJuridica : ".$nPuntoEmision.", nComprobante:".$nComprobante.", nSerie:".$nSerie.", nNumeracionSerie:".$nNumeracionSerie,"") ; # si todo a tendido exito
+				        		$Funcion = "xajax_Listar_Series_Numeracion(0,20,1,1); ocultar_emergente();";
 
-							# si todo a tendido exito
-				        		$objCtaCteNumeracion->commit();
-				        		$objParParametro->commit();
-				        		$objParParExt->commit();
-
-			        		$Funcion = "xajax_Listar_AsignarSeries(0,20,1,1); ocultar_emergente();";
-
-			        	}catch(Exception $e)
-			        	{
-			        		# si ha habido algun error
-								$objCtaCteNumeracion->rollback();
-								$objParParametro->rollback();
-								$objParParExt->rollback();
-
-			        		$MsjAlter =  "Error de registro.";
-			        	}
-
-
+				        	}catch(Exception $e)
+				        	{
+				        		# si ha habido algun error
+									$objParParExt->rollback();
+				        			// $MsjAlter =  "Error de registro.".$e->getMessage() ;
+				        		$MsjAlter =  "Error de registro.";
+				        	}
+					}
 			}
 			$objResponse->assign("labelMsj","innerHTML",$MsjAlter);
 			$objResponse->script($Funcion);
@@ -292,7 +303,7 @@
 		}
 
 	# EDITAR
-		function Editar_AsignarSerie($frm)
+		function Editar_Serie_Numeracion($frm)
 		{
 			$objResponse = new xajaxResponse();
 			#Formulario
@@ -318,7 +329,7 @@
 						$cParNombre = $dataParametro["cuerpo"][0]["cParNombre"] ;
 						$cParDescripcion = $dataParametro["cuerpo"][0]["cParDescripcion"] ;
 
-							$formulario .= Frm_AsignarSerie("Actualizar_AsignarSerie", $nDepCodigo, $nParCodigo, $cParNombre , $cParDescripcion, $nDepCodigo);
+							$formulario .= Frm_Serie_Numeracion("Actualizar_Serie_Numeracion", $nDepCodigo, $nParCodigo, $cParNombre , $cParDescripcion, $nDepCodigo);
 
 						# configurando emergente
 						$FrmRpta = FrmEmergente("ACTUALIZAR SECTOR", $formulario);
@@ -349,7 +360,7 @@
 		}
 
 	#ACTUALIZAR
-		function Actualizar_AsignarSerie($frm)
+		function Actualizar_Serie_Numeracion($frm)
 		{
 			$objResponse = new xajaxResponse();
 
@@ -363,18 +374,18 @@
 				}
 				elseif(empty($frm["cParNombre_"]))
 				{
-					$MsjAlter = "Completar Codigo AsignarSerie ";
+					$MsjAlter = "Completar Codigo Serie_Numeracion ";
 				}
-				elseif(empty($frm["AsignarSerie_"]))
+				elseif(empty($frm["Serie_Numeracion_"]))
 				{
-					$MsjAlter = "Completar AsignarSerie";
+					$MsjAlter = "Completar Serie_Numeracion";
 				}
 
 			if($MsjAlter==""){
 
 				$nCaserio   = $frm["Caserio_"] ;
 				$cParNombre = Mayusc($frm["cParNombre_"]) ;
-				$AsignarSerie     = Mayusc($frm["AsignarSerie_"] );
+				$Serie_Numeracion     = Mayusc($frm["Serie_Numeracion_"] );
 				$nParCodigo = $frm["nParCodigo_"] ;
 
 				$objParametro   = new ClsParametro();
@@ -397,27 +408,27 @@
 		        else
 		        {
 		        	# validar que la descripcion no exista para el distrio
-		        	$bean_parametro->setcParDescripcion( $AsignarSerie  );
+		        	$bean_parametro->setcParDescripcion( $Serie_Numeracion  );
 		        	$bean_parametro->setcParJerarquia( $nCaserio  );
 		    		$data = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
 
 		        	if(count($dataFecha["cuerpo"]) > 0)
 		        	{
 
-		            	$MsjAlter = "Ya Existe el nombre del AsignarSerie para el Distrito" ;
+		            	$MsjAlter = "Ya Existe el nombre del Serie_Numeracion para el Distrito" ;
 		        	}else
 		        	{
-			        		#	Registro datos de AsignarSerie
+			        		#	Registro datos de Serie_Numeracion
 			        		try
 				        	{	# iniciamos la transaccion
 				        		$objParametro->beginTransaction() ;
 
-				        		# REGISTRAR EL AsignarSerie COMO PARAMETRO
+				        		# REGISTRAR EL Serie_Numeracion COMO PARAMETRO
 				        		$data = $objParametro->Upd_Parametro_and_cParJerarquia($bean_parametro);
 								Insertar_Transaccion(2,"ACTUALIZO SECTOR: nParCodigo : ".$data["cuerpo"][0]["nParCodigo"]." - nParClase : 2002","") ;
 								# si todo a tendido exito
 				        		$objParametro->commit();
-				        		$Funcion = "xajax_Listar_AsignarSeries(0,20,1,1); ocultar_emergente();";
+				        		$Funcion = "xajax_Listar_Series_Numeracion(0,20,1,1); ocultar_emergente();";
 
 				        	}catch(Exception $e)
 				        	{
@@ -437,7 +448,7 @@
 		}
 
 	#MOSTRAR ELIMINAR
-		function Eliminar_AsignarSerie($frm)
+		function Eliminar_Serie_Numeracion($frm)
 		{
 			$objResponse = new xajaxResponse();
 
@@ -452,7 +463,7 @@
 			}
 
 
-			$formulario = FrmEliminar("ConfEliminar_AsignarSerie",$rdCodigo);
+			$formulario = FrmEliminar("ConfEliminar_Serie_Numeracion",$rdCodigo);
 
 			$FrmRpta = FrmEmergente("ELIMINAR SECTOR", $formulario);
 			$objResponse->script("mostrar_emergente();");
@@ -463,10 +474,10 @@
 		}
 
 	#CONFIRMAR ELIMINACION
-		function ConfEliminar_AsignarSerie($nParCodigo , $nEstado = 0 )
+		function ConfEliminar_Serie_Numeracion($nParCodigo , $nEstado = 0 )
 		{
 			$objResponse = new xajaxResponse();
-			$objAsignarSerie = new ClsAsignarSerie();
+			$objSerie_Numeracion = new ClsSerie_Numeracion();
 
 			$MsjAlter = "&nbsp;";
 			$Funcion = "";
@@ -481,7 +492,7 @@
 			try
 	    	{	# iniciamos la transaccion
 	    		$objParametro->beginTransaction() ;
-    			# Actulizar estado del paramentro  como AsignarSerie
+    			# Actulizar estado del paramentro  como Serie_Numeracion
 				$objParametro->Upd_Parametro_Estado($bean_parametro);
 
 				Insertar_Transaccion(3,"ELIMNO SECTOR: nParCodigo : ".$nParCodigo." - nParClase : 2002 ","") ;
@@ -489,7 +500,7 @@
 				# si todo a tendido exito
 	    		$objParametro->commit();
 
-	    		$Funcion = "xajax_Listar_AsignarSeries(0,20,1,1); ocultar_emergente();";
+	    		$Funcion = "xajax_Listar_Series_Numeracion(0,20,1,1); ocultar_emergente();";
 
 	    	}catch(Exception $e)
 	    	{
@@ -504,8 +515,9 @@
 			return $objResponse;
 		}
 
-#FRM NUEVO
-		function Frm_AsignarSerie($funcion="",$nParCodigo = 0 , $nPuntoEmision = -1, $nComprobante = -1, $nSerie = -1, $nNumeracionSerie = '000001' ) {
+	#FRM NUEVO
+		function Frm_Serie_Numeracion($funcion="",$nParCodigo = 0 , $nPuntoEmision = -1, $nComprobante = -1, $nSerie = -1, $nNumeracionSerie = '00000001' )
+		{
 			$objDepartamento = new ClsDepartamento() ;
 
 			$objParametro   = new ClsParametro();
@@ -532,13 +544,13 @@
 			    		<fieldset class="c12">
 				    		<input type="hidden" name="nParCodigo_" value="'.$nParCodigo.'" />
 					    	<fieldset class="c6">
-					    		<label for="nPuntoEmision_">Comprobante</label>
+					    		<label for="nPuntoEmision_">Caja(Punto Emisión)</label>
 					    		<select name="nPuntoEmision_" id="nPuntoEmision_" >
 					    		'.$optionPE.'
 					    		</select>
 					    	</fieldset>
 					    	<fieldset class="c6">
-					    		<label for="nComprobante_">Serie</label>
+					    		<label for="nComprobante_">Comprobante</label>
 					    		<select name="nComprobante_" id="nComprobante_" >
 					    		'.$optionComprobante.'
 					    		</select>
@@ -552,9 +564,9 @@
 					    	</fieldset>
 
 					    	<fieldset class="c6">
-									<label for="nNumeracionSerie_">NUMERACIÓN </label>
+									<label for="nNumeracionSerie_">NUMERACIÓN(Empezar en) </label>
 									 <span class="pre  icon-text"></span>
-									<input class="pre" type="text" id="nNumeracionSerie_" name="nNumeracionSerie_" placeholder="INGRESE NÚMERO DE SERIE" value="'.$nNumeracionSerie.'">
+									<input class="pre" type="text" id="nNumeracionSerie_" name="nNumeracionSerie_" placeholder="INGRESE NÚMERO DE SERIE" value="'.$nNumeracionSerie.'" onfocus="Validar_Number(this);" maxlength="8">
 								</fieldset>
 
 						</fieldset>
@@ -565,10 +577,10 @@
 		}
 
 	# REPORTE EN PDF
-		function Rpt_AsignarSerie_Pdf($frm="")
+		function Rpt_Serie_Numeracion_Pdf($frm="")
 		{
 			$objResponse       = new xajaxResponse();
-			$objAsignarSerie         = new ClsAsignarSerie();
+			$objSerie_Numeracion         = new ClsSerie_Numeracion();
 			$bean_parametro    = new Bean_parametro();
 			$bean_caserio      = new Bean_caserio();
 			$bean_provincia    = new Bean_provincia();
@@ -592,11 +604,11 @@
 				}else{
 					$cCaserio = $frm["cCaserio_"];
 				}
-				if(empty($frm["cAsignarSerie_"]))
+				if(empty($frm["cSerie_Numeracion_"]))
 				{
-					$cAsignarSerie = "-";
+					$cSerie_Numeracion = "-";
 				}else{
-					$cAsignarSerie = $frm["cAsignarSerie_"];
+					$cSerie_Numeracion = $frm["cSerie_Numeracion_"];
 				}
 				if(empty($frm["cParNombre_"]))
 				{
@@ -609,12 +621,12 @@
 			$bean_parametro->setnNumRegMostrar(0) ;
 			$bean_parametro->setnPagRegistro(0) ; # que no pagine
 			$bean_parametro->setcParNombre($cParNombre) ;
-			$bean_parametro->setcParDescripcion($cAsignarSerie) ;
+			$bean_parametro->setcParDescripcion($cSerie_Numeracion) ;
 			$bean_provincia->setcProDescripcion($cProvincia) ;
 			$bean_distrito->setcDisDescripcion($cDistrito) ;
 			$bean_caserio->setcCasDescripcion($cCaserio) ;
 
-		    $data = $objAsignarSerie->Get_Sel_AsignarSeries($bean_parametro ,$bean_caserio, $bean_distrito , $bean_provincia );
+		    $data = $objSerie_Numeracion->Get_Sel_Series_Numeracion($bean_parametro ,$bean_caserio, $bean_distrito , $bean_provincia );
 
 
 			$formulario= "";
@@ -627,7 +639,7 @@
 						<tr class="border-bottom">
 							<th class="" style="width:10%;"> Num </th>
 							<th class="" style="width: 20% ;"> Código </th>
-							<th class="" style="width: 20% ;"> AsignarSerie </th>
+							<th class="" style="width: 20% ;"> Serie_Numeracion </th>
 							<th class="" style="width: 30%;"> Caserio </th>
 							<th class="" style="width: 20% ;"> Distrito </th>
 							<th class="" style="width: 20% ;"> Provincia </th>
@@ -663,7 +675,7 @@
 			$HTML ="<html>
 						<body>
 						<br/>
-							<h3 class='rounded text-center mayusc title'> Lista de AsignarSeries </h3>
+							<h3 class='rounded text-center mayusc title'> Lista de Series_Numeracion </h3>
 							<br/>
 						<div>
 							".$formulario."

@@ -141,26 +141,5 @@ fieldset input{ text-transform: none!important}
 </div>
 
 
-<!-- <div class="contenedor border-color border-radius ">
-	<div class="frm row">
-			<form class="hform" id="frmLogin"  name="frmLogin" method="post" action="#">
-	           <fieldset class="border">
-
-		              <fieldset>
-		                  <label for="Usuario_" style="font-weight: bold" >Usuario</label>
-		                  <input type="text" class="icon-user" name="Usuario_" id="Usuario_" placeholder="Usuario"  required autofocus >
-		              </fieldset>
-		              <fieldset>
-		              	<label for="UsuarioPassword_" style="font-weight: bold" >Contraseña</label>
-		              	<input type="password" name="UsuarioPassword_" id="UsuarioPassword_" placeholder="Password" required="">
-		              </fieldset>
-		                <fieldset class="text-right" >
-		                <button  id="btnIngresar" type="button" class="btn green " onclick="xajax_Validar_Acceso(xajax.getFormValues(frmLogin))"><i class="icon-key"></i> Ingresar</button>
-		                </fieldset>
-		        </fieldset>
-	        </form>
-	        <div id="msjlogueo" class="text-center"></div>
-	</div>
-</div>-->
 </body>
 </html>

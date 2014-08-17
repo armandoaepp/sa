@@ -82,6 +82,7 @@ require_once "ClsCtaCteServicio.php";
 require_once "ClsCuentaCorriente.php";
 
 require_once "ClsSerieEmpresa.php";
+require_once "ClsSerieNumeracion.php";
 
 
 
@@ -98,10 +99,11 @@ require_once "../controllers/Funciones_Ajax/Fnc_Productor.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Rpt_Generar.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Parcela.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Cosecha.php";
-require_once "../controllers/Funciones_Ajax/Fnc_AsignarSerie.php";
+
 
 require_once "../controllers/Funciones_Ajax/Fnc_General.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Serie_Empresa.php";
+require_once "../controllers/Funciones_Ajax/Fnc_Serie_Numeracion.php";
 
 set_time_limit(0);
 # INICIALIZAR XAJAX

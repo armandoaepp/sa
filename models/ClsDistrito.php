@@ -19,6 +19,3 @@ Class ClsDistrito extends ClsConexion
 		return $data;
 	}
 }
-
-
-
