@@ -77,6 +77,23 @@ class ClsParParExt extends ClsConexion {
 		return $data;
 
 	}
+# Método Insertar
+	public function Upd_ParParExt_cParParExtValor($bean_parparext)
+	{
+		$nParSrcCodigo   = $bean_parparext->getnParSrcCodigo();
+		$nParSrcClase    = $bean_parparext->getnParSrcClase();
+		$nParDstCodigo   = $bean_parparext->getnParDstCodigo();
+		$nParDstClase    = $bean_parparext->getnParDstClase();
+		$nObjCodigo      = $bean_parparext->getnObjCodigo();
+		$nObjTipo        = $bean_parparext->getnObjTipo();
+		$cParParExtValor = $bean_parparext->getcParParExtValor();
+
+		$this->query = "CALL usp_Upd_ParParExt_cParParExtValor($nParSrcCodigo, $nParSrcClase, $nParDstCodigo, $nParDstClase, $nObjCodigo, $nObjTipo, '$cParParExtValor')";
+		$this->execute_query();
+		$data = $this->rows ;
+		return $data;
+
+	}
 
 }
 ?>

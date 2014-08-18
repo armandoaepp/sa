@@ -94,15 +94,14 @@
 				return $objResponse;
 		}
 
-	#LISTAR LOS REGISTROS DE BD
+	#FILTRAR LOS REGISTROS DE BD
 		function Filtrar_Serie_Numeracion($nOriRegistros, $nNumRegMostrar, $nPagRegistro, $nPagAct,$frm)
 		{
 			$objResponse = new xajaxResponse();
 
-
 			$objCtaCteNumeracion = new ClsSerieNumeracion();
 
-			$bean_parparext = new Bean_parparext();
+			$bean_parparext        = new Bean_parparext();
 			$bean_ctactenumeracion = new Bean_ctactenumeracion();
 
 			# validaciones
@@ -161,7 +160,7 @@
 					$formulario.="<tr id='tr".$i."' onclick=\"js_seleccionar_fila(".$i.");\">";
                     $formulario.= 	"<td>";
                     $formulario.=      "  <input class='inputRadio' type='radio'
-                    				value='".$data["cuerpo"][$i]["nParSrcCodigo"]."-".$data["cuerpo"][$i]["nParDstCodigo"]."'
+                    				value='".$data["cuerpo"][$i]["nParSrcCodigo"]."-".$data["cuerpo"][$i]["nParDstCodigo"]."-".$data["cuerpo"][$i]["nParObjCodigo"]."'
                     				name='rdCodigo' id='rdCodigo".$i."'/>";
                     $formulario.=      substr("00000".($i+1),-5);
                     $formulario.=  	"</td>";
@@ -220,7 +219,6 @@
 				{
 					$MsjAlter = "Numeración: Ingrese Numero de Serie en la que se va iniciar ";
 				}
-
 
 			if($MsjAlter=="")
 			{
@@ -313,35 +311,33 @@
 					if (!empty($frm["rdCodigo"]))
 					{
 						$arr = explode('-', $frm["rdCodigo"]);
-						$nParCodigo = $arr[0];
-						$nCasCodigo = $arr[1];
-						$nDisCodigo = $arr[2];
-						$nProCodigo = $arr[3];
-						$nDepCodigo = $arr[4];
+						$nParSrcCodigo = $arr[0]; # punto de emision
+						$nParDstCodigo = $arr[1]; # comprobante
+						$nParObjCodigo = $arr[2]; # serie
 
-						$objParametro   = new ClsParametro();
-						$bean_parametro = new Bean_parametro() ;
+						$bean_parparext        =  new Bean_parparext() ;
+						$bean_ctactenumeracion =  new Bean_ctactenumeracion() ;
 
-						$bean_parametro->setnParCodigo($nParCodigo);
-						$bean_parametro->setnParClase( 2002 );
+						# EXTRAER EL CODIGO PERJURIDICA
+						$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
 
-						$dataParametro = $objParametro->Buscar_Parametro($bean_parametro) ;
-						$cParNombre = $dataParametro["cuerpo"][0]["cParNombre"] ;
-						$cParDescripcion = $dataParametro["cuerpo"][0]["cParDescripcion"] ;
+						$bean_ctactenumeracion->setcPerJuridica($cPerJuridica);
+						$bean_ctactenumeracion->setnComTipo($nParDstCodigo);
+						$bean_ctactenumeracion->setnSerie($nParObjCodigo);
 
-							$formulario .= Frm_Serie_Numeracion("Actualizar_Serie_Numeracion", $nDepCodigo, $nParCodigo, $cParNombre , $cParDescripcion, $nDepCodigo);
+						$objCtaCteNumeracion = new ClsCtaCteNumeracion() ;
+
+						$dataCtaCte = $objCtaCteNumeracion->Validar_CtaCteNumeracion($bean_ctactenumeracion) ;
+						// $objResponse->alert( count($dataCtaCte["cuerpo"])) ;
+						$Numero = $dataCtaCte["cuerpo"][0]["Numero"] ;
+
+							$formulario .= Frm_Serie_Numeracion("Actualizar_Serie_Numeracion", $nParSrcCodigo, $nParDstCodigo, $nParObjCodigo , $Numero);
 
 						# configurando emergente
 						$FrmRpta = FrmEmergente("ACTUALIZAR SECTOR", $formulario);
 						$objResponse->script("mostrar_emergente();");
 						// $objResponse->assign("emergente","style.height","180px");
 						$objResponse->assign("emergente_contenido","innerHTML",$FrmRpta);
-
-						# para hacer los combos recargables
-						$selectDependiente ="" ;
-						$objResponse->script("xajax_Combo_Provincia(".$nDepCodigo ." ,".$nProCodigo.", '".$selectDependiente."');");
-						$objResponse->script("xajax_Combo_Distrito(".$nProCodigo." ,".$nDisCodigo.", '".$selectDependiente."');");
-						$objResponse->script("xajax_Combo_Caserio(".$nDisCodigo." ,".$nCasCodigo.", '".$selectDependiente."');");
 					}
 					else
 					{
@@ -368,76 +364,93 @@
 			$Funcion = "";
 
 			# VALIDACION
-				if(empty($frm["Caserio_"]))
+				/*if(empty($frm["nPuntoEmision_"]))
 				{
-					$MsjAlter = "Seleccionar Caserio ";
+					$MsjAlter = "Seleccionar Punto de Emisión ";
 				}
-				elseif(empty($frm["cParNombre_"]))
+				elseif(empty($frm["nComprobante_"]))
 				{
-					$MsjAlter = "Completar Codigo Serie_Numeracion ";
+					$MsjAlter = "Seleccionar Comprobante de Pago ";
 				}
-				elseif(empty($frm["Serie_Numeracion_"]))
+				elseif(empty($frm["nSerie_"]))
 				{
-					$MsjAlter = "Completar Serie_Numeracion";
+					$MsjAlter = "Seleccionar Numero de Serie";
+				}*/
+				if(empty($frm["nNumeracionSerie_"]))
+				{
+					$MsjAlter = "Numeración: Ingrese Numero de Serie en la que se va iniciar ";
 				}
+
 
 			if($MsjAlter==""){
 
-				$nCaserio   = $frm["Caserio_"] ;
-				$cParNombre = Mayusc($frm["cParNombre_"]) ;
-				$Serie_Numeracion     = Mayusc($frm["Serie_Numeracion_"] );
-				$nParCodigo = $frm["nParCodigo_"] ;
+			# Datos FRM
 
-				$objParametro   = new ClsParametro();
-				$bean_parametro = new Bean_parametro() ;
+					$arr = explode('-', $frm["nParCodigo_"]);
+					$nPuntoEmision = $arr[0]; # punto de emision
+					$nComprobante = $arr[1]; # comprobante
+					$nSerie = $arr[2]; # serie
+
+					// $nParCodigo       = $frm["nParCodigo_"] ;
+					// $nPuntoEmision    = $frm["nPuntoEmision_"] ;
+					// $nComprobante     = $frm["nComprobante_"] ;
+					// $nSerie           = $frm["nSerie_"] ;
+
+					$nNumeracionSerie = $frm["nNumeracionSerie_"] ;
+					# EXTRAER EL CODIGO PERJURIDICA
+					$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
+
+				# OBJECTOS
+					$bean_parparext        =  new Bean_parparext() ;
+					$bean_ctactenumeracion =  new Bean_ctactenumeracion() ;
 
 
-		        $bean_parametro->setnParCodigo( $nParCodigo  );
-				$bean_parametro->setcParJerarquia($nCaserio);
-				$bean_parametro->setcParDescripcion("-" );
-				$bean_parametro->setcParNombre($cParNombre );
-				$bean_parametro->setnParClase( 2002 );
 
-				# valida que el codigo sector no exista
-		    	$data = $objParametro->Validar_Parametro_Upd($bean_parametro);
+					$bean_ctactenumeracion->setcPerJuridica($cPerJuridica);
+					$bean_ctactenumeracion->setnComTipo($nComprobante);
+					$bean_ctactenumeracion->setnSerie($nSerie);
+					$bean_ctactenumeracion->setNumero($nNumeracionSerie);
 
-		    	if(count($data["cuerpo"]) > 0)
-		        {
-		            $MsjAlter = "Código se encuentra registrado";
-		        }
-		        else
-		        {
-		        	# validar que la descripcion no exista para el distrio
-		        	$bean_parametro->setcParDescripcion( $Serie_Numeracion  );
-		        	$bean_parametro->setcParJerarquia( $nCaserio  );
-		    		$data = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
 
-		        	if(count($dataFecha["cuerpo"]) > 0)
-		        	{
 
-		            	$MsjAlter = "Ya Existe el nombre del Serie_Numeracion para el Distrito" ;
-		        	}else
-		        	{
-			        		#	Registro datos de Serie_Numeracion
-			        		try
-				        	{	# iniciamos la transaccion
-				        		$objParametro->beginTransaction() ;
+					$objCtaCteNumeracion = new ClsCtaCteNumeracion() ;
 
-				        		# REGISTRAR EL Serie_Numeracion COMO PARAMETRO
-				        		$data = $objParametro->Upd_Parametro_and_cParJerarquia($bean_parametro);
-								Insertar_Transaccion(2,"ACTUALIZO SECTOR: nParCodigo : ".$data["cuerpo"][0]["nParCodigo"]." - nParClase : 2002","") ;
-								# si todo a tendido exito
-				        		$objParametro->commit();
-				        		$Funcion = "xajax_Listar_Series_Numeracion(0,20,1,1); ocultar_emergente();";
+					$dataCtaCte = $objCtaCteNumeracion->Validar_CtaCteNumeracion($bean_ctactenumeracion) ;
+					$numero_bd = (int) $dataCtaCte["cuerpo"][0]["Numero"] ;
+					$numero_txt = (int) $nNumeracionSerie ;
 
-				        	}catch(Exception $e)
-				        	{
-				        		# si ha habido algun error
-				        		$objParametro->rollback();
-				        		$MsjAlter =  "Error de registro.";
-				        	}
+					if($numero_txt < $numero_bd )
+					{
+		            	$MsjAlter = "La numeracion minima debe ser ". $dataCtaCte["cuerpo"][0]["Numero"];
+					}
+
+					if($MsjAlter == "")
+					{
+				   		#	Registro datos de Serie_Numeracion
+		        		try
+			        	{
+
+			        		# INSTANCIOAMOS EL OBJECTO INICIAL
+				        		$objCtaCteNumeracion = new ClsCtaCteNumeracion() ;
+							# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+								$cnx = $objCtaCteNumeracion->get_connection() ;
+							# INICIAMOS LA TRANSACCION
+			        			$objCtaCteNumeracion->beginTransaction() ;
+
+			        		# REGISTRAR EL Serie_Numeracion COMO PARAMETRO
+			        		$data = $objCtaCteNumeracion->Upd_CtaCteNumeracion_Numero($bean_ctactenumeracion);
+							Insertar_Transaccion(2,"ACTUALIZO Numeracion :cPerJuridica: ".$cPerJuridica." , nComprobante: ".$nComprobante." ,  nSerie: ". $nSerie.", nNumeracionSerie: ".$nNumeracionSerie,"",$cnx) ;
+							# si todo a tendido exito
+			        		$objCtaCteNumeracion->commit();
+			        		$Funcion = "xajax_Listar_Series_Numeracion(0,20,1,1); ocultar_emergente();";
+
+			        	}catch(Exception $e)
+			        	{
+			        		# si ha habido algun error
+			        		$objCtaCteNumeracion->rollback();
+			        		$MsjAlter =  "Error de registro.";
+			        	}
 			        }
-		        }
 
 			}
 
@@ -458,14 +471,13 @@
 			}
 			else
 			{
-				$arr = explode('-', $frm["rdCodigo"]);
-				$rdCodigo = $arr[0]; # nParCodigo
+				$rdCodigo = $frm["rdCodigo"];
 			}
 
 
 			$formulario = FrmEliminar("ConfEliminar_Serie_Numeracion",$rdCodigo);
 
-			$FrmRpta = FrmEmergente("ELIMINAR SECTOR", $formulario);
+			$FrmRpta = FrmEmergente("ELIMINAR Serie Numeración", $formulario);
 			$objResponse->script("mostrar_emergente();");
 			$objResponse->assign("emergente","style.height","130px");
 			$objResponse->assign("emergente_contenido","innerHTML",utf8_encode($FrmRpta));
@@ -477,35 +489,48 @@
 		function ConfEliminar_Serie_Numeracion($nParCodigo , $nEstado = 0 )
 		{
 			$objResponse = new xajaxResponse();
-			$objSerie_Numeracion = new ClsSerie_Numeracion();
 
 			$MsjAlter = "&nbsp;";
 			$Funcion = "";
 
-			$objParametro   = new ClsParametro();
-			$bean_parametro = new Bean_parametro() ;
+			$arr = explode('-',$nParCodigo);
+			$nParSrcCodigo = $arr[0]; # punto de emision
+			$nParDstCodigo = $arr[1]; # comprobante
+			$nParObjCodigo = $arr[2]; # serie
 
-			$bean_parametro->setnParCodigo($nParCodigo);
-			$bean_parametro->setnParClase( 2002 );
-			$bean_parametro->setnParEstado(  $nEstado  );
+			$bean_parparext        =  new Bean_parparext() ;
+
+			$bean_parparext->setnParSrcCodigo($nParSrcCodigo);
+			$bean_parparext->setnParSrcClase(1007);
+			$bean_parparext->setnParDstCodigo($nParDstCodigo);
+			$bean_parparext->setnParDstClase(1008);
+			$bean_parparext->setnObjCodigo($nParObjCodigo);
+			$bean_parparext->setnObjTipo(1009);
+			$bean_parparext->setcParParExtValor(0); # cuando se registra en estado activo
 
 			try
-	    	{	# iniciamos la transaccion
-	    		$objParametro->beginTransaction() ;
-    			# Actulizar estado del paramentro  como Serie_Numeracion
-				$objParametro->Upd_Parametro_Estado($bean_parametro);
+	    	{
+    			# INSTANCIOAMOS EL OBJECTO INICIAL
+        			$objParParExt        = new ClsParParExt() ;
+				# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
+					$cnx = $objParParExt->get_connection() ;
+				# INICIAMOS LA TRANSACCION
+        			$objParParExt->beginTransaction() ;
 
-				Insertar_Transaccion(3,"ELIMNO SECTOR: nParCodigo : ".$nParCodigo." - nParClase : 2002 ","") ;
+				$data = $objParParExt->Upd_ParParExt_cParParExtValor($bean_parparext) ;
+
+
+				Insertar_Transaccion(3,"ELIMNO SERIE NUMERACIÓN: nComprobante:".$nParSrcCodigo.", nSerie:".$nParDstCodigo.", nParObjCodigo:".$nParObjCodigo,"",$cnx) ;
 
 				# si todo a tendido exito
-	    		$objParametro->commit();
+	    		$objParParExt->commit();
 
 	    		$Funcion = "xajax_Listar_Series_Numeracion(0,20,1,1); ocultar_emergente();";
 
 	    	}catch(Exception $e)
 	    	{
 	    		# si ha habido algun error
-	    		$objParametro->rollback();
+	    		$objParParExt->rollback();
 	    		$MsjAlter = "Error de registro: ";
 	    		// $MsjAlter = "Error de registro: ". $e->getMessage() ;
 	    	}
@@ -516,7 +541,7 @@
 		}
 
 	#FRM NUEVO
-		function Frm_Serie_Numeracion($funcion="",$nParCodigo = 0 , $nPuntoEmision = -1, $nComprobante = -1, $nSerie = -1, $nNumeracionSerie = '00000001' )
+		function Frm_Serie_Numeracion($funcion="", $nPuntoEmision = -1, $nComprobante = -1, $nSerie = -1, $nNumeracionSerie = '00000001' )
 		{
 			$objDepartamento = new ClsDepartamento() ;
 
@@ -536,35 +561,42 @@
 				$dataSerie = $objParametro->Get_Parametro_By_cParClase($bean_parametro) ;
 				$optionSerie = SelectOption($dataSerie , 'nParCodigo', 'cParDescripcion',$nSerie);
 
-				# para hacer los combos recargables
-				$selectDependiente ="Provincia-Distrito-Caserio" ;
+			# para disabled select > 1 en editar
+				// $Numero = (int) $nNumeracionSerie ;
+				$disabled = "" ;
+				$reiniciarEn = "Empezar en" ;
+				if($nSerie > 0 )
+				{
+					$disabled    =  "disabled" ;
+					$reiniciarEn = "Reiniciar en" ;
+				}
+
 				$formulario = "";
 			    $formulario .='
 			    	<div class="vform vformContenedor">
 			    		<fieldset class="c12">
-				    		<input type="hidden" name="nParCodigo_" value="'.$nParCodigo.'" />
-					    	<fieldset class="c6">
+				    		<input type="hidden" name="nParCodigo_" value="'.$nPuntoEmision.'-'.$nComprobante.'-'.$nSerie.'" /> <fieldset class="c6">
 					    		<label for="nPuntoEmision_">Caja(Punto Emisión)</label>
-					    		<select name="nPuntoEmision_" id="nPuntoEmision_" >
+					    		<select name="nPuntoEmision_" id="nPuntoEmision_" '.$disabled.' >
 					    		'.$optionPE.'
 					    		</select>
 					    	</fieldset>
 					    	<fieldset class="c6">
 					    		<label for="nComprobante_">Comprobante</label>
-					    		<select name="nComprobante_" id="nComprobante_" >
+					    		<select name="nComprobante_" id="nComprobante_" '.$disabled.' >
 					    		'.$optionComprobante.'
 					    		</select>
 					    	</fieldset>
 
 					    	<fieldset class="c6">
 					    		<label for="nSerie_">Serie</label>
-					    		<select name="nSerie_" id="nSerie_" >
+					    		<select name="nSerie_" id="nSerie_" '.$disabled.' >
 					    		'.$optionSerie.'
 					    		</select>
 					    	</fieldset>
 
 					    	<fieldset class="c6">
-									<label for="nNumeracionSerie_">NUMERACIÓN(Empezar en) </label>
+									<label for="nNumeracionSerie_">NUMERACIÓN('.$reiniciarEn.') </label>
 									 <span class="pre  icon-text"></span>
 									<input class="pre" type="text" id="nNumeracionSerie_" name="nNumeracionSerie_" placeholder="INGRESE NÚMERO DE SERIE" value="'.$nNumeracionSerie.'" onfocus="Validar_Number(this);" maxlength="8">
 								</fieldset>
@@ -580,53 +612,45 @@
 		function Rpt_Serie_Numeracion_Pdf($frm="")
 		{
 			$objResponse       = new xajaxResponse();
-			$objSerie_Numeracion         = new ClsSerie_Numeracion();
-			$bean_parametro    = new Bean_parametro();
-			$bean_caserio      = new Bean_caserio();
-			$bean_provincia    = new Bean_provincia();
-			$bean_distrito     = new Bean_distrito();
+			$objCtaCteNumeracion = new ClsSerieNumeracion();
+
+			$bean_parparext        = new Bean_parparext();
+			$bean_ctactenumeracion = new Bean_ctactenumeracion();
+
 			# validaciones
-				if(empty($frm["cProvincia_"]))
+				if(empty($frm["B_nParSrcPuntoEmision_"]))
 				{
-					$cProvincia = "-";
+					$nParSrcPuntoEmision = 0;
 				}else{
-					$cProvincia = $frm["cProvincia_"];
+					$nParSrcPuntoEmision = $frm["B_nParSrcPuntoEmision_"];
 				}
-				if(empty($frm["cDistrito_"]))
+				if(empty($frm["B_nParDstComprobante_"]))
 				{
-					$cDistrito = "-";
+					$nParDstComprobante = 0;
 				}else{
-					$cDistrito = $frm["cDistrito_"];
+					$nParDstComprobante = $frm["B_nParDstComprobante_"];
 				}
-				if(empty($frm["cCaserio_"]))
+				if(empty($frm["B_nParObjSerie_"]))
 				{
-					$cCaserio = "-";
+					$nParObjSerie = 0;
 				}else{
-					$cCaserio = $frm["cCaserio_"];
+					$nParObjSerie = $frm["B_nParObjSerie_"];
 				}
-				if(empty($frm["cSerie_Numeracion_"]))
-				{
-					$cSerie_Numeracion = "-";
-				}else{
-					$cSerie_Numeracion = $frm["cSerie_Numeracion_"];
-				}
-				if(empty($frm["cParNombre_"]))
-				{
-					$cParNombre = "-";
-				}else{
-					$cParNombre = $frm["cParNombre_"];
-				}
+			$bean_ctactenumeracion->setnOriRegistros(0) ;
+			$bean_ctactenumeracion->setnNumRegMostrar(0) ;
+			$bean_ctactenumeracion->setnPagRegistro(0) ; # que no pagine
+			$bean_parparext->setnParSrcCodigo($nParSrcPuntoEmision);
+			$bean_parparext->setnParSrcClase(1007);
+			$bean_parparext->setnParDstCodigo($nParDstComprobante);
+			$bean_parparext->setnParDstClase(1008);
+			$bean_parparext->setnObjCodigo($nParObjSerie);
+			$bean_parparext->setnObjTipo(1009);
 
-			$bean_parametro->setnOriRegistros(0) ;
-			$bean_parametro->setnNumRegMostrar(0) ;
-			$bean_parametro->setnPagRegistro(0) ; # que no pagine
-			$bean_parametro->setcParNombre($cParNombre) ;
-			$bean_parametro->setcParDescripcion($cSerie_Numeracion) ;
-			$bean_provincia->setcProDescripcion($cProvincia) ;
-			$bean_distrito->setcDisDescripcion($cDistrito) ;
-			$bean_caserio->setcCasDescripcion($cCaserio) ;
+			$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
+			$bean_ctactenumeracion->setcPerJuridica($cPerJuridica) ;
 
-		    $data = $objSerie_Numeracion->Get_Sel_Series_Numeracion($bean_parametro ,$bean_caserio, $bean_distrito , $bean_provincia );
+
+		    $data = $objCtaCteNumeracion->Filtrar_SerieNumeracion($bean_ctactenumeracion,$bean_parparext);
 
 
 			$formulario= "";
@@ -637,12 +661,11 @@
 				$formulario .= "<table class='table'>" ;
 				$formulario .='
 						<tr class="border-bottom">
-							<th class="" style="width:10%;"> Num </th>
-							<th class="" style="width: 20% ;"> Código </th>
-							<th class="" style="width: 20% ;"> Serie_Numeracion </th>
-							<th class="" style="width: 30%;"> Caserio </th>
-							<th class="" style="width: 20% ;"> Distrito </th>
-							<th class="" style="width: 20% ;"> Provincia </th>
+							<th  style="width: 10%;"> Num. </th>
+								<th  style="width: 25%;"> Punto de Emisión  </th>
+								<th  style="width: 25%;"> Comprobante  </th>
+								<th  style="width: 25%;"> Serie </th>
+								<th  style="width: 20%;"> Numeración </th>
 						</tr>
 					' ;
 
@@ -654,11 +677,10 @@
 	                    $formulario.= 	"<td>";
 	                    $formulario.=         $i + 1 ;
 	                    $formulario.=   "</td>";
-					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParNombre"]."</td>";
-					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParDescripcion"]."</td>";
-					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cCasDescripcion"]."</td>";
-					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cDisDescripcion"]."</td>";
-					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cProDescripcion"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParSrcDescripcion"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParDstDescripcion"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["cParObjDescripcion"]."</td>";
+					   	$formulario.= 	"<td>".$data["cuerpo"][$i]["Numero"]."</td>";
 					   	$formulario.="</tr>";
 				}
 				$formulario .= "</tbody>" ;
