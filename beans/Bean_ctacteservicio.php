@@ -7,7 +7,7 @@ class Bean_ctacteservicio{
 	private $nSerCodigo;
 	private $nBieCodigo;
 	private $nActCodigo;
-	private $nSerImporte;
+	private $fSerImporte;
 	private $nMonCodigo;
 	private $nSerAfecto;
 	private $nSerTipo;
@@ -23,8 +23,8 @@ class Bean_ctacteservicio{
 	public function getnBieCodigo(){ return $this->nBieCodigo;}
 	public function setnActCodigo($nActCodigo_){ $this->nActCodigo=$nActCodigo_;}
 	public function getnActCodigo(){ return $this->nActCodigo;}
-	public function setnSerImporte($nSerImporte_){ $this->nSerImporte=$nSerImporte_;}
-	public function getnSerImporte(){ return $this->nSerImporte;}
+	public function setfSerImporte($fSerImporte_){ $this->fSerImporte=$fSerImporte_;}
+	public function getfSerImporte(){ return $this->fSerImporte;}
 	public function setnMonCodigo($nMonCodigo_){ $this->nMonCodigo=$nMonCodigo_;}
 	public function getnMonCodigo(){ return $this->nMonCodigo;}
 	public function setnSerAfecto($nSerAfecto_){ $this->nSerAfecto=$nSerAfecto_;}

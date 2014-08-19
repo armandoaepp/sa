@@ -355,11 +355,9 @@
 					$MsjAlter = "Seleccionar Status.";
 				}
 
-
-
 			if($MsjAlter == "")
 			{
-				# OBJETOS
+				# OBJETOS BEANS
 					$bean_persona      =  new Bean_persona() ;
 					$bean_perdocumento =  new Bean_perdocumento() ;
 					$bean_pertelefono  =  new Bean_pertelefono() ;
@@ -368,9 +366,9 @@
 					$bean_perrelacion  =  new Bean_perrelacion() ;
 					$bean_perparametro =  new Bean_perparametro() ;
 					$bean_perubigeo    =  new Bean_perubigeo() ;
+					$bean_percuenta    =  new Bean_percuenta() ;
 
 					$objPerDocumento = new ClsPerDocumento();
-
 
 				# DATOS FRM
 					$cPerDocumento      = $frm['cPerDocumento_'] ;
@@ -416,6 +414,7 @@
 								$objPerRelacion  = new ClsPerRelacion($cnx);
 								$objPerParametro = new ClsPerParametro($cnx);
 								$objPerUbigeo    = new ClsPerUbigeo($cnx);
+								$objPerCuenta    = new ClsPerCuenta($cnx);
 
 							# INICIAMOS LA TRANSACCION
 			        			$objPersona->beginTransaction() ;
@@ -478,7 +477,7 @@
 								$bean_perparametro->setcPerParValor($FechaIncorporacion) ;
 								$bean_perparametro->setcPerParGlosa("FECHA INCORPORACION") ;
 								# Fecha Incorporacion
-								$dat1 = $objPerParametro->Set_PerParametro($bean_perparametro ) ;
+									$objPerParametro->Set_PerParametro($bean_perparametro ) ;
 
 								# Status
 								$bean_perparametro->setnParClase(2003) ;
@@ -486,7 +485,21 @@
 								$bean_perparametro->setcPerParValor("") ;
 								$bean_perparametro->setcPerParGlosa("STATUS") ;
 
-								$dat1 .= $objPerParametro->Set_PerParametro($bean_perparametro ) ;
+									$objPerParametro->Set_PerParametro($bean_perparametro ) ;
+
+							# REGISTRAR PERCUENTA
+								$cPerJurCodigo = Get_cPerCodigo_PerJuridica() ;
+
+								$bean_percuenta->setcPerCodigo($cPerCodigo);
+								$bean_percuenta->setcNroCuenta($cPerDocumento);
+								$bean_percuenta->setnPerCtaTipo(1); # GENERAL
+								$bean_percuenta->setcPerJurCodigo($cPerJurCodigo);
+								$bean_percuenta->setnMonCodigo(1);
+								// $bean_percuenta->setnPerCtaEstado($nPerCtaEstado);
+								// $bean_percuenta->setnPerCtaCodigo($nPerCtaCodigo);
+								$objPerCuenta->Set_PerCuenta($bean_percuenta ) ;
+
+
 
 							# REGISTRAR PERUBIGEO -> SECTOR
 

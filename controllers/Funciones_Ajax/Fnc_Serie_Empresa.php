@@ -28,7 +28,7 @@
 								<tr class="title-table" >
 									<td  style="width:20%;">&nbsp; C&oacute;digo</td>
 									<td  style="width:30%;">&nbsp;abreviatura </td>
-									<td  style="width:50%;">&nbsp;'.$_SESSION["S_cParNombre"].'</td>
+									<td  style="width:50%;">&nbsp; Serie </td>
 								</tr>
 						    	<tr class="vform">
 									<td>
@@ -41,7 +41,7 @@
 
 									</td>
 									<td>
-						    		    <input type="search" name="B_cParDescripcion_" id="B_cParDescripcion_" placeholder="Buscar '.$_SESSION["S_cParNombre"].'"
+						    		    <input type="search" name="B_cParDescripcion_" id="B_cParDescripcion_" placeholder="Buscar  Serie "
 						    		   onkeyup="'.$FuncionEnter.'"
 							    		onsearch="'.$FuncionSearch.'" />
 									</td>
@@ -488,7 +488,7 @@
 				$HTML ="<html>
 							<body>
 							<br/>
-								<h3 class='rounded text-center mayusc title'> Lista de Serie de Comprobates</h3>
+								<h3 class='rounded text-center mayusc title'> Lista de Serie de Comprobantes</h3>
 								<br/>
 							<div>
 								".$formulario."
