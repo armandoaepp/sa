@@ -165,3 +165,11 @@ function js_disabled_rd_tab_productor(estado)
 	jQuery('#tab-3').prop("disabled", estado);
 
 }
+
+
+function js_Close_Desplegable(id)
+{
+ 	jq('#closeBusqueda_').css("display", "none");
+ 	jq('#'+id).css("display", "none");
+ 	jq('#'+id).empty(); // limpiar el div
+}

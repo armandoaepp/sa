@@ -87,7 +87,7 @@ require_once "ClsCuentaCorriente.php";
 require_once "ClsSerieEmpresa.php";
 require_once "ClsSerieNumeracion.php";
 
-
+require_once "ClsComprobEntrada.php";
 
 # =====================	Funciones Php
 require_once "../controllers/Funciones_Ajax/Fnc_Comun.php";
@@ -108,6 +108,10 @@ require_once "../controllers/Funciones_Ajax/Fnc_Producto.php";
 require_once "../controllers/Funciones_Ajax/Fnc_General.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Serie_Empresa.php";
 require_once "../controllers/Funciones_Ajax/Fnc_Serie_Numeracion.php";
+
+require_once "../controllers/Funciones_Ajax/Fnc_Comprob_Entrada.php";
+
+
 
 set_time_limit(0);
 # INICIALIZAR XAJAX

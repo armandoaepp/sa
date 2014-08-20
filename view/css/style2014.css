@@ -1196,6 +1196,12 @@ fieldset[disabled] .checkbox-inline {
 	-moz-osx-font-smoothing: grayscale;
 }
 
+.icon-search-left:before {
+	content: "\e619";
+}
+.icon-search-right:before {
+	content: "\e61b";
+}
 .icon-check:before {
 	content: "\e60f";
 }
@@ -1247,6 +1253,9 @@ fieldset[disabled] .checkbox-inline {
 .icon-calendar:before {
 	content: "\e608";
 }
+.icon-mobile:before {
+	content: "\e60a";
+}
 .icon-user:before {
 	content: "\e60b";
 }
@@ -1264,9 +1273,6 @@ fieldset[disabled] .checkbox-inline {
 }
 .icon-bars2:before {
 	content: "\e610";
-}
-.icon-fire:before {
-	content: "\e609";
 }
 .icon-remove:before {
 	content: "\e611";
@@ -1289,9 +1295,6 @@ fieldset[disabled] .checkbox-inline {
 .icon-calendar2:before {
 	content: "\e61a";
 }
-.icon-mobile:before {
-	content: "\e61c";
-}
 .icon-minus:before {
 	content: "\e61e";
 }
@@ -1301,6 +1304,7 @@ fieldset[disabled] .checkbox-inline {
 .icon-cross:before {
 	content: "\e620";
 }
+
 
 
 .table tr td a{

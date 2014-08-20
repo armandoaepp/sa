@@ -36,6 +36,24 @@ class ClsPerRelacion extends ClsConexion
 			$data = $this->rows ;
 			return $data;
 		}
+
+		# UPDATE ESTADO
+		function Buscar_Persona_nPerRelTipo_cPerJuridica($bean_perrelacion , $bean_persona )
+		{
+			$nPerRelTipo     = $bean_perrelacion->getnPerRelTipo() ;
+			$cPerJuridica    = $bean_perrelacion->getcPerJuridica() ;
+
+			$cPerApellidos = $bean_persona->getcPerApellidos() ; # viene encapsulado en cPerApellidos
+			$cPerDocNumero = $bean_persona->getcPerNombre() ; # recuperamos numero de documento que viene encapsulado en  cPerNombre
+
+			// return "CALL usp_Buscar_Persona_nPerRelTipo_cPerJuridica( '$cPerApellidos', '$cPerDocNumero' , $nPerRelTipo , '$cPerJuridica'  )  ; ";
+			$this->query = "CALL usp_Buscar_Persona_nPerRelTipo_cPerJuridica( '$cPerApellidos', '$cPerDocNumero' , $nPerRelTipo , '$cPerJuridica'  )  ; ";
+			$this->execute_query();
+			$data = $this->rows ;
+			return $data;
+		}
+
+
 }
 
 ?>

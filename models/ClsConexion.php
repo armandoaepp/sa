@@ -12,9 +12,9 @@
     private static $db_host = '127.0.0.1';
     private static $db_user = 'root';
     private static $db_pass = '';
-    protected $db_driver = 'mysql';
-
     protected $db_name   = 'planeatec_sa';
+
+    protected $db_driver = 'mysql';
     protected $query;
     protected $rows      = array();
     protected $conn      = null  ;

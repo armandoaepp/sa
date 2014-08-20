@@ -265,3 +265,64 @@ body{
 	cursor: default;
 }
 
+
+
+
+/*DIV*/
+.divdesplegableBuscar{
+  /*position: absolute;*/
+  width: 100%;
+  /*top: 20px ;*/
+}
+.divListaDesplegable{
+    border:solid 1px #DEDEDE;
+    background:#DDE9F4;
+    color:#222222;
+    text-align:left;
+    font-family:Tahoma;
+    font-size: 10px;
+    display: table;
+    margin: 0 auto 2px auto;
+    cursor: pointer;
+    width: 100%;
+}
+.divListaDesplegable:hover {
+    background: #EEDFA4;
+}
+.divListaDesplegable p {
+    display: table-cell;
+    padding: 1px 0;
+    vertical-align: middle;
+}
+.ContenedorListaDesplegable{
+    opacity: 11;
+    max-height: 100px;
+    overflow-y:auto;
+    position:absolute;
+    z-index: 1;
+    width: 100%;
+}
+
+/*.close-desplegable{
+
+
+  position: relative;
+display: inline-block;
+z-index: 12;
+top: -25px;
+}*/
+
+.close-desplegable {
+  position: absolute;
+  z-index: 12;
+  top: 18px;
+  right: 6px;
+  font-size: 13px!important;
+  text-decoration: none;
+  width: 25px;
+}
+
+.close-desplegable span{
+  color: rgb(216, 33, 33)!important;
+  text-decoration: none;
+}
