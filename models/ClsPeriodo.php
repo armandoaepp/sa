@@ -123,7 +123,7 @@
 		return $data;
 	}
 
-		# ACTUALIZAR TODOS LOS PERIODOS AL ESTADO 2: CERRADOS
+	# ACTUALIZAR TODOS LOS PERIODOS AL ESTADO 2: CERRADOS
 	function Cerrar_Periodos()
 	{
 		$this->query="call usp_Cerrar_Periodos() ;";
@@ -131,6 +131,7 @@
 		$data = $this->rows ;
 		return $data;
 	}
+
 
 
 }

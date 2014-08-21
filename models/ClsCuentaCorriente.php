@@ -7,24 +7,25 @@ class ClsCuentaCorriente extends ClsConexion {
 			$this->conn = $cnx;
 	}
 # Método Insertar
-	public function Set_cuentacorriente($bean_cuentacorriente)
+	public function Set_CuentaCorriente($bean_cuentacorriente)
 	{
-		$cCtaCteRecibo = $bean_cuentacorriente->getcCtaCteRecibo();
-		$nPerCtaCodigo = $bean_cuentacorriente->getnPerCtaCodigo();
-		$nCtaCteTipo = $bean_cuentacorriente->getnCtaCteTipo();
-		$nCtaCteItem = $bean_cuentacorriente->getnCtaCteItem();
-		$fCtaCteImporte = $bean_cuentacorriente->getfCtaCteImporte();
-		$nCtaCteCuota = $bean_cuentacorriente->getnCtaCteCuota();
-		$nCtaCteEstado = $bean_cuentacorriente->getnCtaCteEstado();
-		$dCtaCteFecVence = $bean_cuentacorriente->getdCtaCteFecVence();
-		$dCtaCteFecPago = $bean_cuentacorriente->getdCtaCteFecPago();
-		$dCtaCteFecEmis = $bean_cuentacorriente->getdCtaCteFecEmis();
-		$dCtaCteFecRegistro = $bean_cuentacorriente->getdCtaCteFecRegistro();
-		$cCtaCteGlosa = $bean_cuentacorriente->getcCtaCteGlosa();
-		$nPrdCodigo = $bean_cuentacorriente->getnPrdCodigo();
-		$nMonCodigo = $bean_cuentacorriente->getnMonCodigo();
+		// $cCtaCteRecibo      = $bean_cuentacorriente->getcCtaCteRecibo();
+		$nPerCtaCodigo      = $bean_cuentacorriente->getnPerCtaCodigo();
+		$nCtaCteTipo        = $bean_cuentacorriente->getnCtaCteTipo();
+		$nCtaCteItem        = $bean_cuentacorriente->getnCtaCteItem();
+		$fCtaCteImporte     = $bean_cuentacorriente->getfCtaCteImporte();
+		$nCtaCteCuota       = $bean_cuentacorriente->getnCtaCteCuota();
+		$nCtaCteEstado      = $bean_cuentacorriente->getnCtaCteEstado();
+		$dCtaCteFecVence    = $bean_cuentacorriente->getdCtaCteFecVence();
+		$dCtaCteFecPago     = $bean_cuentacorriente->getdCtaCteFecPago();
+		$dCtaCteFecEmis     = $bean_cuentacorriente->getdCtaCteFecEmis();
+		// $dCtaCteFecRegistro = $bean_cuentacorriente->getdCtaCteFecRegistro();
+		$cCtaCteGlosa       = $bean_cuentacorriente->getcCtaCteGlosa();
+		$nPrdCodigo         = $bean_cuentacorriente->getnPrdCodigo();
+		$nMonCodigo         = $bean_cuentacorriente->getnMonCodigo();
 
-		$this->query = "CALL usp_Set_cuentacorriente('$cCtaCteRecibo','$nPerCtaCodigo','$nCtaCteTipo','$nCtaCteItem','$fCtaCteImporte','$nCtaCteCuota','$nCtaCteEstado','$dCtaCteFecVence','$dCtaCteFecPago','$dCtaCteFecEmis','$dCtaCteFecRegistro','$cCtaCteGlosa','$nPrdCodigo','$nMonCodigo')";
+		// return "CALL usp_Set_CuentaCorriente($nPerCtaCodigo, $nCtaCteTipo, $nCtaCteItem,'$fCtaCteImporte', $nCtaCteCuota, $nCtaCteEstado,'$dCtaCteFecVence','$dCtaCteFecPago','$dCtaCteFecEmis','$cCtaCteGlosa', $nPrdCodigo, $nMonCodigo)";
+		$this->query = "CALL usp_Set_CuentaCorriente($nPerCtaCodigo, $nCtaCteTipo, $nCtaCteItem,'$fCtaCteImporte', $nCtaCteCuota, $nCtaCteEstado,'$dCtaCteFecVence','$dCtaCteFecPago','$dCtaCteFecEmis','$cCtaCteGlosa', $nPrdCodigo, $nMonCodigo)";
 		$this->execute_query();
 		$data = $this->rows ;
 		return $data;

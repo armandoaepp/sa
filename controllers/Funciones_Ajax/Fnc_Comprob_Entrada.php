@@ -12,6 +12,8 @@
 		$xajax->registerFunction("Configurar_Comprob_Entrada");
 		$xajax->registerFunction("Buscar_Productor");
 		$xajax->registerFunction("Agregar_Persona");
+		$xajax->registerFunction("Cargar_Numeracion_Serie");
+
 
 
 		# LISTA PARAMETRO
@@ -163,80 +165,161 @@
 				$MsjAlter = "";
 				$Funcion = "#";
 
+				// nParCodigo_
+				// nComprobante_
+				// nSerie_
+				// NumeroSerie_
+				// FechaRegistro_
+				// Persona_
+				// nPerCodigo_
+				// nSector_
+				// nSacos_
+				// LibrasBruta_
+				// LibrasTara_
+				// LibrasNetas_
+				// QuintalesNetos_
+				// KgNetos_
+				// Rendimiento_
+				// HUmedad_
+				// PrecioQuintal_
+				// Total_
+				// Premio_
+				// Obsevacion_
+
 				# VALIDACIONES
-					if(empty($frm["cParNombre_"]))
+					/*if(empty($frm["nSerie_"]))
 					{
-						$MsjAlter = "Completar abreviatura.";
+						$MsjAlter = "Selecionar Serie.";
 					}
-					elseif(empty($frm["cParDescripcion_"]))
+					elseif(empty($frm["NumeroSerie_"]))
 					{
-						$MsjAlter = "Completar descripci&oacute;n.";
+						$MsjAlter = "Debe de Ingresar el Numero de Serie " ;
 					}
+					elseif(empty($frm["nPerCodigo_"]))
+					{
+						$MsjAlter = "Debe Seleccionar un Productor" ;
+					}
+
+					elseif(empty($frm["nSector_"]))
+					{
+						$MsjAlter = "Seleccionar Sector." ;
+					}elseif(empty($frm["nSacos_"]))
+					{
+						$MsjAlter = "Ingrese el Número de Sacos " ;
+					}
+					elseif(empty($frm["LibrasBruta_"]))
+					{
+						$MsjAlter = "Ingrese Libras Brutas " ;
+					}
+					elseif(empty($frm["Rendimiento_"]))
+					{
+						$MsjAlter = "Ingrese el Rendimiento." ;
+					}
+					elseif(empty($frm["HUmedad_"]))
+					{
+						$MsjAlter = "Ingrese el HUmedad." ;
+					}
+					elseif(empty($frm["PrecioQuintal_"]))
+					{
+						$MsjAlter = "Ingrese el Precio Quintal." ;
+					}*/
 
 				if($MsjAlter=="")
 				{
+
+					// $nParCodigo     = $frm["nParCodigo_"];
+					// $nComprobante   = $frm["nComprobante_"];
+					$nSerie         = $frm["nSerie_"];
+					$NumeroSerie    = $frm["NumeroSerie_"];
+					$FechaRegistro  = $frm["FechaRegistro_"];
+					$Persona        = $frm["Persona_"];
+					$nPerCodigo     = $frm["nPerCodigo_"];
+					$nSector        = $frm["nSector_"];
+					$nSacos         = $frm["nSacos_"];
+					$LibrasBruta    = $frm["LibrasBruta_"];
+					$LibrasTara     = $nSacos * 0.5 ; #  $frm["LibrasTara_"];
+					$LibrasNetas    = $LibrasBruta - $LibrasTara ; #  $frm["LibrasNetas_"];
+					$QuintalesNetos = $LibrasNetas / 120; # $frm["QuintalesNetos_"];
+					$KgNetos        = $QuintalesNetos * 55.2; # $frm["KgNetos_"];
+					$Rendimiento    = $frm["Rendimiento_"];
+					$HUmedad        = $frm["HUmedad_"];
+					$PrecioQuintal  = $frm["PrecioQuintal_"];
+
+					$Total          = $QuintalesNetos * $PrecioQuintal; # $frm["Total_"];
+					$Total          = truncateFloat($Total, 2) ;
+
+					$Premio         = $frm["Premio_"];
+					$Obsevacion     = Mayusc($frm["Obsevacion_"]);
+
+					$objResponse->alert($Total) ;
+
+					$cPerJuridica = Get_cPerCodigo_PerJuridica() ; # codigo de empresa deacuerdo al usuario en linea
+
 					$bean_parametro = new  Bean_parametro() ;
+					$bean_percuenta = new Bean_PerCuenta() ;
+					$bean_cuentacorriente = new  Bean_cuentacorriente() ;
 
-					$nParClase       = 2007 ;
-					$cParNombre      = Mayusc($frm["cParNombre_"]);
-					$cParDescripcion = Mayusc($frm["cParDescripcion_"]);
-
-					$cPerJuridica = Get_cPerCodigo_PerJuridica() ; # clas general -> cParJeraquia
-
-				  	$bean_parametro->setnParClase($nParClase ) ;
-				  	$bean_parametro->setcParJerarquia($cPerJuridica) ;
-					$bean_parametro->setcParNombre($cParNombre );
-					$bean_parametro->setcParDescripcion($cParDescripcion) ;
+					$objPerCuenta = new ClsPerCuenta();
+					$objPeriodo = new ClsPeriodo();
 
 
-					$objParametro   = new ClsParametro();
-			    	$dataValida = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
-			        #VALIDAR
-				        if(count($dataValida["cuerpo"])>0){
-	        				$MsjAlter= ".::YA EXISTE UN REGISTRO IDENTICO::.";
-				        }
-				        else{
+					$bean_percuenta->setcPerCodigo($nPerCodigo );
+					$bean_percuenta->setcPerJurCodigo($cPerJuridica);
+
+
+					$data = $objPerCuenta->Get_PerCuenta_cPerCodigo_cPerJuridica($bean_percuenta) ;
+					$nPerCtaCodigo = $data["cuerpo"][0]["nPerCtaCodigo"];
+
+					$dataPeriodo = $objPeriodo->Get_Periodo_Activo();
+					$nPrdCodigo = $dataPeriodo["cuerpo"][0]["nPrdCodigo"];
+
+					$fechaActual = Fecha_Actual_BD() ;
+
+
+					$bean_cuentacorriente->setnPerCtaCodigo($nPerCtaCodigo);
+					$bean_cuentacorriente->setnCtaCteTipo(1);
+					$bean_cuentacorriente->setnCtaCteItem(1);
+					$bean_cuentacorriente->setfCtaCteImporte($Total );
+					$bean_cuentacorriente->setnCtaCteCuota(1);
+					$bean_cuentacorriente->setnCtaCteEstado(2); # pago pendiente
+					$bean_cuentacorriente->setdCtaCteFecVence($fechaActual);
+					$bean_cuentacorriente->setdCtaCteFecPago($fechaActual);
+					$bean_cuentacorriente->setdCtaCteFecEmis($fechaActual);
+					$bean_cuentacorriente->setcCtaCteGlosa("Comprobante de Entrada");
+					$bean_cuentacorriente->setnPrdCodigo($nPrdCodigo);
+					$bean_cuentacorriente->setnMonCodigo(1); # soles
+
+
+					// $objParametro   = new ClsParametro();
+			  //   	$dataValida = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
+			  //       #VALIDAR
+				 //        if(count($dataValida["cuerpo"])>0){
+	    //     				$MsjAlter= ".::YA EXISTE UN REGISTRO IDENTICO::.";
+				 //        }
+				 //        else{
 				        	try
 				        	{
 				        		# INSTANCIOAMOS EL OBJECTO INICIAL
-					        		$objParametro   = new ClsParametro();
+					        		$objCuentaCorriente   = new ClsCuentaCorriente();
 								# LLAMAMOS AL METODO QUE RETORNA LA CONEXION
-									$cnx = $objParametro->get_connection() ;
+									$cnx = $objCuentaCorriente->get_connection() ;
 								# INICIAMOS LA TRANSACCION
-				        			$objParametro->beginTransaction() ;
+				        			$objCuentaCorriente->beginTransaction() ;
+				        			$data = $objCuentaCorriente->Set_CuentaCorriente($bean_cuentacorriente) ;
+				        			$objResponse->alert($data ) ;
 
-				        			$data = $objParametro->Set_Parametro_nParCodigo($bean_parametro);
-				        			$nParCodigo = $data["cuerpo"][0]["nParCodigo"] ;
-
-				        			$bean_ctacteservicio = new Bean_ctacteservicio() ;
-				        			$objCtaCteServicio	= new ClsCtaCteServicio() ;
-				        			$bean_ctacteservicio->setnBieCodigo($nParCodigo);
-									$bean_ctacteservicio->setnActCodigo(0);
-									$bean_ctacteservicio->setfSerImporte(0);
-									$bean_ctacteservicio->setnMonCodigo(1); # soles
-									$bean_ctacteservicio->setnSerAfecto(0);
-									$bean_ctacteservicio->setnSerTipo(0);
-									$bean_ctacteservicio->setnSerModalidad(0);
-									$bean_ctacteservicio->setfSerTasa(0);
-									$bean_ctacteservicio->setnSerPeriodicidad(0);
-									$bean_ctacteservicio->setnUniOrgCodigo(0);
-									$bean_ctacteservicio->setnPrdCodigo(0);
-
-									$dataCte = $objCtaCteServicio->Set_CtaCteServicio($bean_ctacteservicio) ;
-									$nSerCodigo = $dataCte["cuerpo"][0]["nSerCodigo"];
-
-									Insertar_Transaccion(1,"NUEVO PRODUCTO: nParCodigo : ".$nParCodigo." nSerCodigo -".$nSerCodigo."- nParClase : ".$nParClase." - cParDescripcion : ".$cParDescripcion,"",$cnx) ;
+									# Insertar_Transaccion(1,"NUEVO PRODUCTO: nParCodigo : ".$nParCodigo." nSerCodigo -".$nSerCodigo."- nParClase : ".$nParClase." - cParDescripcion : ".$cParDescripcion,"",$cnx) ;
 								# si todo a tendido exito
-				        		$objParametro->commit();
+				        		$objCuentaCorriente->commit();
 
-								$Funcion = " xajax_Listar_Comprob_Entradas(0,20,1,1) ;ocultar_emergente();";
+								// $Funcion = " xajax_Listar_Comprob_Entradas(0,20,1,1) ;ocultar_emergente();";
 				        	}catch(Exception $e)
 				        	{
 				        		# si ha habido algun error
-				        		$objParametro->rollback();
-				        		$MsjAlter =  "Error de registro.";
+				        		$objCuentaCorriente->rollback();
+				        		$MsjAlter =  "Error de registro.".$e->getMessage();
 				        	}
-			        	}
+			        	// }
 				}
 
 				$objResponse->assign("labelMsj","innerHTML",$MsjAlter);
@@ -449,7 +532,7 @@
 					$FechaNow = Fecha_Actual_Barra();
 
 					$FuncionSearch = 'xajax_Buscar_Productor(this.value, \'-\') ;' ;
-					$FuncionEnter = ' if(event.keyCode == 13 ){'.$FuncionSearch.'} ;';
+					$FuncionEnter = ' if(event.keyCode == 13 ){'.$FuncionSearch.'} ;if( (jq(this).val()).length  == 0){	'.$FuncionSearch.' }';
 
 
 					$formulario ="";
@@ -466,7 +549,7 @@
 
 						$formulario .=' <fieldset class="c2">
 								    		<label for="nSerie_">Serie</label>
-								    		<select name="nSerie_" id="nSerie_">
+								    		<select name="nSerie_" id="nSerie_" onchange="xajax_Cargar_Numeracion_Serie(this.value, 2)">
 								    		'.$optionSerie.'
 								    		</select>
 								    	</fieldset> ';
@@ -498,7 +581,7 @@
 												</div>
 												<div class="clear" ></div> ' ;
 
-						$formulario .= 	'		<div class="ContenedorListaDesplegable" id="divLoadPersona_" style="display:none;" >
+						$formulario .= 	'	<div class="ContenedorListaDesplegable" id="divLoadPersona_" style="display:none;" >
 												</div>
 											</div>
 										</fieldset>';
@@ -513,9 +596,9 @@
 						$formulario .=' <hr> ';
 
 						$formulario .=' <fieldset class="c6">
-								    		<label for="nSacos">Sacos</label>
+								    		<label for="nSacos_">Sacos</label>
 	                                		<span class="pre icon-text"></span>
-											<input class="pre" type="text" id="nSacos" name="nSacos" placeholder ="Ingrese Numero de Sacos"  >
+											<input class="pre" type="text" id="nSacos_" name="nSacos_" placeholder ="Ingrese Numero de Sacos"  >
 								    	</fieldset> ';
 
 						$formulario .=' <fieldset class="c6">
@@ -682,103 +765,121 @@
 			    return $objResponse;
 			}
 
-		# BUSCAR PESCADOR
-			function Buscar_Productor($cPerApellidos_Nombres = "-" , $cPerDocNumero = "-")
-			{
-				# objetos
-					$objResponse 	= new xajaxResponse();
-					$objPerRelacion 	= new ClsPerRelacion();
-				# variables
-					$formulario = "";
-					$display	= "none";
+		# BUSQUEDA DE PRODUCTOR
+			# BUSCAR PRODUCTOR
+				function Buscar_Productor($cPerApellidos_Nombres = "-" , $cPerDocNumero = "-")
+				{
+					# objetos
+						$objResponse 	= new xajaxResponse();
+						$objPerRelacion 	= new ClsPerRelacion();
+					# variables
+						$formulario = "";
+						$display	= "none";
 
-					if($cPerApellidos_Nombres != "-")
-					{
-						$Buscarx = $cPerApellidos_Nombres ;
-						if(is_numeric($cPerApellidos_Nombres))
+						if($cPerApellidos_Nombres != "-")
 						{
-							$longuitud = 3 ;
-							$cPerDocNumero = $cPerApellidos_Nombres ;
-							$cPerApellidos_Nombres = "-" ;
+							$Buscarx = $cPerApellidos_Nombres ;
+							if(is_numeric($cPerApellidos_Nombres))
+							{
+								$longuitud = 3 ;
+								$cPerDocNumero = $cPerApellidos_Nombres ;
+								$cPerApellidos_Nombres = "-" ;
+							}else
+							{
+								$longuitud = 2 ;
+							}
 						}else
 						{
 							$longuitud = 2 ;
 						}
-					}else
-					{
-						$longuitud = 2 ;
-					}
 
-
-
-
-					if(strlen(trim($Buscarx))>= $longuitud)
-					{
-						$bean_persona     =  new Bean_persona() ;
-						$bean_perrelacion =  new Bean_perrelacion() ;
-
-
-						$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
-						$bean_perrelacion->setnPerRelTipo(2002) ;
-						$bean_perrelacion->setcPerJuridica($cPerJuridica) ;
-
-						$bean_persona->setcPerApellidos($cPerApellidos_Nombres) ; # viene encapsulado en cPerApellidos
-						$bean_persona->setcPerNombre($cPerDocNumero) ; # recuperamos numero de documento que viene encapsulado en  cPerNombre
-
-
-						$data = $objPerRelacion->Buscar_Persona_nPerRelTipo_cPerJuridica($bean_perrelacion , $bean_persona ) ;
-						// $objResponse->alert($data ) ;
-
-						if(count($data["cuerpo"]) > 0)
+						if(strlen(trim($Buscarx))>= $longuitud)
 						{
-								for ($i=0; $i < count($data["cuerpo"]) ; $i++)
-								{
-									$cPerCodigo 	= $data["cuerpo"][$i]['cPerCodigo'];
-									$cPerApellidos = Mayusc($data["cuerpo"][$i]["cPerApellidos"]." " .$data["cuerpo"][$i]["cPerNombre"]);
-									$cPerDocNumero = $data["cuerpo"][$i]["cPerDocNumero"];
+							$bean_persona     =  new Bean_persona() ;
+							$bean_perrelacion =  new Bean_perrelacion() ;
 
 
-									$formulario .=	"<div class='divListaDesplegable' style='top:-13px' onClick=\"xajax_Agregar_Persona('$cPerCodigo');\">";
-							      	$formulario .= 		"<p>DNI: ".$cPerDocNumero." - : ".$cPerApellidos."  <span class='icon-user right space-small-right'></span></p>";
-							      	$formulario .= 	"</div>";
-								}
-								$display="block";
-				       	}
-				       	else
+							$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
+							$bean_perrelacion->setnPerRelTipo(2002) ;
+							$bean_perrelacion->setcPerJuridica($cPerJuridica) ;
+
+							$bean_persona->setcPerApellidos($cPerApellidos_Nombres) ; # viene encapsulado en cPerApellidos
+							$bean_persona->setcPerNombre($cPerDocNumero) ; # recuperamos numero de documento que viene encapsulado en  cPerNombre
+
+							$data = $objPerRelacion->Buscar_Persona_nPerRelTipo_cPerJuridica($bean_perrelacion , $bean_persona ) ;
+							// $objResponse->alert($data ) ;
+
+							if(count($data["cuerpo"]) > 0)
+							{
+									for ($i=0; $i < count($data["cuerpo"]) ; $i++)
+									{
+										$cPerCodigo 	= $data["cuerpo"][$i]['cPerCodigo'];
+										$cPerApellidos = Mayusc($data["cuerpo"][$i]["cPerApellidos"]." " .$data["cuerpo"][$i]["cPerNombre"]);
+										$cPerDocNumero = $data["cuerpo"][$i]["cPerDocNumero"];
+
+
+										$formulario .=	"<div class='divListaDesplegable' style='top:-13px' onClick=\"xajax_Agregar_Persona('$cPerCodigo');\">";
+								      	$formulario .= 		"<p>DNI: ".$cPerDocNumero." - : ".$cPerApellidos."  <span class='icon-user right space-small-right'></span></p>";
+								      	$formulario .= 	"</div>";
+									}
+									$display="block";
+					       	}
+
+						}else
 				       	{
-						    // $objResponse->assign("Domicilio_","value","");
+						    $objResponse->assign("nPerCodigo_","value","");
 						    // $objResponse->assign("Codigo_Propietario_","value","");
 				       	}
-					}
 
-	           	$objResponse->assign("divLoadPersona_","innerHTML",$formulario);
-		       	$objResponse->assign("divLoadPersona_","style.display",$display);
-		       	$objResponse->assign("closeBusqueda_","style.display",$display);
+		           	$objResponse->assign("divLoadPersona_","innerHTML",$formulario);
+			       	$objResponse->assign("divLoadPersona_","style.display",$display);
+			       	$objResponse->assign("closeBusqueda_","style.display",$display);
 
 
-				return $objResponse;
-			}
-		# AGREGAR PESCADOR
-			function Agregar_Persona($cPerCodigo = "" , $IdtextPersona = "nPerCodigo_")
+					return $objResponse;
+				}
+
+			# AGREGAR PRODUCTOR
+				function Agregar_Persona($cPerCodigo = "" , $IdtextPersona = "nPerCodigo_")
+				{
+				    $objResponse 	= new xajaxResponse();
+				    $objPersona	= new ClsPersona();
+				    $bean_persona= new Bean_persona();
+
+				    $bean_persona->setcPerCodigo($cPerCodigo) ;
+
+				    $data 	= $objPersona->Buscar_Persona_By_cPerCodigo($bean_persona);
+
+				    $objResponse->assign("Persona_","value",$data["cuerpo"][0]["cPerApellidos"]." ".$data["cuerpo"][0]["cPerNombre"]);
+
+				    $objResponse->assign("nPerCodigo_","value",$cPerCodigo);
+
+				    $objResponse->assign("divLoadPersona_","style.display","none");
+				    $objResponse->assign("divLoadPersona_","innerHTML","");
+			       	$objResponse->assign("closeBusqueda_","style.display","none");
+
+					return $objResponse;
+				}
+
+		# CARGAR LA NUMERACION PARA UNA SERIE
+			function Cargar_Numeracion_Serie($nSerieCod = 0 , $nComTipo = 2 )
 			{
-			    $objResponse 	= new xajaxResponse();
-			    $objPersona	= new ClsPersona();
-			    $bean_persona= new Bean_persona();
+				$objResponse 	= new xajaxResponse();
 
-			    $bean_persona->setcPerCodigo($cPerCodigo) ;
+				$bean_ctactenumeracion = new Bean_ctactenumeracion() ;
+				$objComprobEntrada     = new ClsComprobEntrada() ;
+				#  SERIES
+					$cPerJuridica = Get_cPerCodigo_PerJuridica() ;
+					$bean_ctactenumeracion->setcPerJuridica($cPerJuridica) ;
+					$bean_ctactenumeracion->setnComTipo($nComTipo);
+					$bean_ctactenumeracion->setnSerie($nSerieCod);
 
-			    $data 	= $objPersona->Buscar_Persona_By_cPerCodigo($bean_persona);
+					$dataSerie = $objComprobEntrada->Get_Series_cPerJuridica_nComTipo_nSerie($bean_ctactenumeracion) ;
 
-			    $objResponse->assign("Persona_","value",$data["cuerpo"][0]["cPerApellidos"]." ".$data["cuerpo"][0]["cPerNombre"]);
-
-			    $objResponse->assign("nPerCodigo_","value",$cPerCodigo);
-
-			    $objResponse->assign("divLoadPersona_","style.display","none");
-			    $objResponse->assign("divLoadPersona_","innerHTML","");
-		       	$objResponse->assign("closeBusqueda_","style.display","none");
+					$numeracionSerie = $dataSerie["cuerpo"][0]["Numero"] ;
+					$objResponse->assign("NumeroSerie_", "value",$numeracionSerie);
 
 				return $objResponse;
 			}
-
 
 ?>

@@ -33,7 +33,7 @@ class ClsPerCuenta extends ClsConexion {
 		$this->query = "CALL usp_Upd_PerCuenta($nPerCtaCodigo, '$cNroCuenta',$nPerCtaTipo, '$cPerJurCodigo',$nMonCodigo) ";
 		$this->execute_query();
 		$data = $this->rows ;
-
+		return $data;
 	}
 //Método Eliminar(Actualizar Estado)
 	public function Upd_PerCuenta_Estado($bean_percuenta)
@@ -44,15 +44,31 @@ class ClsPerCuenta extends ClsConexion {
 		$this->query = "CALL usp_Upd_PerCuenta_Estado($nPerCtaCodigo, $nPerCtaEstado)";
 		$this->execute_query();
 		$data = $this->rows ;
+		return $data;
 	}
 //Método Buscar por ID
 	public function Get_Percuenta_nPerCtaCodigo($bean_percuenta)
 	{
 		$nPerCtaCodigo = $bean_percuenta->getnPerCtaCodigo();
 
-		$this->query = "CALL usp_Get_Percuenta_nPerCtaCodigo('$nPerCtaCodigo')";
+		$this->query = "CALL usp_Get_Percuenta_nPerCtaCodigo($nPerCtaCodigo)";
 		$this->execute_query();
 		$data = $this->rows ;
+		return $data;
 	}
+
+	//Get Percuenta po cPerCodigo de persona Persona Codigo de emprea
+	public function Get_PerCuenta_cPerCodigo_cPerJuridica($bean_percuenta)
+	{
+		$cPerCodigo    = $bean_percuenta->getcPerCodigo();
+		$cPerJurCodigo = $bean_percuenta->getcPerJurCodigo();
+
+		$this->query = "CALL usp_Get_PerCuenta_cPerCodigo_cPerJuridica('$cPerCodigo','$cPerJurCodigo ')";
+		$this->execute_query();
+		$data = $this->rows ;
+		return $data;
+	}
+
+
 }
 ?>
