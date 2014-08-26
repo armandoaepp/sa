@@ -294,7 +294,7 @@
 			  //   	$dataValida = $objParametro->Get_Parametro_by_cPar_Desc_Jeranquia($bean_parametro);
 			  //       #VALIDAR
 				 //        if(count($dataValida["cuerpo"])>0){
-	    //     				$MsjAlter= ".::YA EXISTE UN REGISTRO IDENTICO::.";
+	  			  //$MsjAlter= ".::YA EXISTE UN REGISTRO IDENTICO::.";
 				 //        }
 				 //        else{
 				        	try
